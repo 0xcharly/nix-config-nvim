@@ -1974,7 +1974,6 @@
         "term-edit-nvim": "term-edit-nvim",
         "tmux-nvim": "tmux-nvim",
         "todo-comments": "todo-comments",
-        "treesitter-context": "treesitter-context",
         "treesitter-textobjects": "treesitter-textobjects",
         "vim-matchup": "vim-matchup",
         "yanky": "yanky"
@@ -2344,22 +2343,6 @@
       "original": {
         "owner": "folke",
         "repo": "todo-comments.nvim",
-        "type": "github"
-      }
-    },
-    "treesitter-context": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1713984790,
-        "narHash": "sha256-QAudKglQGDRJKrsEcMSjbrxTgQRXO60ZcfOvEnPLUoE=",
-        "owner": "nvim-treesitter",
-        "repo": "nvim-treesitter-context",
-        "rev": "4fe0a54e86859744968e1a5c7867b49c86855774",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nvim-treesitter",
-        "repo": "nvim-treesitter-context",
         "type": "github"
       }
     },

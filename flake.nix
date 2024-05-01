@@ -90,10 +90,6 @@
       url = "github:nvim-treesitter/nvim-treesitter-textobjects";
       flake = false;
     };
-    treesitter-context = {
-      url = "github:nvim-treesitter/nvim-treesitter-context";
-      flake = false;
-    };
     nvim-ts-context-commentstring = {
       url = "github:JoosepAlviste/nvim-ts-context-commentstring";
       flake = false;
@@ -270,6 +266,7 @@
         packages = rec {
           default = nvim;
           nvim = pkgs.nvim-pkg;
+          nvim-corp = pkgs.nvim-corp-pkg;
           nightly = pkgs.neovim-nightly;
         };
         devShells = {

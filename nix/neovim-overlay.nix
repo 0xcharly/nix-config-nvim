@@ -105,7 +105,8 @@ with final.lib; let
       wrapRc = true;
     });
 
-  all-plugins = with final.nvimPlugins;
+  # Base plugin list that is safe for corporate usage.
+  base-plugins = with final.nvimPlugins;
     ([
       plenary
       sqlite
@@ -126,7 +127,6 @@ with final.lib; let
       actions-preview-nvim
       nvim-treesitter
       treesitter-textobjects
-      treesitter-context
       nvim-ts-context-commentstring
       vim-matchup
       nvim-lint
@@ -170,6 +170,12 @@ with final.lib; let
       dial-nvim
     ]);
 
+  # Complete list of plugins for personal usage.
+  pkg-plugins = base-plugins ++ [ prev.vimPlugins.copilot-vim ];
+
+  # Complete list of plugins for corporate usage.
+  corp-pkg-plugins = base-plugins;
+
   extraPackages = with final; [
     nodePackages.vim-language-server
     nodePackages.yaml-language-server
@@ -181,12 +187,17 @@ with final.lib; let
   ];
 
   nvim-pkg = mkNeovim {
-    plugins = all-plugins;
+    plugins = pkg-plugins;
+    inherit extraPackages;
+  };
+
+  nvim-corp-pkg = mkNeovim {
+    plugins = corp-pkg-plugins;
     inherit extraPackages;
   };
 
   luarc-json = final.mk-luarc-json {
-    plugins = all-plugins;
+    plugins = pkg-plugins;
     nvim = final.neovim-nightly;
     neodev-types = "nightly";
   };
