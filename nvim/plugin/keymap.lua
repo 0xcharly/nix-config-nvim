@@ -1,3 +1,5 @@
+local cmd = vim.cmd
+local diagnostic = vim.diagnostic
 local keymap = vim.keymap
 
 -- Remap for dealing with word wrap.
@@ -9,21 +11,21 @@ keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true }
 keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Helix-inspired keymaps.
-keymap.set('n', 'U', '<C-r>', { silent = true })            -- Redo
-keymap.set('n', 'gn', vim.cmd.bnext, { silent = true })     -- Goto next buffer
-keymap.set('n', 'gp', vim.cmd.bprevious, { silent = true }) -- Goto previous buffer
+keymap.set('n', 'U', '<C-r>', { silent = true }) -- Redo
+keymap.set('n', 'gn', cmd.bnext, { silent = true }) -- Goto next buffer
+keymap.set('n', 'gp', cmd.bprevious, { silent = true }) -- Goto previous buffer
 
 -- Buffer list navigation
-keymap.set('n', '[b', vim.cmd.bprevious, { silent = true, desc = 'previous [b]uffer' })
-keymap.set('n', ']b', vim.cmd.bnext, { silent = true, desc = 'next [b]uffer' })
-keymap.set('n', '[B', vim.cmd.bfirst, { silent = true, desc = 'first [B]uffer' })
-keymap.set('n', ']B', vim.cmd.blast, { silent = true, desc = 'last [B]uffer' })
+keymap.set('n', '[b', cmd.bprevious, { silent = true, desc = 'previous [b]uffer' })
+keymap.set('n', ']b', cmd.bnext, { silent = true, desc = 'next [b]uffer' })
+keymap.set('n', '[B', cmd.bfirst, { silent = true, desc = 'first [B]uffer' })
+keymap.set('n', ']B', cmd.blast, { silent = true, desc = 'last [B]uffer' })
 
 -- Diagnostic keymaps.
-keymap.set('n', '[d', vim.diagnostic.goto_prev, { silent = true })
-keymap.set('n', ']d', vim.diagnostic.goto_next, { silent = true })
-keymap.set('n', '<leader>e', vim.diagnostic.open_float, { silent = true })
-keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { silent = true })
+keymap.set('n', '[d', diagnostic.goto_prev, { silent = true })
+keymap.set('n', ']d', diagnostic.goto_next, { silent = true })
+keymap.set('n', '<leader>e', diagnostic.open_float, { silent = true })
+keymap.set('n', '<leader>q', diagnostic.setloclist, { silent = true })
 
 -- Make esc leave terminal mode
 keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { silent = true })
@@ -46,12 +48,10 @@ keymap.set('n', '<C-Down>', '<C-w>j', { silent = true })
 keymap.set('n', '<C-Up>', '<C-w>k', { silent = true })
 keymap.set('n', '<C-Right>', '<C-w>l', { silent = true })
 
-keymap.set('i', '<A-Left>', vim.cmd.tabprev, { silent = true })
-keymap.set('i', '<A-Right>', vim.cmd.tabnext, { silent = true })
-keymap.set('n', '<A-Left>', vim.cmd.tabprev, { silent = true })
-keymap.set('n', '<A-Right>', vim.cmd.tabnext, { silent = true })
-
-keymap.set('n', '<LocalLeader>pv', vim.cmd.Ex)
+keymap.set('i', '<A-Left>', cmd.tabprev, { silent = true })
+keymap.set('i', '<A-Right>', cmd.tabnext, { silent = true })
+keymap.set('n', '<A-Left>', cmd.tabprev, { silent = true })
+keymap.set('n', '<A-Right>', cmd.tabnext, { silent = true })
 
 keymap.set('v', 'J', ":m '>+1<cr>gv=gv", { silent = true })
 keymap.set('v', 'K', ":m '<-2<cr>gv=gv", { silent = true })
@@ -78,5 +78,5 @@ keymap.set('n', '<LocalLeader>d', '"_d', { silent = true })
 keymap.set('v', '<LocalLeader>d', '"_d', { silent = true })
 
 -- Pane creation.
-keymap.set('n', '<LocalLeader>ws', vim.cmd.split, { silent = true })
-keymap.set('n', '<LocalLeader>wv', vim.cmd.vsplit, { silent = true })
+keymap.set('n', '<LocalLeader>ws', cmd.split, { silent = true })
+keymap.set('n', '<LocalLeader>wv', cmd.vsplit, { silent = true })

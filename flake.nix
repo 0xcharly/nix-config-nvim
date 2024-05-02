@@ -115,6 +115,10 @@
       url = "github:folke/todo-comments.nvim";
       flake = false;
     };
+    trouble = {
+      url = "github:folke/trouble.nvim";
+      flake = false;
+    };
     lualine = {
       url = "github:hoob3rt/lualine.nvim";
       flake = false;
@@ -160,6 +164,10 @@
       flake = false;
     };
     rustaceanvim.url = "github:mrcjkb/rustaceanvim";
+    which-key-nvim = {
+      url = "github:folke/which-key.nvim";
+      flake = false;
+    };
     # nvim-cmp and plugins.
     nvim-cmp = {
       url = "github:hrsh7th/nvim-cmp";
@@ -207,75 +215,74 @@
     };
   };
 
-  outputs =
-    inputs @ { self
-    , nixpkgs
-    , neorocks
-    , gen-luarc
-    , flake-utils
-    , pre-commit-hooks
-    , ...
-    }:
-    let
-      supportedSystems = [
-        "aarch64-darwin"
-        "aarch64-linux"
-        "x86_64-linux"
-      ];
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    neorocks,
+    gen-luarc,
+    flake-utils,
+    pre-commit-hooks,
+    ...
+  }: let
+    supportedSystems = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
 
-      plugin-overlay = import ./nix/vim-plugins-overlay.nix { inherit inputs; };
-      neovim-overlay = import ./nix/neovim-overlay.nix { inherit inputs; };
-    in
+    plugin-overlay = import ./nix/vim-plugins-overlay.nix {inherit inputs;};
+    neovim-overlay = import ./nix/neovim-overlay.nix {inherit inputs;};
+  in
     flake-utils.lib.eachSystem supportedSystems
-      (system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [
-            neorocks.overlays.default
-            gen-luarc.overlays.default
-            plugin-overlay
-            neovim-overlay
-            inputs.telescope-manix.overlays.default
-            inputs.rustaceanvim.overlays.default
-          ];
-        };
-        shell = pkgs.mkShell {
-          name = "nvim-devShell";
-          buildInputs = with pre-commit-hooks.packages.${system}; [
+    (system: let
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          neorocks.overlays.default
+          gen-luarc.overlays.default
+          plugin-overlay
+          neovim-overlay
+          inputs.telescope-manix.overlays.default
+          inputs.rustaceanvim.overlays.default
+        ];
+      };
+      shell = pkgs.mkShell {
+        name = "nvim-devShell";
+        buildInputs =
+          (with pre-commit-hooks.packages.${system}; [
+            # Lua LSP.
             lua-language-server
-            alejandra
             stylua
             luacheck
-          ];
-          shellHook = ''
-            ${self.checks.${system}.pre-commit-check.shellHook}
-            ln -fs ${pkgs.luarc-json} .luarc.json
-          '';
+          ])
+          # Nix LSP.
+          ++ [pkgs.nixd];
+        shellHook = ''
+          ${self.checks.${system}.pre-commit-check.shellHook}
+          ln -fs ${pkgs.luarc-json} .luarc.json
+        '';
+      };
+      pre-commit-check = pre-commit-hooks.lib.${system}.run {
+        src = self;
+        hooks = {
+          stylua.enable = true;
+          luacheck.enable = true;
         };
-        pre-commit-check = pre-commit-hooks.lib.${system}.run {
-          src = self;
-          hooks = {
-            alejandra.enable = true;
-            stylua.enable = true;
-            luacheck.enable = true;
-          };
-        };
-      in
-      {
-        packages = rec {
-          default = nvim;
-          nvim = pkgs.nvim-pkg;
-          nvim-corp = pkgs.nvim-corp-pkg;
-          nightly = pkgs.neovim-nightly;
-        };
-        devShells = {
-          default = shell;
-        };
-        checks = {
-          inherit pre-commit-check;
-        };
-      })
+      };
+    in {
+      packages = rec {
+        default = nightly;
+        nightly = pkgs.nvim-pkg;
+        nightly-corp = pkgs.nvim-pkg-corp;
+        nightly-zero-conf = pkgs.neovim-nightly;
+      };
+      devShells = {
+        default = shell;
+      };
+      checks = {
+        inherit pre-commit-check;
+      };
+    })
     // {
       overlays.default = neovim-overlay;
     };

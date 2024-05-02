@@ -6,15 +6,17 @@
 
 local M = {}
 
+local codelens = require('user.lsp.codelens')
+
 ---Gets a 'ClientCapabilities' object, describing the LSP client capabilities
 ---Extends the object with capabilities provided by plugins.
 ---@return lsp.ClientCapabilities
 function M.make_client_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  -- Add com_nvim_lsp capabilities
-  capabilities = require 'cmp_nvim_lsp'.default_capabilities(capabilities)
-  capabilities = require 'lsp-selection-range'.update_capabilities(capabilities)
-  -- Enable preliminary support for workspace/didChangeWatchedFiles
+  -- Add com_nvim_lsp capabilities.
+  capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+  capabilities = require('lsp-selection-range').update_capabilities(capabilities)
+  -- Enable preliminary support for workspace/didChangeWatchedFiles.
   capabilities = vim.tbl_deep_extend('keep', capabilities, {
     workspace = {
       didChangeWatchedFiles = {
@@ -79,7 +81,7 @@ vim.lsp.codelens.on_codelens = function(err, lenses, ctx, _)
 end
 
 local code_action = function()
-  return require 'actions-preview'.code_actions()
+  return require('actions-preview').code_actions()
   -- return vim.lsp.buf.code_action()
 end
 
@@ -93,7 +95,7 @@ local go_to_first_import = function()
         for _, result in ipairs(results) do
           if result.kind == 'Module' then
             local lnum = result.lnum
-            vim.api.nvim_input "m'"
+            vim.api.nvim_input("m'")
             vim.api.nvim_win_set_cursor(0, { lnum, 0 })
             return
           end
@@ -112,37 +114,23 @@ local filtered_document_symbol = function(filter)
 end
 
 local document_functions = function()
-  filtered_document_symbol 'Function'
+  filtered_document_symbol('Function')
 end
 
 local document_modules = function()
-  filtered_document_symbol 'Module'
+  filtered_document_symbol('Module')
 end
 
 local document_structs = function()
-  filtered_document_symbol 'Struct'
+  filtered_document_symbol('Struct')
 end
 
-function M.ui_tweaks()
-  -- Leading icon on diagnostic virtual text.
-  vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-      underline = true,
-      virtual_text = {
-        spacing = 4,
-        prefix = ' ',
-      },
-    })
-
-  -- Bordered popups.
-  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-    vim.lsp.handlers.hover, { border = 'rounded' })
-  vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-    vim.lsp.handlers.signature_help, { border = 'rounded' })
-end
+-- Bordered popups.
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
 M.on_attach = function(client, bufnr)
-  vim.cmd.setlocal 'signcolumn=yes'
+  vim.cmd.setlocal('signcolumn=yes')
 
   local function buf_set_var(...)
     vim.api.nvim_buf_set_var(bufnr, ...)
@@ -157,57 +145,57 @@ M.on_attach = function(client, bufnr)
   end
 
   -- Mappings.
-  keymap.set('n', 'gD', vim.lsp.buf.declaration, desc 'lsp: go to [D]eclaration')
-  keymap.set('n', 'gd', vim.lsp.buf.definition, desc 'lsp: go to [d]efinition')
-  keymap.set('n', '<space>gt', vim.lsp.buf.type_definition, desc 'lsp: go to [t]ype definition')
+  keymap.set('n', 'gD', vim.lsp.buf.declaration, desc('lsp: go to [D]eclaration'))
+  keymap.set('n', 'gd', vim.lsp.buf.definition, desc('lsp: go to [d]efinition'))
+  keymap.set('n', '<LocalLeader>gt', vim.lsp.buf.type_definition, desc('lsp: go to [t]ype definition'))
   -- keymap.set('n', 'K', vim.lsp.buf.hover, opts) -- overridden by nvim-ufo
-  keymap.set('n', '<space>pd', peek_definition, desc 'lsp: [p]eek [d]efinition')           -- overridden by nvim-ufo
-  keymap.set('n', '<space>pt', peek_type_definition, desc 'lsp: [p]eek [t]ype definition') -- overridden by nvim-ufo
-  keymap.set('n', 'gi', vim.lsp.buf.implementation, desc 'lsp: go to [i]mplementation')
-  keymap.set('n', '<space>gi', go_to_first_import, desc 'lsp: [g]o to fist [i]mport')
-  keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, desc 'lsp: signature help')
-  keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, desc 'lsp: [w]orkspace folder [a]dd')
-  keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, desc 'lsp: [w]orkspace folder [r]emove')
-  keymap.set('n', '<space>wl', function()
+  keymap.set('n', '<LocalLeader>pd', peek_definition, desc('lsp: [p]eek [d]efinition')) -- overridden by nvim-ufo
+  keymap.set('n', '<LocalLeader>pt', peek_type_definition, desc('lsp: [p]eek [t]ype definition')) -- overridden by nvim-ufo
+  keymap.set('n', 'gi', vim.lsp.buf.implementation, desc('lsp: go to [i]mplementation'))
+  keymap.set('n', '<LocalLeader>gi', go_to_first_import, desc('lsp: [g]o to fist [i]mport'))
+  keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, desc('lsp: signature help'))
+  keymap.set('n', '<LocalLeader>wa', vim.lsp.buf.add_workspace_folder, desc('lsp: [w]orkspace folder [a]dd'))
+  keymap.set('n', '<LocalLeader>wr', vim.lsp.buf.remove_workspace_folder, desc('lsp: [w]orkspace folder [r]emove'))
+  keymap.set('n', '<LocalLeader>wl', function()
     -- TODO: Replace this with a Telescope extension?
     vim.print(vim.lsp.buf.list_workspace_folders())
-  end, desc 'lsp: [w]orkspace folders [l]')
-  keymap.set('n', '<space>rn', vim.lsp.buf.rename, desc 'lsp: [r]e[n]ame')
-  keymap.set('n', '<space>wq', vim.lsp.buf.workspace_symbol, desc 'lsp: [w]orkspace symbol [q]uery')
-  keymap.set('n', '<space>dd', vim.lsp.buf.document_symbol, desc 'lsp: [dd]ocument symbol')
-  keymap.set('n', '<space>df', document_functions, desc 'lsp: [d]ocument [f]unctions')
-  keymap.set('n', '<space>ds', document_structs, desc 'lsp: [d]ocument [s]tructs')
-  keymap.set('n', '<space>di', document_modules, desc 'lsp: [d]ocument modules/[i]mports')
+  end, desc('lsp: [w]orkspace folders [l]'))
+  keymap.set('n', '<LocalLeader>rn', vim.lsp.buf.rename, desc('lsp: [r]e[n]ame'))
+  keymap.set('n', '<LocalLeader>wq', vim.lsp.buf.workspace_symbol, desc('lsp: [w]orkspace symbol [q]uery'))
+  keymap.set('n', '<LocalLeader>dd', vim.lsp.buf.document_symbol, desc('lsp: [dd]ocument symbol'))
+  keymap.set('n', '<LocalLeader>df', document_functions, desc('lsp: [d]ocument [f]unctions'))
+  keymap.set('n', '<LocalLeader>ds', document_structs, desc('lsp: [d]ocument [s]tructs'))
+  keymap.set('n', '<LocalLeader>di', document_modules, desc('lsp: [d]ocument modules/[i]mports'))
   if client.name == 'rust-analyzer' then
     keymap.set('n', '<M-CR>', function()
-      vim.cmd.RustLsp 'codeAction'
-    end, desc 'rust: code action')
+      vim.cmd.RustLsp('codeAction')
+    end, desc('rust: code action'))
   else
-    keymap.set('n', '<M-CR>', code_action, desc 'lsp: code action')
+    keymap.set('n', '<M-CR>', code_action, desc('lsp: code action'))
   end
-  keymap.set('n', '<M-l>', vim.lsp.codelens.run, desc 'lsp: run code lens')
-  keymap.set('n', '<space>cr', vim.lsp.codelens.refresh, desc 'lsp: refresh [c]ode [l]enses')
-  -- keymap.set('n', '[l', codelens.goto_prev, desc('lsp: previous code[l]ens'))
-  -- keymap.set('n', ']l', codelens.goto_next, desc('lsp: next code[l]ens'))
-  keymap.set('n', 'gr', vim.lsp.buf.references, desc 'lsp: [g]et [r]eferences')
-  keymap.set({ 'n', 'v' }, '<space>f', function()
+  keymap.set('n', '<M-l>', vim.lsp.codelens.run, desc('lsp: run code lens'))
+  keymap.set('n', '<LocalLeader>cr', vim.lsp.codelens.refresh, desc('lsp: [r]efresh [c]ode lenses'))
+  keymap.set('n', '[l', codelens.goto_prev, desc('lsp: previous code[l]ens'))
+  keymap.set('n', ']l', codelens.goto_next, desc('lsp: next code[l]ens'))
+  keymap.set('n', 'gr', vim.lsp.buf.references, desc('lsp: [g]et [r]eferences'))
+  keymap.set({ 'n', 'v' }, '<LocalLeader>f', function()
     vim.lsp.buf.format { async = true }
-  end, desc 'lsp: [f]ormat buffer')
+  end, desc('lsp: [f]ormat buffer'))
   keymap.set('n', 'vv', function()
-    require 'lsp-selection-range'.trigger()
-  end, desc 'lsp: trigger selection range')
+    require('lsp-selection-range').trigger()
+  end, desc('lsp: trigger selection range'))
   keymap.set('v', 'vv', function()
-    require 'lsp-selection-range'.expand()
-  end, desc 'lsp: expand selection range')
+    require('lsp-selection-range').expand()
+  end, desc('lsp: expand selection range'))
 
   -- Autocomplete signature hints
-  require 'lsp_signature'.on_attach()
+  require('lsp_signature').on_attach()
 
   if client.server_capabilities.inlayHintProvider then
     keymap.set('n', '<space>h', function()
       local current_setting = vim.lsp.inlay_hint.is_enabled(bufnr)
       vim.lsp.inlay_hint.enable(bufnr, not current_setting)
-    end, desc 'lsp: toggle inlay [h]ints')
+    end, desc('lsp: toggle inlay [h]ints'))
   end
 
   local function get_active_clients(buf)

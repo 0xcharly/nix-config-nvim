@@ -1,26 +1,19 @@
-local lsp = require 'user.lsp'
+local nixd_cmd = 'nixd'
 
-if vim.fn.executable 'nil' ~= 1 then
+if vim.fn.executable(nixd_cmd) ~= 1 then
   return
 end
 
+local lsp = require('user.lsp')
+
 ---@diagnostic disable-next-line: missing-fields
 vim.lsp.start {
-  name = 'nil_ls',
-  cmd = { 'nil' },
+  name = 'nixd',
+  cmd = { nixd_cmd },
   root_dir = vim.fs.dirname(vim.fs.find({ 'flake.nix', '.git' }, { upward = true })[1]),
   on_attach = lsp.on_attach,
-  capabilities = lsp.capabilities,
+  capabilities = lsp.make_client_capabilities(),
   settings = {
-    formatting = {
-      command = { 'alejandra', '-qq' },
-    },
-    flake = {
-      autoArchive = true,
-      autoEvalInputs = true,
-    },
+    nixd = {},
   },
 }
-
-vim.api.nvim_set_hl(0, '@lsp.type.property.nix', {})
-vim.api.nvim_set_hl(0, '@lsp.type.variable.nix', {})

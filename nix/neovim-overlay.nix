@@ -1,164 +1,166 @@
-{ inputs }: final: prev:
+{inputs}: final: prev:
 with final.lib; let
-  mkNeovim =
-    { appName ? null
-    , plugins ? [ ]
-    , extraPackages ? [ ]
-    , resolvedExtraLuaPackages ? [ ]
-    , extraPython3Packages ? p: [ ]
-    , withPython3 ? true
-    , withRuby ? false
-    , withNodeJs ? false
-    , viAlias ? true
-    , vimAlias ? true
-    }:
-    let
-      defaultPlugin = {
-        plugin = null;
-        config = null;
-        optional = false;
-        runtime = { };
-      };
+  mkNeovim = {
+    appName ? null,
+    plugins ? [],
+    extraPackages ? [],
+    resolvedExtraLuaPackages ? [],
+    extraPython3Packages ? p: [],
+    withPython3 ? true,
+    withRuby ? false,
+    withNodeJs ? false,
+    viAlias ? true,
+    vimAlias ? true,
+  }: let
+    defaultPlugin = {
+      plugin = null;
+      config = null;
+      optional = false;
+      runtime = {};
+    };
 
-      externalPackages = extraPackages ++ [ final.sqlite ];
+    externalPackages = extraPackages ++ [final.sqlite];
 
-      normalizedPlugins = map
-        (x:
-          defaultPlugin
-          // (
-            if x ? plugin
-            then x
-            else { plugin = x; }
-          ))
-        plugins;
+    normalizedPlugins =
+      map
+      (x:
+        defaultPlugin
+        // (
+          if x ? plugin
+          then x
+          else {plugin = x;}
+        ))
+      plugins;
 
-      neovimConfig = final.neovimUtils.makeNeovimConfig {
-        inherit extraPython3Packages withPython3 withRuby withNodeJs viAlias vimAlias;
-        plugins = normalizedPlugins;
-      };
+    neovimConfig = final.neovimUtils.makeNeovimConfig {
+      inherit extraPython3Packages withPython3 withRuby withNodeJs viAlias vimAlias;
+      plugins = normalizedPlugins;
+    };
 
-      nvimConfig = final.stdenv.mkDerivation {
-        name = "nvim-config";
-        src = ../nvim;
+    nvimConfig = final.stdenv.mkDerivation {
+      name = "nvim-config";
+      src = ../nvim;
 
-        buildInputs = [ final.rsync ];
-        buildPhase = ''
-          mkdir -p $out/nvim
-        '';
+      buildInputs = [final.rsync];
+      buildPhase = ''
+        mkdir -p $out/nvim
+      '';
 
-        installPhase = ''
-          rsync -a --exclude=after --exclude=/init.lua $src/ $out/nvim
-          rsync -a after $out
-        '';
-      };
+      installPhase = ''
+        rsync -a --exclude=after --exclude=/init.lua $src/ $out/nvim
+        rsync -a after $out
+      '';
+    };
 
-      initLua =
-        ''
-          vim.loader.enable()
-          vim.opt.rtp:prepend('${../lib}')
-        ''
-        + ""
-        + (builtins.readFile ../nvim/init.lua)
-        + ""
-        + ''
-          vim.opt.rtp:append('${nvimConfig}/nvim')
-          vim.opt.rtp:append('${nvimConfig}/after')
-        '';
+    initLua =
+      ''
+        vim.loader.enable()
+        vim.opt.rtp:prepend('${../lib}')
+      ''
+      + ""
+      + (builtins.readFile ../nvim/init.lua)
+      + ""
+      + ''
+        vim.opt.rtp:append('${nvimConfig}/nvim')
+        vim.opt.rtp:append('${nvimConfig}/after')
+      '';
 
-      extraMakeWrapperArgs = builtins.concatStringsSep " " (
-        (optional (appName != "nvim" && appName != null && appName != "")
-          ''--set NVIM_APPNAME "${appName}"'')
-        ++ (optional (externalPackages != [ ])
-          ''--prefix PATH : "${makeBinPath externalPackages}"'')
-        ++ [
-          ''--set LIBSQLITE_CLIB_PATH "${final.sqlite.out}/lib/libsqlite3.so"''
-          ''--set LIBSQLITE "${final.sqlite.out}/lib/libsqlite3.so"''
-        ]
-      );
+    extraMakeWrapperArgs = builtins.concatStringsSep " " (
+      (optional (appName != "nvim" && appName != null && appName != "")
+        ''--set NVIM_APPNAME "${appName}"'')
+      ++ (optional (externalPackages != [])
+        ''--prefix PATH : "${makeBinPath externalPackages}"'')
+      ++ [
+        ''--set LIBSQLITE_CLIB_PATH "${final.sqlite.out}/lib/libsqlite3.so"''
+        ''--set LIBSQLITE "${final.sqlite.out}/lib/libsqlite3.so"''
+      ]
+    );
 
-      extraMakeWrapperLuaCArgs = optionalString (resolvedExtraLuaPackages != [ ]) ''
-        --suffix LUA_CPATH ";" "${
-          lib.concatMapStringsSep ";" final.luaPackages.getLuaCPath
+    extraMakeWrapperLuaCArgs = optionalString (resolvedExtraLuaPackages != []) ''
+      --suffix LUA_CPATH ";" "${
+        lib.concatMapStringsSep ";" final.luaPackages.getLuaCPath
+        resolvedExtraLuaPackages
+      }"'';
+
+    extraMakeWrapperLuaArgs =
+      optionalString (resolvedExtraLuaPackages != [])
+      ''
+        --suffix LUA_PATH ";" "${
+          concatMapStringsSep ";" final.luaPackages.getLuaPath
           resolvedExtraLuaPackages
         }"'';
-
-      extraMakeWrapperLuaArgs =
-        optionalString (resolvedExtraLuaPackages != [ ])
-          ''
-            --suffix LUA_PATH ";" "${
-              concatMapStringsSep ";" final.luaPackages.getLuaPath
-              resolvedExtraLuaPackages
-            }"'';
-    in
+  in
     # final.wrapNeovimUnstable inputs.packages.${prev.system}.neovim (neovimConfig
     final.wrapNeovimUnstable final.neovim-nightly (neovimConfig
       // {
-      luaRcContent = initLua;
-      wrapperArgs =
-        escapeShellArgs neovimConfig.wrapperArgs
+        luaRcContent = initLua;
+        wrapperArgs =
+          escapeShellArgs neovimConfig.wrapperArgs
           + " "
           + extraMakeWrapperArgs
           + " "
           + extraMakeWrapperLuaCArgs
           + " "
           + extraMakeWrapperLuaArgs;
-      wrapRc = true;
-    });
+        wrapRc = true;
+      });
 
   # Base plugin list that is safe for corporate usage.
   base-plugins = with final.nvimPlugins;
     ([
-      plenary
-      sqlite
-      nvim-web-devicons
-      eyeliner-nvim
-      repeat
-      surround
-      nvim-lastplace
-      comment
-      nio # TODO: Remove when rocks-dev is ready
-      nvim-dap
-      nvim-dap-ui
-      lsp-status
-      lsp_signature
-      nvim-lsp-selection-range
-      fidget
-      lspkind-nvim
-      actions-preview-nvim
-      nvim-treesitter
-      treesitter-textobjects
-      nvim-ts-context-commentstring
-      vim-matchup
-      nvim-lint
-      telescope
-      telescope-smart-history
-      todo-comments
-      lualine
-      oil-nvim
-      harpoon
-      gitsigns
-      nvim-bqf
-      formatter
-      yanky
-      tmux-nvim
-      term-edit-nvim
-      other-nvim
-      crates-nvim
-    ]
-    ++ [
-      # nvim-cmp and plugins
-      cmp-buffer
-      cmp-tmux
-      cmp-path
-      cmp-cmdline
-      cmp-cmdline-history
-      cmp-nvim-lua
-      cmp-nvim-lsp
-      cmp-nvim-lsp-document-symbol
-      cmp-nvim-lsp-signature-help
-      cmp-rg
-      nvim-cmp
-    ])
+        plenary
+        sqlite
+        nvim-web-devicons
+        eyeliner-nvim
+        repeat
+        surround
+        nvim-lastplace
+        comment
+        nio # TODO: Remove when rocks-dev is ready
+        nvim-dap
+        nvim-dap-ui
+        lsp-status
+        lsp_signature
+        nvim-lsp-selection-range
+        fidget
+        lspkind-nvim
+        actions-preview-nvim
+        nvim-treesitter
+        treesitter-textobjects
+        nvim-ts-context-commentstring
+        vim-matchup
+        nvim-lint
+        telescope
+        telescope-smart-history
+        todo-comments
+        trouble
+        lualine
+        oil-nvim
+        harpoon
+        gitsigns
+        nvim-bqf
+        formatter
+        yanky
+        tmux-nvim
+        term-edit-nvim
+        other-nvim
+        crates-nvim
+        which-key-nvim
+      ]
+      ++ [
+        # nvim-cmp and plugins
+        cmp-buffer
+        cmp-tmux
+        cmp-path
+        cmp-cmdline
+        cmp-cmdline-history
+        cmp-nvim-lua
+        cmp-nvim-lsp
+        cmp-nvim-lsp-document-symbol
+        cmp-nvim-lsp-signature-help
+        cmp-rg
+        nvim-cmp
+      ])
     ++ (with final; [
       telescope-manix
       rustaceanvim
@@ -166,15 +168,15 @@ with final.lib; let
     ++ (with prev.vimPlugins; [
       catppuccin-nvim
       vim-fugitive
-      telescope-fzy-native-nvim
+      telescope-fzf-native-nvim
       dial-nvim
     ]);
 
   # Complete list of plugins for personal usage.
-  pkg-plugins = base-plugins ++ [ prev.vimPlugins.copilot-vim ];
+  pkg-plugins = base-plugins ++ [prev.vimPlugins.copilot-vim];
 
   # Complete list of plugins for corporate usage.
-  corp-pkg-plugins = base-plugins;
+  pkg-corp-plugins = base-plugins;
 
   extraPackages = with final; [
     nodePackages.vim-language-server
@@ -191,8 +193,8 @@ with final.lib; let
     inherit extraPackages;
   };
 
-  nvim-corp-pkg = mkNeovim {
-    plugins = corp-pkg-plugins;
+  nvim-pkg-corp = mkNeovim {
+    plugins = pkg-corp-plugins;
     inherit extraPackages;
   };
 
@@ -201,8 +203,12 @@ with final.lib; let
     nvim = final.neovim-nightly;
     neodev-types = "nightly";
   };
-in
-{
-  inherit nvim-pkg luarc-json;
-}
 
+  corp-luarc-json = final.mk-luarc-json {
+    plugins = pkg-plugins;
+    nvim = final.neovim-nightly;
+    neodev-types = "nightly";
+  };
+in {
+  inherit nvim-pkg nvim-pkg-nightly nvim-pkg-corp luarc-json corp-luarc-json;
+}

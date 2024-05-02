@@ -1975,7 +1975,9 @@
         "tmux-nvim": "tmux-nvim",
         "todo-comments": "todo-comments",
         "treesitter-textobjects": "treesitter-textobjects",
+        "trouble": "trouble",
         "vim-matchup": "vim-matchup",
+        "which-key-nvim": "which-key-nvim",
         "yanky": "yanky"
       }
     },
@@ -2362,6 +2364,22 @@
         "type": "github"
       }
     },
+    "trouble": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1711693365,
+        "narHash": "sha256-kIQ72fqAsiMF9jq0MzC6peaHJddYn5PRNXfYFHTQB5Q=",
+        "owner": "folke",
+        "repo": "trouble.nvim",
+        "rev": "b9cf677f20bb2faa2dacfa870b084e568dca9572",
+        "type": "github"
+      },
+      "original": {
+        "owner": "folke",
+        "repo": "trouble.nvim",
+        "type": "github"
+      }
+    },
     "vim-matchup": {
       "flake": false,
       "locked": {
@@ -2375,6 +2393,22 @@
       "original": {
         "owner": "andymass",
         "repo": "vim-matchup",
+        "type": "github"
+      }
+    },
+    "which-key-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1697801635,
+        "narHash": "sha256-uvghPj/teWrRMm09Gh8iQ/LV2nYJw0lmoiZK6L4+1cY=",
+        "owner": "folke",
+        "repo": "which-key.nvim",
+        "rev": "4433e5ec9a507e5097571ed55c02ea9658fb268a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "folke",
+        "repo": "which-key.nvim",
         "type": "github"
       }
     },

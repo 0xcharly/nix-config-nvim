@@ -41,9 +41,10 @@ in {
     vim-matchup = mkNvimPlugin inputs.vim-matchup "vim-matchup";
     nvim-lint = mkNvimPlugin inputs.nvim-lint "nvim-lint";
     telescope = mkNvimPlugin inputs.telescope "telescope.nvim";
-    telescope-manix = mkNvimPlugin inputs.telescope "telescope-manix";
+    telescope-manix = mkNvimPlugin inputs.telescope-manix "telescope-manix";
     telescope-smart-history = mkNvimPlugin inputs.telescope-smart-history "telescope-smart-history.nvim";
     todo-comments = mkNvimPlugin inputs.todo-comments "todo-comments.nvim";
+    trouble = mkNvimPlugin inputs.trouble "trouble.nvim";
     lualine = mkNvimPlugin inputs.lualine "lualine";
     oil-nvim = mkNvimPlugin inputs.oil-nvim "oil.nvim";
     harpoon = mkNvimPlugin inputs.harpoon "harpoon";
@@ -56,6 +57,8 @@ in {
     other-nvim = mkNvimPlugin inputs.other-nvim "other.nvim";
     crates-nvim = mkNvimPlugin inputs.crates-nvim "crates-nvim";
     rustaceanvim = mkNvimPlugin inputs.crates-nvim "rustaceanvim";
+    which-key-nvim = (mkNvimPlugin inputs.which-key-nvim "which-key.nvim").overrideAttrs (oa: {
+      patches = [./which-key.patch];
+    });
   };
 }
-

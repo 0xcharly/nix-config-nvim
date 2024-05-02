@@ -11,7 +11,7 @@ local sign = function(opts)
     numhl = '',
   })
 end
-local diagnostic_signs = require 'user.lsp'.diagnostic_signs
+local diagnostic_signs = require('user.lsp').diagnostic_signs
 for name, icon in pairs(diagnostic_signs) do
   sign {
     name = 'DiagnosticSign' .. name,
@@ -21,6 +21,7 @@ end
 
 vim.diagnostic.config {
   virtual_text = {
+    spacing = 4,
     prefix = '',
     format = function(diagnostic)
       local severity = diagnostic.severity
@@ -53,7 +54,7 @@ vim.diagnostic.config {
   },
 }
 
-local lsp = require 'user.lsp'
+local lsp = require('user.lsp')
 
 ---@return RustaceanOpts
 vim.g.rustaceanvim = function()
@@ -89,10 +90,10 @@ end
 
 -- Native plugins
 vim.cmd.filetype('plugin', 'indent', 'on')
-vim.cmd.packadd 'cfilter'  -- Allows filtering the quickfix list with :cfdo
+vim.cmd.packadd('cfilter') -- Allows filtering the quickfix list with :cfdo
 
 -- this should be at the end, because
 -- it causes neovim to source ftplugins
 -- on the packpath when passing a file to the nvim command
-vim.cmd.syntax 'on'
-vim.cmd.syntax 'enable'
+vim.cmd.syntax('on')
+vim.cmd.syntax('enable')
