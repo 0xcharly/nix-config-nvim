@@ -16,6 +16,11 @@
     };
     flake-utils.url = "github:numtide/flake-utils";
 
+    neovim = {
+      url = "github:neovim/neovim/v0.9.5?dir=contrib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Plugins
     plenary = {
       url = "github:nvim-lua/plenary.nvim";
@@ -271,9 +276,11 @@
       };
     in {
       packages = rec {
-        default = nightly;
-        nightly = pkgs.nvim-pkg;
-        nightly-corp = pkgs.nvim-pkg-corp;
+        default = stable;
+        stable = pkgs.nvim-pkg;
+        stable-corp = pkgs.nvim-pkg-corp;
+        nightly = pkgs.nvim-nightly-pkg;
+        nightly-corp = pkgs.nvim-nightly-corp-pkg;
         nightly-zero-conf = pkgs.neovim-nightly;
       };
       devShells = {

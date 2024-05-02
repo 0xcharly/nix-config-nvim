@@ -2,6 +2,7 @@
 with final.lib; let
   mkNeovim = {
     appName ? null,
+    nvim ? final.neovim,
     plugins ? [],
     extraPackages ? [],
     resolvedExtraLuaPackages ? [],
@@ -90,8 +91,7 @@ with final.lib; let
           resolvedExtraLuaPackages
         }"'';
   in
-    # final.wrapNeovimUnstable inputs.packages.${prev.system}.neovim (neovimConfig
-    final.wrapNeovimUnstable final.neovim-nightly (neovimConfig
+    final.wrapNeovimUnstable nvim (neovimConfig
       // {
         luaRcContent = initLua;
         wrapperArgs =
@@ -190,11 +190,25 @@ with final.lib; let
 
   nvim-pkg = mkNeovim {
     plugins = pkg-plugins;
+    nvim = inputs.neovim.packages.${prev.system}.neovim;
+    inherit extraPackages;
+  };
+
+  nvim-nightly-pkg = mkNeovim {
+    plugins = pkg-plugins;
+    nvim = final.neovim-nightly;
     inherit extraPackages;
   };
 
   nvim-pkg-corp = mkNeovim {
     plugins = pkg-corp-plugins;
+    nvim = inputs.neovim.packages.${prev.system}.neovim;
+    inherit extraPackages;
+  };
+
+  nvim-nightly-corp-pkg = mkNeovim {
+    plugins = pkg-corp-plugins;
+    nvim = final.neovim-nightly;
     inherit extraPackages;
   };
 
@@ -205,10 +219,10 @@ with final.lib; let
   };
 
   corp-luarc-json = final.mk-luarc-json {
-    plugins = pkg-plugins;
+    plugins = pkg-corp-plugins;
     nvim = final.neovim-nightly;
     neodev-types = "nightly";
   };
 in {
-  inherit nvim-pkg nvim-pkg-nightly nvim-pkg-corp luarc-json corp-luarc-json;
+  inherit nvim-pkg nvim-nightly-pkg nvim-pkg-corp nvim-nightly-corp-pkg luarc-json corp-luarc-json;
 }
