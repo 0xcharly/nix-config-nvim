@@ -14,6 +14,10 @@ vim.lsp.start {
   on_attach = lsp.on_attach,
   capabilities = lsp.make_client_capabilities(),
   settings = {
-    nixd = {},
+    nixd = {
+      formatting = {
+        command = 'alejandra',
+      },
+    },
   },
 }

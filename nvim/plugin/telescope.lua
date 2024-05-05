@@ -84,74 +84,64 @@ local function fuzzy_grep_current_file_type()
   grep_current_file_type(fuzzy_grep)
 end
 
--- vim.keymap.set('n', '<LocalLeader>f', pickers.find_files)
--- vim.keymap.set('n', '<LocalLeader><Space>', project_files, { desc = 'telescope: project files git' })
--- vim.keymap.set('n', '<LocalLeader>b', buffers)
--- vim.keymap.set('n', '<LocalLeader>j', pickers.jumplist)
--- vim.keymap.set('n', '<LocalLeader>h', pickers.highlights)
--- vim.keymap.set('n', '<LocalLeader>s', pickers.lsp_document_symbols)
--- vim.keymap.set('n', '<LocalLeader>S', pickers.lsp_dynamic_workspace_symbols)
--- vim.keymap.set('n', '<LocalLeader>d', pickers.diagnostics)
--- vim.keymap.set('n', '<LocalLeader>/', pickers.find_files)
--- vim.keymap.set('n', '<LocalLeader>?', pickers.help_tags)
--- vim.keymap.set('n', '<LocalLeader>tm', pickers.man_pages)
--- vim.keymap.set('n', '<LocalLeader>*', pickers.grep_string)
--- vim.keymap.set('n', '<LocalLeader>g', pickers.live_grep)
+-- vim.keymap.set('n', '<Leader>f', pickers.find_files)
+-- vim.keymap.set('n', '<Leader><Space>', project_files, { desc = 'telescope: project files git' })
+-- vim.keymap.set('n', '<Leader>b', buffers)
+-- vim.keymap.set('n', '<Leader>j', pickers.jumplist)
+-- vim.keymap.set('n', '<Leader>h', pickers.highlights)
+-- vim.keymap.set('n', '<Leader>s', pickers.lsp_document_symbols)
+-- vim.keymap.set('n', '<Leader>S', pickers.lsp_dynamic_workspace_symbols)
+-- vim.keymap.set('n', '<Leader>d', pickers.diagnostics)
+-- vim.keymap.set('n', '<Leader>/', pickers.find_files)
+-- vim.keymap.set('n', '<Leader>?', pickers.help_tags)
+-- vim.keymap.set('n', '<Leader>tm', pickers.man_pages)
+-- vim.keymap.set('n', '<Leader>*', pickers.grep_string)
+-- vim.keymap.set('n', '<Leader>g', pickers.live_grep)
 
-vim.keymap.set('n', '<LocalLeader>ts', pickers.live_grep, { desc = '[t]elescope: live grep (regex [s]earch)' })
+vim.keymap.set('n', '<Leader>ts', pickers.live_grep, { desc = '[t]elescope: live grep (regex [s]earch)' })
 vim.keymap.set('n', '<C-g>', function()
   local conf = require('telescope.config').values
   pickers.live_grep {
     vimgrep_arguments = table.insert(conf.vimgrep_arguments, '-F'),
   }
 end, { desc = 'telescope: live grep (no regex)' })
-vim.keymap.set('n', '<LocalLeader>tf', fuzzy_grep, { desc = '[t]elescope: [f]uzzy grep' })
+vim.keymap.set('n', '<Leader>tf', fuzzy_grep, { desc = '[t]elescope: [f]uzzy grep' })
 vim.keymap.set('n', '<M-f>', fuzzy_grep_current_file_type, { desc = 'telescope: fuzzy grep filetype' })
 vim.keymap.set('n', '<M-g>', live_grep_current_file_type, { desc = 'telescope: live grep filetype' })
-vim.keymap.set(
-  'n',
-  '<LocalLeader>t*',
-  grep_string_current_file_type,
-  { desc = '[t]elescope: grep string [*] filetype' }
-)
-vim.keymap.set('n', '<LocalLeader>*', pickers.grep_string, { desc = 'telescope: grep string' })
-vim.keymap.set('n', '<LocalLeader>t?', pickers.help_tags, { desc = '[t]elescope: help [?] tags' })
-vim.keymap.set('n', '<LocalLeader>tg', project_files, { desc = '[t]elescope: project files [g]it' })
-vim.keymap.set('n', '<LocalLeader>t.n', function()
+vim.keymap.set('n', '<Leader>t*', grep_string_current_file_type, { desc = '[t]elescope: grep string [*] filetype' })
+vim.keymap.set('n', '<Leader>*', pickers.grep_string, { desc = 'telescope: grep string' })
+vim.keymap.set('n', '<Leader>t?', pickers.help_tags, { desc = '[t]elescope: help [?] tags' })
+vim.keymap.set('n', '<Leader>tg', project_files, { desc = '[t]elescope: project files [g]it' })
+vim.keymap.set('n', '<Leader>t.n', function()
   pickers.git_files { cwd = '~/code/nixos-config' }
 end)
-vim.keymap.set('n', '<LocalLeader>t.v', function()
+vim.keymap.set('n', '<Leader>t.v', function()
   pickers.git_files { cwd = '~/code/nix-config-nvim' }
 end)
-vim.keymap.set('n', '<LocalLeader>tc', pickers.quickfix, { desc = '[t]elescope: quickfix [c] list' })
-vim.keymap.set('n', '<LocalLeader>tq', pickers.command_history, { desc = '[t]elescope: command [q] history' })
-vim.keymap.set('n', '<LocalLeader>tl', pickers.loclist, { desc = '[t]elescope: [l]oclist' })
-vim.keymap.set('n', '<LocalLeader>tr', pickers.registers, { desc = '[t]elescope: [r]egisters' })
-vim.keymap.set('n', '<LocalLeader>td', pickers.diagnostics, { desc = '[t]elescope: [d]iagnostics' })
-vim.keymap.set('n', '<LocalLeader>ty', function()
+vim.keymap.set('n', '<Leader>tc', pickers.quickfix, { desc = '[t]elescope: quickfix [c] list' })
+vim.keymap.set('n', '<Leader>tq', pickers.command_history, { desc = '[t]elescope: command [q] history' })
+vim.keymap.set('n', '<Leader>tl', pickers.loclist, { desc = '[t]elescope: [l]oclist' })
+vim.keymap.set('n', '<Leader>tr', pickers.registers, { desc = '[t]elescope: [r]egisters' })
+vim.keymap.set('n', '<Leader>td', pickers.diagnostics, { desc = '[t]elescope: [d]iagnostics' })
+vim.keymap.set('n', '<Leader>ty', function()
   extensions.yank_history.yank_history()
 end, { desc = '[t]elescope: [y]ank history' })
-vim.keymap.set('n', '<LocalLeader>tbb', pickers.buffers, { desc = '[t]elescope: [bb]uffers' })
+vim.keymap.set('n', '<Leader>tbb', pickers.buffers, { desc = '[t]elescope: [bb]uffers' })
+vim.keymap.set('n', '<Leader>tbf', pickers.current_buffer_fuzzy_find, { desc = '[t]elescope: [b]uffer [f]uzzy find' })
+vim.keymap.set('n', '<Leader>ts', pickers.lsp_document_symbols, { desc = '[t]elescope: lsp document [s]ymbols' })
 vim.keymap.set(
   'n',
-  '<LocalLeader>tbf',
-  pickers.current_buffer_fuzzy_find,
-  { desc = '[t]elescope: [b]uffer [f]uzzy find' }
-)
-vim.keymap.set('n', '<LocalLeader>ts', pickers.lsp_document_symbols, { desc = '[t]elescope: lsp document [s]ymbols' })
-vim.keymap.set(
-  'n',
-  '<LocalLeader>tw',
+  '<Leader>tw',
   pickers.lsp_dynamic_workspace_symbols,
   { desc = '[t]elescope: lsp dynamic [w]orkspace symbols' }
 )
-vim.keymap.set('n', '<LocalLeader>th', function()
+vim.keymap.set('n', '<Leader>th', function()
   extensions.harpoon.marks()
 end, { desc = '[t]elescope: [h]arpoon marks' })
-vim.keymap.set('n', '<LocalLeader>tn', function()
+vim.keymap.set('n', '<Leader>tn', function()
   extensions.manix.manix()
 end, { desc = '[t]elescope: ma[n]ix' })
-vim.keymap.set('n', '<LocalLeader>tN', function()
+vim.keymap.set('n', '<Leader>tN', function()
   extensions.manix.manix { cword = true }
 end, { desc = '[t]elescope: ma[N]ix <cword>' })
 

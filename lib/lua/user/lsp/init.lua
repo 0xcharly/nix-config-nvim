@@ -147,25 +147,25 @@ M.on_attach = function(client, bufnr)
   -- Mappings.
   keymap.set('n', 'gD', vim.lsp.buf.declaration, desc('lsp: go to [D]eclaration'))
   keymap.set('n', 'gd', vim.lsp.buf.definition, desc('lsp: go to [d]efinition'))
-  keymap.set('n', '<LocalLeader>gt', vim.lsp.buf.type_definition, desc('lsp: go to [t]ype definition'))
+  keymap.set('n', '<Leader>gt', vim.lsp.buf.type_definition, desc('lsp: go to [t]ype definition'))
   -- keymap.set('n', 'K', vim.lsp.buf.hover, opts) -- overridden by nvim-ufo
-  keymap.set('n', '<LocalLeader>pd', peek_definition, desc('lsp: [p]eek [d]efinition')) -- overridden by nvim-ufo
-  keymap.set('n', '<LocalLeader>pt', peek_type_definition, desc('lsp: [p]eek [t]ype definition')) -- overridden by nvim-ufo
+  keymap.set('n', '<Leader>pd', peek_definition, desc('lsp: [p]eek [d]efinition')) -- overridden by nvim-ufo
+  keymap.set('n', '<Leader>pt', peek_type_definition, desc('lsp: [p]eek [t]ype definition')) -- overridden by nvim-ufo
   keymap.set('n', 'gi', vim.lsp.buf.implementation, desc('lsp: go to [i]mplementation'))
-  keymap.set('n', '<LocalLeader>gi', go_to_first_import, desc('lsp: [g]o to fist [i]mport'))
+  keymap.set('n', '<Leader>gi', go_to_first_import, desc('lsp: [g]o to fist [i]mport'))
   keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, desc('lsp: signature help'))
-  keymap.set('n', '<LocalLeader>wa', vim.lsp.buf.add_workspace_folder, desc('lsp: [w]orkspace folder [a]dd'))
-  keymap.set('n', '<LocalLeader>wr', vim.lsp.buf.remove_workspace_folder, desc('lsp: [w]orkspace folder [r]emove'))
-  keymap.set('n', '<LocalLeader>wl', function()
+  keymap.set('n', '<Leader>wa', vim.lsp.buf.add_workspace_folder, desc('lsp: [w]orkspace folder [a]dd'))
+  keymap.set('n', '<Leader>wr', vim.lsp.buf.remove_workspace_folder, desc('lsp: [w]orkspace folder [r]emove'))
+  keymap.set('n', '<Leader>wl', function()
     -- TODO: Replace this with a Telescope extension?
     vim.print(vim.lsp.buf.list_workspace_folders())
   end, desc('lsp: [w]orkspace folders [l]'))
-  keymap.set('n', '<LocalLeader>rn', vim.lsp.buf.rename, desc('lsp: [r]e[n]ame'))
-  keymap.set('n', '<LocalLeader>wq', vim.lsp.buf.workspace_symbol, desc('lsp: [w]orkspace symbol [q]uery'))
-  keymap.set('n', '<LocalLeader>dd', vim.lsp.buf.document_symbol, desc('lsp: [dd]ocument symbol'))
-  keymap.set('n', '<LocalLeader>df', document_functions, desc('lsp: [d]ocument [f]unctions'))
-  keymap.set('n', '<LocalLeader>ds', document_structs, desc('lsp: [d]ocument [s]tructs'))
-  keymap.set('n', '<LocalLeader>di', document_modules, desc('lsp: [d]ocument modules/[i]mports'))
+  keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, desc('lsp: [r]e[n]ame'))
+  keymap.set('n', '<Leader>wq', vim.lsp.buf.workspace_symbol, desc('lsp: [w]orkspace symbol [q]uery'))
+  keymap.set('n', '<Leader>dd', vim.lsp.buf.document_symbol, desc('lsp: [dd]ocument symbol'))
+  keymap.set('n', '<Leader>df', document_functions, desc('lsp: [d]ocument [f]unctions'))
+  keymap.set('n', '<Leader>ds', document_structs, desc('lsp: [d]ocument [s]tructs'))
+  keymap.set('n', '<Leader>di', document_modules, desc('lsp: [d]ocument modules/[i]mports'))
   if client.name == 'rust-analyzer' then
     keymap.set('n', '<C-CR>', function()
       vim.cmd.RustLsp('codeAction')
@@ -174,11 +174,11 @@ M.on_attach = function(client, bufnr)
     keymap.set('n', '<C-CR>', code_action, desc('lsp: code action'))
   end
   keymap.set('n', '<M-l>', vim.lsp.codelens.run, desc('lsp: run code lens'))
-  keymap.set('n', '<LocalLeader>cr', vim.lsp.codelens.refresh, desc('lsp: [r]efresh [c]ode lenses'))
+  keymap.set('n', '<Leader>cr', vim.lsp.codelens.refresh, desc('lsp: [r]efresh [c]ode lenses'))
   keymap.set('n', '[l', codelens.goto_prev, desc('lsp: previous code[l]ens'))
   keymap.set('n', ']l', codelens.goto_next, desc('lsp: next code[l]ens'))
   keymap.set('n', 'gr', vim.lsp.buf.references, desc('lsp: [g]et [r]eferences'))
-  keymap.set({ 'n', 'v' }, '<LocalLeader>f', function()
+  keymap.set({ 'n', 'v' }, '<Leader>f', function()
     vim.lsp.buf.format { async = true }
   end, desc('lsp: [f]ormat buffer'))
   keymap.set('n', 'vv', function()
