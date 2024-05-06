@@ -199,7 +199,8 @@ M.on_attach = function(client, bufnr)
   end
 
   local function get_active_clients(buf)
-    return vim.lsp.get_clients { bufnr = buf, name = client.name }
+    -- TODO: use `vim.lsp.get_clients` when it's available (i.e. when updated to 10.x).
+    return vim.lsp.get_active_clients { bufnr = buf, name = client.name }
   end
   local function buf_refresh_codeLens()
     vim.schedule(function()
