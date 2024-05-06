@@ -167,11 +167,11 @@ M.on_attach = function(client, bufnr)
   keymap.set('n', '<Leader>ds', document_structs, desc('lsp: [d]ocument [s]tructs'))
   keymap.set('n', '<Leader>di', document_modules, desc('lsp: [d]ocument modules/[i]mports'))
   if client.name == 'rust-analyzer' then
-    keymap.set('n', '<C-CR>', function()
+    keymap.set('n', '<M-CR>', function()
       vim.cmd.RustLsp('codeAction')
     end, desc('rust: code action'))
   else
-    keymap.set('n', '<C-CR>', code_action, desc('lsp: code action'))
+    keymap.set('n', '<M-CR>', code_action, desc('lsp: code action'))
   end
   keymap.set('n', '<M-l>', vim.lsp.codelens.run, desc('lsp: run code lens'))
   keymap.set('n', '<Leader>cr', vim.lsp.codelens.refresh, desc('lsp: [r]efresh [c]ode lenses'))

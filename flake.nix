@@ -252,16 +252,17 @@
         ];
       };
       shell = pkgs.mkShell {
-        name = "nvim-devShell";
+        name = "nix-config-nvim-devShell";
         buildInputs =
           (with pre-commit-hooks.packages.${system}; [
-            # Lua LSP.
+            alejandra
             lua-language-server
-            stylua
             luacheck
+            stylua
           ])
-          # Nix LSP.
-          ++ [pkgs.nixd];
+          ++ (with pkgs; [
+            nixd
+          ]);
         shellHook = ''
           ${self.checks.${system}.pre-commit-check.shellHook}
           ln -fs ${pkgs.luarc-json} .luarc.json
@@ -270,8 +271,9 @@
       pre-commit-check = pre-commit-hooks.lib.${system}.run {
         src = self;
         hooks = {
-          stylua.enable = true;
+          alejandra.enable = true;
           luacheck.enable = true;
+          stylua.enable = true;
         };
       };
     in {
