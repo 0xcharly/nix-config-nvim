@@ -166,6 +166,7 @@ with final.lib; let
       rustaceanvim
     ])
     ++ (with prev.vimPlugins; [
+      auto-hlsearch-nvim
       catppuccin-nvim
       vim-fugitive
       telescope-fzf-native-nvim
