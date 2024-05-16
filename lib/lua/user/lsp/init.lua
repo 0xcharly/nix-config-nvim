@@ -22,6 +22,7 @@ function M.make_client_capabilities()
       didChangeWatchedFiles = {
         dynamicRegistration = true,
       },
+      configuration = true,
     },
   })
   capabilities.textDocument.foldingRange = {
