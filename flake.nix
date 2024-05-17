@@ -76,7 +76,7 @@
       flake = false;
     };
     fidget = {
-      url = "git+https://github.com/j-hui/fidget.nvim.git";
+      url = "github:j-hui/fidget.nvim";
       flake = false;
     };
     lspkind-nvim = {
