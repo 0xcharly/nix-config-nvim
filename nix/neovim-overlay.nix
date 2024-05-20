@@ -1,8 +1,7 @@
-{inputs}: final: prev:
-with final.lib; let
+{inputs}: final: prev: let
   mkNeovim = {
     appName ? null,
-    nvim ? final.neovim,
+    nvim ? prev.neovim,
     plugins ? [],
     extraPackages ? [],
     resolvedExtraLuaPackages ? [],
@@ -20,7 +19,7 @@ with final.lib; let
       runtime = {};
     };
 
-    externalPackages = extraPackages ++ [final.sqlite];
+    externalPackages = extraPackages ++ [prev.sqlite];
 
     normalizedPlugins =
       map
@@ -67,27 +66,27 @@ with final.lib; let
       '';
 
     extraMakeWrapperArgs = builtins.concatStringsSep " " (
-      (optional (appName != "nvim" && appName != null && appName != "")
+      (prev.lib.optional (appName != "nvim" && appName != null && appName != "")
         ''--set NVIM_APPNAME "${appName}"'')
-      ++ (optional (externalPackages != [])
-        ''--prefix PATH : "${makeBinPath externalPackages}"'')
+      ++ (prev.lib.optional (externalPackages != [])
+        ''--prefix PATH : "${prev.lib.makeBinPath externalPackages}"'')
       ++ [
         ''--set LIBSQLITE_CLIB_PATH "${final.sqlite.out}/lib/libsqlite3.so"''
         ''--set LIBSQLITE "${final.sqlite.out}/lib/libsqlite3.so"''
       ]
     );
 
-    extraMakeWrapperLuaCArgs = optionalString (resolvedExtraLuaPackages != []) ''
+    extraMakeWrapperLuaCArgs = prev.lib.optionalString (resolvedExtraLuaPackages != []) ''
       --suffix LUA_CPATH ";" "${
-        lib.concatMapStringsSep ";" final.luaPackages.getLuaCPath
+        prev.lib.concatMapStringsSep ";" final.luaPackages.getLuaCPath
         resolvedExtraLuaPackages
       }"'';
 
     extraMakeWrapperLuaArgs =
-      optionalString (resolvedExtraLuaPackages != [])
+      prev.lib.optionalString (resolvedExtraLuaPackages != [])
       ''
         --suffix LUA_PATH ";" "${
-          concatMapStringsSep ";" final.luaPackages.getLuaPath
+          prev.lib.concatMapStringsSep ";" final.luaPackages.getLuaPath
           resolvedExtraLuaPackages
         }"'';
   in
@@ -95,7 +94,7 @@ with final.lib; let
       // {
         luaRcContent = initLua;
         wrapperArgs =
-          escapeShellArgs neovimConfig.wrapperArgs
+          prev.lib.escapeShellArgs neovimConfig.wrapperArgs
           + " "
           + extraMakeWrapperArgs
           + " "
@@ -106,8 +105,9 @@ with final.lib; let
       });
 
   # Base plugin list that is safe for corporate usage.
-  base-plugins = with final.nvimPlugins;
-    ([
+  base-plugins =
+    (with final.nvimPlugins;
+      [
         plenary
         sqlite
         nvim-web-devicons
@@ -179,49 +179,35 @@ with final.lib; let
   # Complete list of plugins for corporate usage.
   pkg-corp-plugins = base-plugins;
 
-  extraPackages = with final; [
-    nodePackages.vim-language-server
-    nodePackages.yaml-language-server
-    nodePackages.dockerfile-language-server-nodejs
-    nodePackages.vscode-json-languageserver-bin
-    nodePackages.bash-language-server
-    taplo # toml toolkit including a language server
-    sqls
-  ];
-
   nvim-pkg = mkNeovim {
     plugins = pkg-plugins;
     nvim = inputs.neovim.packages.${prev.system}.neovim;
-    inherit extraPackages;
   };
 
   nvim-nightly-pkg = mkNeovim {
     plugins = pkg-plugins;
-    nvim = final.neovim-nightly;
-    inherit extraPackages;
+    nvim = inputs.neovim-nightly.packages.${prev.system}.neovim;
   };
 
   nvim-pkg-corp = mkNeovim {
     plugins = pkg-corp-plugins;
     nvim = inputs.neovim.packages.${prev.system}.neovim;
-    inherit extraPackages;
   };
 
   nvim-nightly-corp-pkg = mkNeovim {
     plugins = pkg-corp-plugins;
-    nvim = final.neovim-nightly;
-    inherit extraPackages;
+    nvim = inputs.neovim-nightly.packages.${prev.system}.neovim;
   };
 
   luarc-json = final.mk-luarc-json {
     plugins = pkg-plugins;
-    nvim = final.neovim-nightly;
+    nvim = final.neovim;
     neodev-types = "nightly";
   };
 
   corp-luarc-json = final.mk-luarc-json {
     plugins = pkg-corp-plugins;
-    nvim = final.neovim-nightly;
+    nvim = final.neovim;
     neodev-types = "nightly";
   };
 in {

@@ -8,7 +8,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
-    neorocks.url = "github:nvim-neorocks/neorocks";
     gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -18,6 +17,11 @@
 
     neovim = {
       url = "github:neovim/neovim/v0.10.0?dir=contrib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    neovim-nightly = {
+      url = "github:neovim/neovim?dir=contrib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -223,7 +227,6 @@
   outputs = inputs @ {
     self,
     nixpkgs,
-    neorocks,
     gen-luarc,
     flake-utils,
     pre-commit-hooks,
@@ -243,7 +246,6 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
-          neorocks.overlays.default
           gen-luarc.overlays.default
           plugin-overlay
           neovim-overlay
