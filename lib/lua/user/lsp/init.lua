@@ -194,14 +194,13 @@ M.on_attach = function(client, bufnr)
 
   if client.server_capabilities.inlayHintProvider then
     keymap.set('n', '<space>h', function()
-      local current_setting = vim.lsp.inlay_hint.is_enabled(bufnr)
-      vim.lsp.inlay_hint.enable(bufnr, not current_setting)
+      local current_setting = vim.lsp.inlay_hint.is_enabled { bufnr = bufnr }
+      vim.lsp.inlay_hint.enable(not current_setting, { bufnr = bufnr })
     end, desc('lsp: toggle inlay [h]ints'))
   end
 
   local function get_active_clients(buf)
-    -- TODO: use `vim.lsp.get_clients` when it's available (i.e. when updated to 10.x).
-    return vim.lsp.get_active_clients { bufnr = buf, name = client.name }
+    return vim.lsp.get_clients { bufnr = buf, name = client.name }
   end
   local function buf_refresh_codeLens()
     vim.schedule(function()
