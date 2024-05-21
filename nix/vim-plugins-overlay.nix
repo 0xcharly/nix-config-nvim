@@ -39,7 +39,6 @@ in {
     treesitter-context = mkNvimPlugin inputs.treesitter-context "treesitter-context";
     nvim-ts-context-commentstring = mkNvimPlugin inputs.nvim-ts-context-commentstring "nvim-ts-context-commentstring";
     vim-matchup = mkNvimPlugin inputs.vim-matchup "vim-matchup";
-    nvim-lint = mkNvimPlugin inputs.nvim-lint "nvim-lint";
     telescope = mkNvimPlugin inputs.telescope "telescope.nvim";
     telescope-manix = mkNvimPlugin inputs.telescope-manix "telescope-manix";
     telescope-smart-history = mkNvimPlugin inputs.telescope-smart-history "telescope-smart-history.nvim";
@@ -50,12 +49,6 @@ in {
     harpoon = mkNvimPlugin inputs.harpoon "harpoon";
     gitsigns = mkNvimPlugin inputs.gitsigns "gitsigns.nvim";
     nvim-bqf = mkNvimPlugin inputs.nvim-bqf "nvim-bqf";
-    formatter = mkNvimPlugin inputs.formatter "formatter.nvim";
-    yanky = mkNvimPlugin inputs.yanky "yanky.nvim";
-    tmux-nvim = mkNvimPlugin inputs.tmux-nvim "tmux.nvim";
-    term-edit-nvim = mkNvimPlugin inputs.term-edit-nvim "term-edit.nvim";
-    other-nvim = mkNvimPlugin inputs.other-nvim "other.nvim";
-    crates-nvim = mkNvimPlugin inputs.crates-nvim "crates-nvim";
     rustaceanvim = mkNvimPlugin inputs.crates-nvim "rustaceanvim";
     which-key-nvim = (mkNvimPlugin inputs.which-key-nvim "which-key.nvim").overrideAttrs (oa: {
       patches = [./which-key.patch];

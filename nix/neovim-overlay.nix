@@ -1,39 +1,26 @@
 {inputs}: final: prev: let
   mkNeovim = {
-    appName ? null,
     nvim ? prev.neovim,
     plugins ? [],
-    extraPackages ? [],
-    resolvedExtraLuaPackages ? [],
-    extraPython3Packages ? p: [],
-    withPython3 ? true,
-    withRuby ? false,
-    withNodeJs ? false,
-    viAlias ? true,
-    vimAlias ? true,
   }: let
-    defaultPlugin = {
-      plugin = null;
-      config = null;
-      optional = false;
-      runtime = {};
-    };
-
-    externalPackages = extraPackages ++ [prev.sqlite];
+    externalPackages = [prev.sqlite];
 
     normalizedPlugins =
       map
-      (x:
-        defaultPlugin
-        // (
-          if x ? plugin
-          then x
-          else {plugin = x;}
-        ))
+      (plugin: {
+        inherit plugin;
+        config = null;
+        optional = false;
+        runtime = {};
+      })
       plugins;
 
     neovimConfig = final.neovimUtils.makeNeovimConfig {
-      inherit extraPython3Packages withPython3 withRuby withNodeJs viAlias vimAlias;
+      viAlias = true;
+      vimAlias = true;
+      withPython3 = true;
+      withRuby = false;
+      withNodeJs = false;
       plugins = normalizedPlugins;
     };
 
@@ -65,42 +52,19 @@
         vim.opt.rtp:prepend('${nvimConfig}/after')
       '';
 
-    extraMakeWrapperArgs = builtins.concatStringsSep " " (
-      (prev.lib.optional (appName != "nvim" && appName != null && appName != "")
-        ''--set NVIM_APPNAME "${appName}"'')
-      ++ (prev.lib.optional (externalPackages != [])
-        ''--prefix PATH : "${prev.lib.makeBinPath externalPackages}"'')
-      ++ [
-        ''--set LIBSQLITE_CLIB_PATH "${final.sqlite.out}/lib/libsqlite3.so"''
-        ''--set LIBSQLITE "${final.sqlite.out}/lib/libsqlite3.so"''
-      ]
-    );
-
-    extraMakeWrapperLuaCArgs = prev.lib.optionalString (resolvedExtraLuaPackages != []) ''
-      --suffix LUA_CPATH ";" "${
-        prev.lib.concatMapStringsSep ";" final.luaPackages.getLuaCPath
-        resolvedExtraLuaPackages
-      }"'';
-
-    extraMakeWrapperLuaArgs =
-      prev.lib.optionalString (resolvedExtraLuaPackages != [])
-      ''
-        --suffix LUA_PATH ";" "${
-          prev.lib.concatMapStringsSep ";" final.luaPackages.getLuaPath
-          resolvedExtraLuaPackages
-        }"'';
+    extraMakeWrapperArgs = builtins.concatStringsSep " " [
+      ''--prefix PATH : "${prev.lib.makeBinPath externalPackages}"''
+      ''--set LIBSQLITE_CLIB_PATH "${final.sqlite.out}/lib/libsqlite3.so"''
+      ''--set LIBSQLITE "${final.sqlite.out}/lib/libsqlite3.so"''
+    ];
   in
     final.wrapNeovimUnstable nvim (neovimConfig
       // {
         luaRcContent = initLua;
-        wrapperArgs =
-          prev.lib.escapeShellArgs neovimConfig.wrapperArgs
-          + " "
-          + extraMakeWrapperArgs
-          + " "
-          + extraMakeWrapperLuaCArgs
-          + " "
-          + extraMakeWrapperLuaArgs;
+        wrapperArgs = builtins.concatStringsSep " " [
+          (prev.lib.escapeShellArgs neovimConfig.wrapperArgs)
+          extraMakeWrapperArgs
+        ];
         wrapRc = true;
       });
 
@@ -129,7 +93,6 @@
         treesitter-textobjects
         nvim-ts-context-commentstring
         vim-matchup
-        nvim-lint
         telescope
         telescope-smart-history
         todo-comments
@@ -139,12 +102,6 @@
         harpoon
         gitsigns
         nvim-bqf
-        formatter
-        yanky
-        tmux-nvim
-        term-edit-nvim
-        other-nvim
-        crates-nvim
         which-key-nvim
       ]
       ++ [
@@ -181,7 +138,8 @@
 
   nvim-pkg = mkNeovim {
     plugins = pkg-plugins;
-    nvim = inputs.neovim.packages.${prev.system}.neovim;
+    nvim = final.neovim-unwrapped;
+    # nvim = inputs.neovim.packages.${prev.system}.neovim;
   };
 
   nvim-nightly-pkg = mkNeovim {
@@ -191,7 +149,8 @@
 
   nvim-pkg-corp = mkNeovim {
     plugins = pkg-corp-plugins;
-    nvim = inputs.neovim.packages.${prev.system}.neovim;
+    nvim = final.neovim-unwrapped;
+    # nvim = inputs.neovim.packages.${prev.system}.neovim;
   };
 
   nvim-nightly-corp-pkg = mkNeovim {

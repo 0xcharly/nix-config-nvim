@@ -113,10 +113,6 @@
       url = "github:andymass/vim-matchup";
       flake = false;
     };
-    nvim-lint = {
-      url = "github:mfussenegger/nvim-lint";
-      flake = false;
-    };
     telescope = {
       url = "github:nvim-telescope/telescope.nvim/0.1.x";
       flake = false;
@@ -152,30 +148,6 @@
     };
     nvim-bqf = {
       url = "github:kevinhwang91/nvim-bqf";
-      flake = false;
-    };
-    formatter = {
-      url = "github:mhartington/formatter.nvim";
-      flake = false;
-    };
-    yanky = {
-      url = "github:gbprod/yanky.nvim";
-      flake = false;
-    };
-    tmux-nvim = {
-      url = "github:aserowy/tmux.nvim";
-      flake = false;
-    };
-    term-edit-nvim = {
-      url = "github:chomosuke/term-edit.nvim";
-      flake = false;
-    };
-    other-nvim = {
-      url = "github:rgroli/other.nvim";
-      flake = false;
-    };
-    crates-nvim = {
-      url = "github:saecki/crates.nvim";
       flake = false;
     };
     rustaceanvim.url = "github:mrcjkb/rustaceanvim";

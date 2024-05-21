@@ -192,22 +192,6 @@
         "type": "github"
       }
     },
-    "crates-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1715690194,
-        "narHash": "sha256-R1y1OIep4tcFd4mhylZ/A2zdwOmEQtCzuVBOBYu0qUI=",
-        "owner": "saecki",
-        "repo": "crates.nvim",
-        "rev": "d556c00d60c9421c913ee54ff690df2a34f6264e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "saecki",
-        "repo": "crates.nvim",
-        "type": "github"
-      }
-    },
     "eyeliner-nvim": {
       "flake": false,
       "locked": {
@@ -640,22 +624,6 @@
         "type": "github"
       }
     },
-    "formatter": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1710786051,
-        "narHash": "sha256-pNKa8vPP2cmyGhdoW/S5XoboL4ErVAwiP8YkDGq/TGI=",
-        "owner": "mhartington",
-        "repo": "formatter.nvim",
-        "rev": "ad246d34ce7a32f752071ed81b09b94e6b127fad",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mhartington",
-        "repo": "formatter.nvim",
-        "type": "github"
-      }
-    },
     "gen-luarc": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -998,11 +966,11 @@
       },
       "locked": {
         "dir": "contrib",
-        "lastModified": 1716282422,
-        "narHash": "sha256-aoxKYsrmPkJQdBUNrJUnQxJ2dNhK4GRUPV9M0xum6nY=",
+        "lastModified": 1716300707,
+        "narHash": "sha256-f/HtWBXhXxSpCGaxlLSxCZsDDdPFwrqDkcoUeldZzvs=",
         "owner": "0xcharly",
         "repo": "neovim",
-        "rev": "8a33c5074f3e8f242e7edbdeb9e1761a6d21d5aa",
+        "rev": "283f9c166191044454a5596c7525551f7c7a1a76",
         "type": "github"
       },
       "original": {
@@ -1490,22 +1458,6 @@
         "type": "github"
       }
     },
-    "nvim-lint": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1715872292,
-        "narHash": "sha256-sAAIBMxT4i2zYBjpBlUsGrU86Ne4HFIqLE9eo57Pv7w=",
-        "owner": "mfussenegger",
-        "repo": "nvim-lint",
-        "rev": "1f98d6c863f91706369d74aeb2eb3f02b2e96861",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mfussenegger",
-        "repo": "nvim-lint",
-        "type": "github"
-      }
-    },
     "nvim-lsp-selection-range": {
       "flake": false,
       "locked": {
@@ -1583,22 +1535,6 @@
       "original": {
         "owner": "stevearc",
         "repo": "oil.nvim",
-        "type": "github"
-      }
-    },
-    "other-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1713266145,
-        "narHash": "sha256-AIwXu0bDHlvd9Dy9ZX2VEA1ACNI1J10tc8iPN5fyscs=",
-        "owner": "rgroli",
-        "repo": "other.nvim",
-        "rev": "2a82971d3763474df29d5d32d0699b5bb13c551f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rgroli",
-        "repo": "other.nvim",
         "type": "github"
       }
     },
@@ -1769,11 +1705,9 @@
         "cmp-rg": "cmp-rg",
         "cmp-tmux": "cmp-tmux",
         "comment": "comment",
-        "crates-nvim": "crates-nvim",
         "eyeliner-nvim": "eyeliner-nvim",
         "fidget": "fidget",
         "flake-utils": "flake-utils",
-        "formatter": "formatter",
         "gen-luarc": "gen-luarc",
         "gitsigns": "gitsigns",
         "harpoon": "harpoon",
@@ -1790,13 +1724,11 @@
         "nvim-dap": "nvim-dap",
         "nvim-dap-ui": "nvim-dap-ui",
         "nvim-lastplace": "nvim-lastplace",
-        "nvim-lint": "nvim-lint",
         "nvim-lsp-selection-range": "nvim-lsp-selection-range",
         "nvim-treesitter": "nvim-treesitter",
         "nvim-ts-context-commentstring": "nvim-ts-context-commentstring",
         "nvim-web-devicons": "nvim-web-devicons",
         "oil-nvim": "oil-nvim",
-        "other-nvim": "other-nvim",
         "plenary": "plenary",
         "pre-commit-hooks": "pre-commit-hooks",
         "repeat": "repeat",
@@ -1806,14 +1738,11 @@
         "telescope": "telescope",
         "telescope-manix": "telescope-manix",
         "telescope-smart-history": "telescope-smart-history",
-        "term-edit-nvim": "term-edit-nvim",
-        "tmux-nvim": "tmux-nvim",
         "todo-comments": "todo-comments",
         "treesitter-textobjects": "treesitter-textobjects",
         "trouble": "trouble",
         "vim-matchup": "vim-matchup",
-        "which-key-nvim": "which-key-nvim",
-        "yanky": "yanky"
+        "which-key-nvim": "which-key-nvim"
       }
     },
     "rustaceanvim": {
@@ -2090,38 +2019,6 @@
         "type": "github"
       }
     },
-    "term-edit-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1701573268,
-        "narHash": "sha256-hGKSfdAgWUKgFsVSBHa+f+5Hkvc8JuB0Hy5d03YEB84=",
-        "owner": "chomosuke",
-        "repo": "term-edit.nvim",
-        "rev": "e04f69d5828c6e6a4d81c34f75f18762fad50372",
-        "type": "github"
-      },
-      "original": {
-        "owner": "chomosuke",
-        "repo": "term-edit.nvim",
-        "type": "github"
-      }
-    },
-    "tmux-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1714058617,
-        "narHash": "sha256-P2gFopPFMYPl6Ggd40MzbVHQjdc6jLvW39u0gaN0i40=",
-        "owner": "aserowy",
-        "repo": "tmux.nvim",
-        "rev": "53ea7eab504730e7e8397fd2ae0133053d56afc8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "aserowy",
-        "repo": "tmux.nvim",
-        "type": "github"
-      }
-    },
     "todo-comments": {
       "flake": false,
       "locked": {
@@ -2199,22 +2096,6 @@
       "original": {
         "owner": "folke",
         "repo": "which-key.nvim",
-        "type": "github"
-      }
-    },
-    "yanky": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1716021118,
-        "narHash": "sha256-B51JQxV16gyReRhCF3NZ0n25ShqVee78DTfOvaP/8w8=",
-        "owner": "gbprod",
-        "repo": "yanky.nvim",
-        "rev": "396ff7ed952a69549f299c7b6f64615a89836733",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gbprod",
-        "repo": "yanky.nvim",
         "type": "github"
       }
     }
