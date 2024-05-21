@@ -61,8 +61,8 @@
       + (builtins.readFile ../nvim/init.lua)
       + ""
       + ''
-        vim.opt.rtp:append('${nvimConfig}/nvim')
-        vim.opt.rtp:append('${nvimConfig}/after')
+        vim.opt.rtp:prepend('${nvimConfig}/nvim')
+        vim.opt.rtp:prepend('${nvimConfig}/after')
       '';
 
     extraMakeWrapperArgs = builtins.concatStringsSep " " (
