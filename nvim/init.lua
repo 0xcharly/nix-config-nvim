@@ -91,9 +91,3 @@ end
 -- Native plugins
 vim.cmd.filetype('plugin', 'indent', 'on')
 vim.cmd.packadd('cfilter') -- Allows filtering the quickfix list with :cfdo
-
--- this should be at the end, because
--- it causes neovim to source ftplugins
--- on the packpath when passing a file to the nvim command
-vim.cmd.syntax('on')
-vim.cmd.syntax('enable')
