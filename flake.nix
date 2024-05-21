@@ -16,12 +16,18 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     neovim = {
-      url = "github:neovim/neovim/v0.10.0?dir=contrib";
+      # NOTE: temporary workaround while the neovim flakes moves to the community repo:
+      # https://github.com/nix-community/neovim-nightly-overlay/pull/483
+      url = "github:0xcharly/neovim/v0.10.0?dir=contrib";
+      # url = "github:neovim/neovim/v0.10.0?dir=contrib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     neovim-nightly = {
-      url = "github:neovim/neovim?dir=contrib";
+      # NOTE: temporary workaround while the neovim flakes moves to the community repo:
+      # https://github.com/nix-community/neovim-nightly-overlay/pull/483
+      url = "github:0xcharly/neovim?dir=contrib";
+      # url = "github:neovim/neovim?dir=contrib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
