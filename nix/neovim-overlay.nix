@@ -70,64 +70,54 @@
 
   # Base plugin list that is safe for corporate usage.
   base-plugins =
-    (with final.nvimPlugins;
-      [
-        plenary
-        sqlite
-        nvim-web-devicons
-        eyeliner-nvim
-        repeat
-        surround
-        nvim-lastplace
-        comment
-        nio # TODO: Remove when rocks-dev is ready
-        nvim-dap
-        nvim-dap-ui
-        lsp-status
-        lsp_signature
-        nvim-lsp-selection-range
-        fidget
-        lspkind-nvim
-        actions-preview-nvim
-        nvim-treesitter
-        treesitter-textobjects
-        nvim-ts-context-commentstring
-        vim-matchup
-        telescope
-        telescope-smart-history
-        todo-comments
-        trouble
-        lualine
-        oil-nvim
-        harpoon
-        gitsigns
-        nvim-bqf
-        which-key-nvim
-      ]
-      ++ [
-        # nvim-cmp and plugins
-        cmp-buffer
-        cmp-tmux
-        cmp-path
-        cmp-cmdline
-        cmp-cmdline-history
-        cmp-nvim-lua
-        cmp-nvim-lsp
-        cmp-nvim-lsp-document-symbol
-        cmp-nvim-lsp-signature-help
-        cmp-rg
-        nvim-cmp
-      ])
-    ++ (with final; [
-      telescope-manix
-      rustaceanvim
-    ])
-    ++ (with prev.vimPlugins; [
+    (with prev.vimPlugins; [
+      # Plugins pinned to the <nixpkgs> channel.
+      actions-preview-nvim
       auto-hlsearch-nvim
       catppuccin-nvim
-      vim-fugitive
-      telescope-fzf-native-nvim
+      comment-nvim
       dial-nvim
+      eyeliner-nvim
+      fidget-nvim
+      gitsigns-nvim
+      harpoon2
+      lsp-status-nvim
+      lspkind-nvim
+      lualine-nvim
+      nvim-bqf
+      nvim-lastplace
+      nvim-surround
+      nvim-treesitter
+      nvim-treesitter-textobjects
+      nvim-ts-context-commentstring
+      nvim-web-devicons
+      oil-nvim
+      plenary-nvim
+      sqlite-lua
+      telescope-fzf-native-nvim
+      telescope-nvim
+      todo-comments-nvim
+      trouble-nvim
+      vim-fugitive
+      vim-matchup
+      vim-repeat
+      which-key-nvim
+      # nvim-cmp and plugins
+      nvim-cmp
+      cmp-buffer
+      cmp-path
+      cmp-cmdline
+      cmp-cmdline-history
+      cmp-nvim-lua
+      cmp-nvim-lsp
+      cmp-nvim-lsp-document-symbol
+      cmp-nvim-lsp-signature-help
+      cmp-rg
+    ])
+    ++ (with final; [
+      # Plugins from flakes.
+      telescope-manix
+      rustaceanvim
     ]);
 
   # Complete list of plugins for personal usage.

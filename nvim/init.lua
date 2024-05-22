@@ -61,10 +61,7 @@ vim.g.rustaceanvim = function()
   ---@type RustaceanOpts
   local rustacean_opts = {
     server = {
-      on_attach = function(client, bufnr)
-        lsp.on_attach(client, bufnr)
-        lsp.on_dap_attach(bufnr)
-      end,
+      on_attach = lsp.on_attach,
       capabilities = lsp.make_client_capabilities(),
       default_settings = {
         ['rust-analyzer'] = {

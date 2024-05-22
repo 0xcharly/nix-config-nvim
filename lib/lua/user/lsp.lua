@@ -6,8 +6,6 @@
 
 local M = {}
 
-local codelens = require('user.lsp.codelens')
-
 ---Gets a 'ClientCapabilities' object, describing the LSP client capabilities
 ---Extends the object with capabilities provided by plugins.
 ---@return lsp.ClientCapabilities
@@ -15,7 +13,6 @@ function M.make_client_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   -- Add com_nvim_lsp capabilities.
   capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-  capabilities = require('lsp-selection-range').update_capabilities(capabilities)
   -- Enable preliminary support for workspace/didChangeWatchedFiles.
   capabilities = vim.tbl_deep_extend('keep', capabilities, {
     workspace = {
@@ -66,20 +63,6 @@ end
 local keymap = vim.keymap
 
 -- require 'fidget'.setup {}
-
-local default_on_codelens = vim.lsp.codelens.on_codelens
----@diagnostic disable-next-line: duplicate-set-field
-vim.lsp.codelens.on_codelens = function(err, lenses, ctx, _)
-  if err or not lenses or not next(lenses) then
-    return default_on_codelens(err, lenses, ctx, _)
-  end
-  for _, lens in pairs(lenses) do
-    if lens and lens.command and lens.command.title then
-      lens.command.title = ' ' .. lens.command.title
-    end
-  end
-  return default_on_codelens(err, lenses, ctx, _)
-end
 
 local code_action = function()
   return require('actions-preview').code_actions()
@@ -149,9 +132,8 @@ M.on_attach = function(client, bufnr)
   keymap.set('n', 'gD', vim.lsp.buf.declaration, desc('lsp: go to [D]eclaration'))
   keymap.set('n', 'gd', vim.lsp.buf.definition, desc('lsp: go to [d]efinition'))
   keymap.set('n', '<Leader>gt', vim.lsp.buf.type_definition, desc('lsp: go to [t]ype definition'))
-  -- keymap.set('n', 'K', vim.lsp.buf.hover, opts) -- overridden by nvim-ufo
-  keymap.set('n', '<Leader>pd', peek_definition, desc('lsp: [p]eek [d]efinition')) -- overridden by nvim-ufo
-  keymap.set('n', '<Leader>pt', peek_type_definition, desc('lsp: [p]eek [t]ype definition')) -- overridden by nvim-ufo
+  keymap.set('n', '<Leader>pd', peek_definition, desc('lsp: [p]eek [d]efinition'))
+  keymap.set('n', '<Leader>pt', peek_type_definition, desc('lsp: [p]eek [t]ype definition'))
   keymap.set('n', 'gi', vim.lsp.buf.implementation, desc('lsp: go to [i]mplementation'))
   keymap.set('n', '<Leader>gi', go_to_first_import, desc('lsp: [g]o to fist [i]mport'))
   keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, desc('lsp: signature help'))
@@ -174,23 +156,10 @@ M.on_attach = function(client, bufnr)
   else
     keymap.set('n', '<M-CR>', code_action, desc('lsp: code action'))
   end
-  keymap.set('n', '<M-l>', vim.lsp.codelens.run, desc('lsp: run code lens'))
-  keymap.set('n', '<Leader>cr', vim.lsp.codelens.refresh, desc('lsp: [r]efresh [c]ode lenses'))
-  keymap.set('n', '[l', codelens.goto_prev, desc('lsp: previous code[l]ens'))
-  keymap.set('n', ']l', codelens.goto_next, desc('lsp: next code[l]ens'))
   keymap.set('n', 'gr', vim.lsp.buf.references, desc('lsp: [g]et [r]eferences'))
   keymap.set({ 'n', 'v' }, '<Leader>f', function()
     vim.lsp.buf.format { async = true }
   end, desc('lsp: [f]ormat buffer'))
-  keymap.set('n', 'vv', function()
-    require('lsp-selection-range').trigger()
-  end, desc('lsp: trigger selection range'))
-  keymap.set('v', 'vv', function()
-    require('lsp-selection-range').expand()
-  end, desc('lsp: expand selection range'))
-
-  -- Autocomplete signature hints
-  require('lsp_signature').on_attach()
 
   if client.server_capabilities.inlayHintProvider then
     keymap.set('n', '<space>h', function()
@@ -198,63 +167,6 @@ M.on_attach = function(client, bufnr)
       vim.lsp.inlay_hint.enable(not current_setting, { bufnr = bufnr })
     end, desc('lsp: toggle inlay [h]ints'))
   end
-
-  local function get_active_clients(buf)
-    return vim.lsp.get_clients { bufnr = buf, name = client.name }
-  end
-  local function buf_refresh_codeLens()
-    vim.schedule(function()
-      for _, c in pairs(get_active_clients(bufnr)) do
-        if c.server_capabilities.codeLensProvider then
-          vim.lsp.codelens.refresh()
-          return
-        end
-      end
-    end)
-  end
-  local group = vim.api.nvim_create_augroup(string.format('lsp-%s-%s', bufnr, client.id), {})
-  if client.server_capabilities.codeLensProvider then
-    vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
-      group = group,
-      callback = buf_refresh_codeLens,
-      buffer = bufnr,
-    })
-    buf_refresh_codeLens()
-  end
-end
-
-M.on_dap_attach = function(bufnr)
-  local dap = require('dap')
-  local dap_widgets = require('dap.ui.widgets')
-  local dap_utils = require('dap.utils')
-  local dapui = require('dapui')
-  local function desc(description)
-    return { noremap = true, silent = true, buffer = bufnr, desc = description }
-  end
-  keymap.set('n', '<leader>dS', dap.stop, desc('[d]ap: [S]top'))
-  -- keymap.set('n', '<Up>', dap.step_out, desc('dap: step out'))
-  -- keymap.set('n', '<Down>', dap.step_into, desc('dap: sep into'))
-  -- keymap.set('n', '<Right>', dap.step_over, desc('dap: step over'))
-  keymap.set('n', '<space>dC', dap.continue, desc('[d]ap: [C]ontinue'))
-  keymap.set('n', '<leader>b', dap.toggle_breakpoint, desc('dap: toggle [b]reakpoint'))
-  -- keymap.set('n', '<leader>B', dap.toggle_conditional_breakpoint, opts) -- FIXME
-  keymap.set('n', '<leader>dr', function()
-    dap.repl.toggle { height = 15 }
-  end, desc('[d]ap: toggl [r]epl'))
-  keymap.set('n', '<leader>dl', dap.run_last, desc('[d]ap: run [l]ast debug session'))
-  keymap.set('n', '<leader>dS', function()
-    dap_widgets.centered_float(dap_widgets.frames)
-  end, desc('[d]ap: centered floating widget (frames) [S]'))
-  keymap.set('n', '<leader>ds', function()
-    dap_widgets.centered_float(dap_widgets.scopes)
-  end, desc('[d]ap: centered floating widget ([s]copes)'))
-  keymap.set('n', '<leader>dh', dap_widgets.hover, desc('[d]ap: [h]over'))
-  keymap.set('v', '<leader>dh', function()
-    dap_widgets.hover(dap_utils.get_visual_selection_text)
-  end, desc('[d]ap: [h]over'))
-  keymap.set('v', '<leader>de', dapui.eval, desc('[d]ap: [e]valuate'))
-  keymap.set('v', '<M-k>', dapui.float_element, desc('dap: show element in floating window'))
-  keymap.set('n', '<leader>du', dapui.toggle, desc('[d]ap: toggle [u]i'))
 end
 
 vim.api.nvim_create_autocmd('LspDetach', {
