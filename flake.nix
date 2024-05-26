@@ -7,7 +7,7 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -15,21 +15,7 @@
     };
     flake-utils.url = "github:numtide/flake-utils";
 
-    neovim = {
-      # NOTE: temporary workaround while the neovim flakes moves to the community repo:
-      # https://github.com/nix-community/neovim-nightly-overlay/pull/483
-      url = "github:0xcharly/neovim/v0.10.0?dir=contrib";
-      # url = "github:neovim/neovim/v0.10.0?dir=contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    neovim-nightly = {
-      # NOTE: temporary workaround while the neovim flakes moves to the community repo:
-      # https://github.com/nix-community/neovim-nightly-overlay/pull/483
-      url = "github:0xcharly/neovim?dir=contrib";
-      # url = "github:neovim/neovim?dir=contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
     # Plugins from flakes.
     telescope-manix.url = "github:mrcjkb/telescope-manix";
@@ -39,7 +25,6 @@
   outputs = inputs @ {
     self,
     nixpkgs,
-    gen-luarc,
     flake-utils,
     pre-commit-hooks,
     ...
@@ -57,8 +42,9 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
-          gen-luarc.overlays.default
           neovim-overlay
+          inputs.gen-luarc.overlays.default
+          inputs.neovim-nightly-overlay.overlays.default
           inputs.telescope-manix.overlays.default
           inputs.rustaceanvim.overlays.default
         ];
@@ -90,12 +76,11 @@
       };
     in {
       packages = rec {
-        default = stable;
-        stable = pkgs.nvim-pkg;
-        stable-corp = pkgs.nvim-pkg-corp;
+        default = latest;
+        latest = pkgs.nvim-latest-pkg;
+        latest-corp = pkgs.nvim-latest-corp-pkg;
         nightly = pkgs.nvim-nightly-pkg;
         nightly-corp = pkgs.nvim-nightly-corp-pkg;
-        nightly-zero-conf = pkgs.neovim-nightly;
       };
       devShells = {
         default = shell;

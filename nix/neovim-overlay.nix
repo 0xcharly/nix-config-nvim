@@ -1,7 +1,7 @@
 {inputs}: final: prev: let
   mkNeovim = {
-    nvim ? prev.neovim,
-    plugins ? [],
+    nvim,
+    plugins,
   }: let
     externalPackages = [prev.sqlite];
 
@@ -126,26 +126,24 @@
   # Complete list of plugins for corporate usage.
   pkg-corp-plugins = base-plugins;
 
-  nvim-pkg = mkNeovim {
+  nvim-latest-pkg = mkNeovim {
     plugins = pkg-plugins;
-    nvim = final.neovim-unwrapped;
-    # nvim = inputs.neovim.packages.${prev.system}.neovim;
+    nvim = prev.neovim-unwrapped;
   };
 
   nvim-nightly-pkg = mkNeovim {
     plugins = pkg-plugins;
-    nvim = inputs.neovim-nightly.packages.${prev.system}.neovim;
+    nvim = final.neovim;
   };
 
-  nvim-pkg-corp = mkNeovim {
+  nvim-latest-corp-pkg = mkNeovim {
     plugins = pkg-corp-plugins;
-    nvim = final.neovim-unwrapped;
-    # nvim = inputs.neovim.packages.${prev.system}.neovim;
+    nvim = prev.neovim-unwrapped;
   };
 
   nvim-nightly-corp-pkg = mkNeovim {
     plugins = pkg-corp-plugins;
-    nvim = inputs.neovim-nightly.packages.${prev.system}.neovim;
+    nvim = final.neovim;
   };
 
   luarc-json = final.mk-luarc-json {
@@ -160,5 +158,12 @@
     neodev-types = "nightly";
   };
 in {
-  inherit nvim-pkg nvim-nightly-pkg nvim-pkg-corp nvim-nightly-corp-pkg luarc-json corp-luarc-json;
+  inherit
+    nvim-latest-pkg
+    nvim-nightly-pkg
+    nvim-latest-corp-pkg
+    nvim-nightly-corp-pkg
+    luarc-json
+    corp-luarc-json
+    ;
 }
