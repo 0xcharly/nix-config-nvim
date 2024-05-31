@@ -75,7 +75,6 @@
       actions-preview-nvim
       auto-hlsearch-nvim
       catppuccin-nvim
-      comment-nvim
       dial-nvim
       eyeliner-nvim
       fidget-nvim
