@@ -147,13 +147,13 @@
 
   luarc-json = final.mk-luarc-json {
     plugins = pkg-plugins;
-    nvim = final.neovim;
+    nvim = prev.neovim-unwrapped;
     neodev-types = "nightly";
   };
 
   corp-luarc-json = final.mk-luarc-json {
     plugins = pkg-corp-plugins;
-    nvim = final.neovim;
+    nvim = prev.neovim-unwrapped;
     neodev-types = "nightly";
   };
 in {
