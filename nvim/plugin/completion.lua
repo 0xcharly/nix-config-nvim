@@ -1,19 +1,28 @@
-local cmp = require 'cmp'
+local cmp = require('cmp')
+
+local cmp_mapping_next_item =
+  cmp.mapping(cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
+local cmp_mapping_prev_item =
+  cmp.mapping(cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
+local cmp_mapping_confirm = cmp.mapping(
+  cmp.mapping.confirm {
+    behavior = cmp.ConfirmBehavior.Insert,
+    select = true,
+  },
+  { 'i', 'c' }
+)
 
 cmp.setup {
   mapping = cmp.mapping.preset.insert {
-    ['<C-j>'] = cmp.mapping(cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' }),
-    ['<C-k>'] = cmp.mapping(cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' }),
+    ['<C-j>'] = cmp_mapping_next_item,
+    ['<C-k>'] = cmp_mapping_prev_item,
+    ['<C-S-j>'] = cmp_mapping_next_item,
+    ['<C-S-k>'] = cmp_mapping_prev_item,
     ['<C-m>'] = cmp.mapping.scroll_docs(4),
     ['<C-w>'] = cmp.mapping.scroll_docs(-4),
     ['<C-a>'] = cmp.mapping.abort(),
-    ['<C-y>'] = cmp.mapping(
-      cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Insert,
-        select = true,
-      },
-      { 'i', 'c' }
-    ),
+    ['<C-y>'] = cmp_mapping_confirm,
+    ['<C-S-y>'] = cmp_mapping_confirm,
     ['<c-space>'] = cmp.mapping.complete {},
     ['<C-q>'] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = true },
     ['<Tab>'] = cmp.config.disable,
@@ -24,7 +33,7 @@ cmp.setup {
     { name = 'nvim_ciderlsp' },
     { name = 'path' },
     { name = 'luasnip' },
-    { name = 'buffer',       keyword_length = 3 },
+    { name = 'buffer', keyword_length = 3 },
   },
   sorting = {
     comparators = {
@@ -34,8 +43,8 @@ cmp.setup {
 
       -- Copied from cmp-under; don't need a plugin for this.
       function(entry1, entry2)
-        local _, entry1_under = entry1.completion_item.label:find '^_+'
-        local _, entry2_under = entry2.completion_item.label:find '^_+'
+        local _, entry1_under = entry1.completion_item.label:find('^_+')
+        local _, entry2_under = entry2.completion_item.label:find('^_+')
         entry1_under = entry1_under or 0
         entry2_under = entry2_under or 0
         if entry1_under > entry2_under then
@@ -52,14 +61,16 @@ cmp.setup {
     },
   },
   snippet = {
-    expand = function(args) require 'luasnip'.lsp_expand(args.body) end,
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
   },
   window = {
     completion = cmp.config.window.bordered(),
     documentation = cmp.config.window.bordered(),
   },
   formatting = {
-    format = require 'lspkind'.cmp_format {
+    format = require('lspkind').cmp_format {
       mode = 'symbol_text',
       preset = 'codicons',
       maxwidth = 50,
