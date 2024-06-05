@@ -18,6 +18,12 @@ vim.lsp.start {
         black = {
           enabled = true -- Disables autopep8 and yapf.
         },
+        flake8 = {
+          enabled = true
+        },
+        pylint = {
+          enabled = true
+        },
       }
     }
   },
