@@ -4,6 +4,10 @@ if vim.fn.executable(pylsp_cmd) ~= 1 then
   return
 end
 
+vim.bo.shitf = 4
+vim.bo.softtabstop = 4
+vim.bo.tabstop = 4
+
 local lsp = require('user.lsp')
 
 ---@diagnostic disable-next-line: missing-fields
