@@ -16,15 +16,27 @@ vim.lsp.start {
     pylsp = {
       plugins = {
         black = {
-          enabled = true -- Disables autopep8 and yapf.
+          enabled = true, -- Disables autopep8 and yapf.
         },
         flake8 = {
-          enabled = true
+          enabled = true,
         },
         pylint = {
-          enabled = true
+          enabled = true,
         },
-      }
-    }
+        maccabe = {
+          enabled = false,
+        },
+        pycodestyle = {
+          enabled = false,
+        },
+        pyflakes = {
+          enabled = false,
+        },
+        mypy = {
+          enabled = true,
+        },
+      },
+    },
   },
 }
