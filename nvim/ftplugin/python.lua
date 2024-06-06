@@ -24,11 +24,12 @@ vim.lsp.start {
         pylint = {
           enabled = true,
         },
-        maccabe = {
-          enabled = false,
+        mccabe = {
+          enabled = true,
         },
         pycodestyle = {
-          enabled = false,
+          enabled = true,
+          convention = 'google',
         },
         pyflakes = {
           enabled = false,
