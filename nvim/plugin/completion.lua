@@ -32,7 +32,6 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'nvim_ciderlsp' },
     { name = 'path' },
-    { name = 'luasnip' },
     { name = 'buffer', keyword_length = 3 },
   },
   sorting = {
@@ -59,11 +58,6 @@ cmp.setup {
       cmp.config.compare.length,
       cmp.config.compare.order,
     },
-  },
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
   },
   window = {
     completion = cmp.config.window.bordered(),
