@@ -86,7 +86,7 @@
       nvim-bqf
       nvim-lastplace
       nvim-surround
-      nvim-treesitter
+      nvim-treesitter.withAllGrammars
       nvim-treesitter-textobjects
       nvim-ts-context-commentstring
       nvim-web-devicons
