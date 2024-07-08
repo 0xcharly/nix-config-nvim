@@ -20,10 +20,10 @@ local root_files = {
   '.git',
 }
 
-local lsp = require 'user.lsp'
+local lsp = require('user.lsp')
 
 vim.lsp.start {
-  name = 'luals',
+  name = 'lua',
   cmd = { lua_ls_cmd },
   root_dir = vim.fs.dirname(vim.fs.find(root_files, { upward = true })[1]),
   on_attach = lsp.on_attach,

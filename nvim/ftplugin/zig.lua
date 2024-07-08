@@ -8,7 +8,7 @@ local lsp = require('user.lsp')
 
 ---@diagnostic disable-next-line: missing-fields
 vim.lsp.start {
-  name = 'zls',
+  name = 'zig',
   cmd = { zls_cmd },
   on_attach = lsp.on_attach,
   capabilities = lsp.make_client_capabilities(),

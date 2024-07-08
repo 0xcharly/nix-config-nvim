@@ -12,7 +12,7 @@ local lsp = require('user.lsp')
 
 ---@diagnostic disable-next-line: missing-fields
 vim.lsp.start {
-  name = 'pylsp',
+  name = 'python',
   cmd = { pylsp_cmd },
   on_attach = lsp.on_attach,
   capabilities = lsp.make_client_capabilities(),
