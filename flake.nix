@@ -18,7 +18,6 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
     # Plugins from flakes.
-    telescope-manix.url = "github:mrcjkb/telescope-manix";
     rustaceanvim.url = "github:mrcjkb/rustaceanvim";
   };
 
@@ -35,7 +34,7 @@
       "x86_64-linux"
     ];
 
-    neovim-overlay = import ./nix/neovim-overlay.nix {inherit inputs;};
+    neovim-overlay = import ./nix/neovim-overlay.nix;
   in
     flake-utils.lib.eachSystem supportedSystems
     (system: let
@@ -45,7 +44,6 @@
           neovim-overlay
           inputs.gen-luarc.overlays.default
           inputs.neovim-nightly-overlay.overlays.default
-          inputs.telescope-manix.overlays.default
           inputs.rustaceanvim.overlays.default
         ];
       };

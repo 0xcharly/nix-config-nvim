@@ -1,4 +1,4 @@
-{inputs}: final: prev: let
+final: prev: let
   mkNeovim = {
     nvim,
     plugins,
@@ -97,7 +97,6 @@
       telescope-nvim
       todo-comments-nvim
       trouble-nvim
-      vim-fugitive
       vim-matchup
       vim-repeat
       which-key-nvim
@@ -115,7 +114,6 @@
     ])
     ++ (with final; [
       # Plugins from flakes.
-      telescope-manix
       rustaceanvim
     ]);
 
