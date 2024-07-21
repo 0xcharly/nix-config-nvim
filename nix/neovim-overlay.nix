@@ -1,8 +1,13 @@
 final: prev: let
   mkNeovim = {
     nvim,
+    patches ? [],
     plugins,
   }: let
+    nvim-patched = nvim.overrideAttrs (finalAttrs: previousAttrs: {
+      patches = previousAttrs.patches ++ patches;
+    });
+
     externalPackages = [prev.sqlite];
 
     normalizedPlugins =
@@ -58,7 +63,7 @@ final: prev: let
       ''--set LIBSQLITE "${final.sqlite.out}/lib/libsqlite3.so"''
     ];
   in
-    final.wrapNeovimUnstable nvim (neovimConfig
+    final.wrapNeovimUnstable nvim-patched (neovimConfig
       // {
         luaRcContent = initLua;
         wrapperArgs = builtins.concatStringsSep " " [
@@ -135,6 +140,7 @@ final: prev: let
 
   nvim-latest-corp-pkg = mkNeovim {
     plugins = pkg-corp-plugins;
+    patches = [../patches/0001-Do-not-check-mtime-before-writting-to-a-file.patch];
     nvim = prev.neovim-unwrapped;
   };
 
