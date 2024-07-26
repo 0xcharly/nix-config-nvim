@@ -1,6 +1,6 @@
-From 3473b036ff78e773f93d37d5362a5b3a3352b3e0 Mon Sep 17 00:00:00 2001
+From 9759bf32e975417f386db695d52268bd5935cdb8 Mon Sep 17 00:00:00 2001
 From: Charly Delay <charly@delay.gg>
-Date: Sun, 21 Jul 2024 15:29:58 +0900
+Date: Fri, 26 Jul 2024 15:55:09 +0900
 Subject: [PATCH] Do not check `mtime` before writting to a file.
 
 This patch essentially removes both warning and user confirmation input
@@ -14,17 +14,18 @@ the file not being changed.
 Inspired by https://github.com/neovim/neovim/pull/29310.
 ---
  src/nvim/bufwrite.c                  | 27 ----------
- test/functional/core/fileio_spec.lua | 19 +------
+ test/functional/core/fileio_spec.lua | 18 +------
  test/functional/ui/input_spec.lua    | 75 ----------------------------
- 3 files changed, 1 insertion(+), 120 deletions(-)
+ 3 files changed, 1 insertion(+), 119 deletions(-)
 
-diff --color=auto -ru neovim-0.10.0/src/nvim/bufwrite.c neovim-0.10.0-patched/src/nvim/bufwrite.c
---- neovim-0.10.0/src/nvim/bufwrite.c	2024-05-16 21:34:32
-+++ neovim-0.10.0-patched/src/nvim/bufwrite.c	2024-07-21 16:02:06
-@@ -345,25 +345,6 @@
+diff --git a/src/nvim/bufwrite.c b/src/nvim/bufwrite.c
+index 27de03954..bab12db72 100644
+--- a/src/nvim/bufwrite.c
++++ b/src/nvim/bufwrite.c
+@@ -345,25 +345,6 @@ static int buf_write_bytes(struct bw_info *ip)
    return (wlen < len) ? FAIL : OK;
  }
-
+ 
 -/// Check modification time of file, before writing to it.
 -/// The size isn't checked, because using a tool like "gzip" takes care of
 -/// using the same timestamp but can't set the size.
@@ -47,11 +48,10 @@ diff --color=auto -ru neovim-0.10.0/src/nvim/bufwrite.c neovim-0.10.0-patched/sr
  /// Generate a BOM in "buf[4]" for encoding "name".
  ///
  /// @return  the length of the BOM (zero when no BOM).
-@@ -710,14 +691,6 @@
-         *err = set_err_num("E505", _("is read-only (add ! to override)"));
+@@ -711,14 +692,6 @@ static int get_fileinfo(buf_T *buf, char *fname, bool overwriting, bool forceit,
        }
        return FAIL;
--    }
+     }
 -
 -    // If 'forceit' is false, check if the timestamp hasn't changed since reading the file.
 -    if (overwriting && !forceit) {
@@ -59,22 +59,23 @@ diff --color=auto -ru neovim-0.10.0/src/nvim/bufwrite.c neovim-0.10.0-patched/sr
 -      if (retval == FAIL) {
 -        return FAIL;
 -      }
-     }
+-    }
    }
    return OK;
-diff --color=auto -ru neovim-0.10.0/test/functional/core/fileio_spec.lua neovim-0.10.0-patched/test/functional/core/fileio_spec.lua
---- neovim-0.10.0/test/functional/core/fileio_spec.lua	2024-05-16 21:34:32
-+++ neovim-0.10.0-patched/test/functional/core/fileio_spec.lua	2024-07-21 16:02:29
-@@ -297,24 +297,7 @@
-     -- Set the file's access/update time to be
+ }
+diff --git a/test/functional/core/fileio_spec.lua b/test/functional/core/fileio_spec.lua
+index 1c4f42eb4..f806c878b 100644
+--- a/test/functional/core/fileio_spec.lua
++++ b/test/functional/core/fileio_spec.lua
+@@ -293,23 +293,7 @@ describe('fileio', function()
      -- greater than the time at which it was created.
      uv.fs_utime('Xtest-overwrite-forced', future_time, future_time)
--    -- use async feed_command because nvim basically hangs on the prompt
+     -- use async feed_command because nvim basically hangs on the prompt
 -    feed_command('w')
 -    screen:expect([[
--      {2:WARNING: The file has been changed since}|
--      {2: reading it!!!}                          |
--      {3:Do you really want to write to it (y/n)?}|
+-      {9:WARNING: The file has been changed since}|
+-      {9: reading it!!!}                          |
+-      {6:Do you really want to write to it (y/n)?}|
 -      ^                                        |
 -    ]])
 -
@@ -91,13 +92,14 @@ diff --color=auto -ru neovim-0.10.0/test/functional/core/fileio_spec.lua neovim-
      screen:expect([[
        ^foobar                                  |
        {1:~                                       }|*2
-diff --color=auto -ru neovim-0.10.0/test/functional/ui/input_spec.lua neovim-0.10.0-patched/test/functional/ui/input_spec.lua
---- neovim-0.10.0/test/functional/ui/input_spec.lua	2024-05-16 21:34:32
-+++ neovim-0.10.0-patched/test/functional/ui/input_spec.lua	2024-07-21 16:02:54
-@@ -320,81 +320,6 @@
+diff --git a/test/functional/ui/input_spec.lua b/test/functional/ui/input_spec.lua
+index f37793945..774ff2b97 100644
+--- a/test/functional/ui/input_spec.lua
++++ b/test/functional/ui/input_spec.lua
+@@ -320,81 +320,6 @@ it('unsimplified mapping works when there was a partial match vim-patch:8.2.4504
    expect('xb')
  end)
-
+ 
 -describe('input non-printable chars', function()
 -  after_each(function()
 -    os.remove('Xtest-overwrite')
@@ -176,3 +178,6 @@ diff --color=auto -ru neovim-0.10.0/test/functional/ui/input_spec.lua neovim-0.1
  describe('event processing and input', function()
    it('not blocked by event bursts', function()
      api.nvim_set_keymap(
+-- 
+2.44.1
+

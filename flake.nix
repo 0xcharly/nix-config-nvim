@@ -7,87 +7,71 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
-    pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
+    # Pin our primary nixpkgs repositories.
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
+    # We use flake parts to organize our configurations.
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    git-hooks-nix = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
+    };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-utils.url = "github:numtide/flake-utils";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
 
     # Plugins from flakes.
     rustaceanvim.url = "github:mrcjkb/rustaceanvim";
   };
 
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    flake-utils,
-    pre-commit-hooks,
-    ...
-  }: let
-    supportedSystems = [
-      "aarch64-darwin"
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
-
+  outputs = inputs @ {flake-parts, ...}: let
     neovim-overlay = import ./nix/neovim-overlay.nix;
   in
-    flake-utils.lib.eachSystem supportedSystems
-    (system: let
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          neovim-overlay
-          inputs.gen-luarc.overlays.default
-          inputs.neovim-nightly-overlay.overlays.default
-          inputs.rustaceanvim.overlays.default
-        ];
-      };
-      shell = pkgs.mkShell {
-        name = "nix-config-nvim-devShell";
-        buildInputs =
-          (with pre-commit-hooks.packages.${system}; [
-            alejandra
-            lua-language-server
-            luacheck
-            stylua
-          ])
-          ++ (with pkgs; [
-            nixd
-          ]);
-        shellHook = ''
-          ${self.checks.${system}.pre-commit-check.shellHook}
-          ln -fs ${pkgs.luarc-json} .luarc.json
-        '';
-      };
-      pre-commit-check = pre-commit-hooks.lib.${system}.run {
-        src = self;
-        hooks = {
-          alejandra.enable = true;
-          luacheck.enable = true;
-          stylua.enable = true;
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        inputs.flake-parts.flakeModules.easyOverlay
+        inputs.git-hooks-nix.flakeModule
+        inputs.treefmt-nix.flakeModule
+
+        ./flake/devshells.nix
+      ];
+
+      systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
+
+      perSystem = {
+        config,
+        system,
+        ...
+      }: let
+        pkgs = import inputs.nixpkgs-unstable {
+          inherit system;
+          overlays = [
+            neovim-overlay
+            inputs.gen-luarc.overlays.default
+            inputs.neovim-nightly-overlay.overlays.default
+            inputs.rustaceanvim.overlays.default
+          ];
+        };
+      in {
+        _module.args = {inherit pkgs;};
+        overlayAttrs.delay-nvim-config = config.packages;
+        packages = rec {
+          default = latest;
+          latest = pkgs.nvim-latest-pkg;
+          latest-corp = pkgs.nvim-latest-corp-pkg;
+          nightly = pkgs.nvim-nightly-pkg;
+          nightly-corp = pkgs.nvim-nightly-corp-pkg;
         };
       };
-    in {
-      packages = rec {
-        default = latest;
-        latest = pkgs.nvim-latest-pkg;
-        latest-corp = pkgs.nvim-latest-corp-pkg;
-        nightly = pkgs.nvim-nightly-pkg;
-        nightly-corp = pkgs.nvim-nightly-corp-pkg;
-      };
-      devShells = {
-        default = shell;
-      };
-      checks = {
-        inherit pre-commit-check;
-      };
-    })
-    // {
-      overlays.default = neovim-overlay;
     };
 }
