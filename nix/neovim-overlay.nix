@@ -123,7 +123,7 @@ final: prev: let
     ]);
 
   # Complete list of plugins for personal usage.
-  pkg-plugins = base-plugins ++ [prev.vimPlugins.copilot-vim];
+  pkg-plugins = base-plugins; # ++ [prev.vimPlugins.copilot-vim];
 
   # Complete list of plugins for corporate usage.
   pkg-corp-plugins = base-plugins;
