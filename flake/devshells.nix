@@ -1,5 +1,6 @@
 {
   perSystem = {
+    self',
     config,
     pkgs,
     ...
@@ -9,7 +10,7 @@
         # Nix.
         alejandra
         lua-language-server
-        luacheck
+        # luacheck
         nixd
 
         # Lua.
@@ -18,7 +19,7 @@
 
       shellHook = ''
         ${config.pre-commit.installationScript}
-        ln -fs ${pkgs.luarc-json} .luarc.json
+        ln -fs ${self'.packages.luarc-json} .luarc.json
       '';
     };
 

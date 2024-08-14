@@ -7,10 +7,8 @@
   };
 
   inputs = {
-    # Pin our primary nixpkgs repositories.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # Pin our primary nixpkgs repository.
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # We use flake parts to organize our configurations.
     flake-parts = {
@@ -19,24 +17,20 @@
     };
     git-hooks-nix = {
       url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
 
     # Plugins from flakes.
     rustaceanvim.url = "github:mrcjkb/rustaceanvim";
   };
 
-  outputs = inputs @ {flake-parts, ...}: let
-    neovim-overlay = import ./nix/neovim-overlay.nix;
-  in
+  outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.flake-parts.flakeModules.easyOverlay
@@ -48,29 +42,103 @@
 
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
-      perSystem = {
-        config,
-        system,
-        ...
-      }: let
-        pkgs = import inputs.nixpkgs-unstable {
+      perSystem = {system, ...}: let
+        pkgs = import inputs.nixpkgs {
           inherit system;
           overlays = [
-            neovim-overlay
             inputs.gen-luarc.overlays.default
-            inputs.neovim-nightly-overlay.overlays.default
             inputs.rustaceanvim.overlays.default
           ];
         };
-      in {
+        defaultConfig = {
+          src = ./nvim-config;
+          runtime = [./nvim-runtime];
+          patches = [];
+          plugins =
+            (with pkgs.vimPlugins; [
+              catppuccin-nvim
+              gitsigns-nvim
+              harpoon2
+              lualine-nvim
+              nvim-lastplace
+              nvim-surround
+              (nvim-treesitter.withPlugins (p:
+                with p; [
+                  awk
+                  bash
+                  beancount
+                  c
+                  cmake
+                  comment
+                  cpp
+                  css
+                  csv
+                  dart
+                  devicetree
+                  dhall
+                  diff
+                  dot
+                  fish
+                  gitcommit
+                  gitignore
+                  ini
+                  java
+                  json
+                  just
+                  kotlin
+                  lua
+                  make
+                  markdown
+                  markdown_inline
+                  nix
+                  objc
+                  python
+                  rust
+                  ssh_config
+                  starlark
+                  toml
+                  yaml
+                  zig
+                ]))
+              oil-nvim
+              plenary-nvim
+              sqlite-lua
+              telescope-fzf-native-nvim
+              telescope-nvim
+              todo-comments-nvim
+              # nvim-cmp and plugins
+              nvim-cmp
+              cmp-buffer
+              cmp-path
+              cmp-cmdline
+              cmp-nvim-lua
+              cmp-nvim-lsp
+              cmp-nvim-lsp-document-symbol
+              cmp-nvim-lsp-signature-help
+              cmp-rg
+            ])
+            ++ [pkgs.rustaceanvim];
+        };
+      in rec {
         _module.args = {inherit pkgs;};
-        overlayAttrs.delay-nvim-config = config.packages;
+        overlayAttrs.delay-nvim-config = packages;
+
         packages = rec {
-          default = latest;
-          latest = pkgs.nvim-latest-pkg;
-          latest-corp = pkgs.nvim-latest-corp-pkg;
-          nightly = pkgs.nvim-nightly-pkg;
-          nightly-corp = pkgs.nvim-nightly-corp-pkg;
+          default = (pkgs.callPackage ./mk-nvim-config.nix {}) defaultConfig;
+          debug-norc = (pkgs.callPackage ./mk-nvim-config.nix {}) {src = ./.;};
+          debug-no-plugins = withPlugins [];
+          debug-with-zenburn = withExtraPlugins [pkgs.vimPlugins.zenburn];
+
+          withPlugins = plugins: default.override {inherit plugins;};
+          withExtraPlugins = plugins:
+            default.override (prev: {plugins = prev.plugins ++ plugins;});
+
+          # For the devshell.
+          luarc-json = pkgs.mk-luarc-json {
+            inherit (defaultConfig) plugins;
+            nvim = pkgs.neovim-unwrapped;
+            neodev-types = "nightly";
+          };
         };
       };
     };

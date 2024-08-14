@@ -17,15 +17,15 @@ local lualine_groups_generator = function(suffix)
     z = 'LualineZ' .. suffix,
   }
 end
-require 'lualine'.setup {
+require('lualine').setup {
   options = {
     theme = {
-      normal = lualine_groups_generator 'Normal',
-      insert = lualine_groups_generator 'Insert',
-      visual = lualine_groups_generator 'Visual',
-      replace = lualine_groups_generator 'Replace',
-      command = lualine_groups_generator 'Command',
-      inactive = lualine_groups_generator 'Inactive',
+      normal = lualine_groups_generator('Normal'),
+      insert = lualine_groups_generator('Insert'),
+      visual = lualine_groups_generator('Visual'),
+      replace = lualine_groups_generator('Replace'),
+      command = lualine_groups_generator('Command'),
+      inactive = lualine_groups_generator('Inactive'),
     },
   },
   sections = {
@@ -39,10 +39,10 @@ require 'lualine'.setup {
       {
         'diagnostics',
         symbols = {
-          error = require 'user.lsp'.diagnostic_signs.Error,
-          warn = require 'user.lsp'.diagnostic_signs.Warn,
-          info = require 'user.lsp'.diagnostic_signs.Info,
-          hint = require 'user.lsp'.diagnostic_signs.Hint,
+          error = require('user.lsp').diagnostic_signs.Error,
+          warn = require('user.lsp').diagnostic_signs.Warn,
+          info = require('user.lsp').diagnostic_signs.Info,
+          hint = require('user.lsp').diagnostic_signs.Hint,
         },
       },
     },
@@ -66,6 +66,6 @@ require 'lualine'.setup {
     lualine_c = { section_filename },
     lualine_x = { 'location' },
     lualine_y = {},
-    lualine_z = {}
+    lualine_z = {},
   },
 }
