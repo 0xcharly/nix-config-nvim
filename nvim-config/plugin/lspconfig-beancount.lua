@@ -5,24 +5,19 @@ if vim.fn.executable(beancount_cmd) ~= 1 then
 end
 
 local lsp = require('user.lsp')
+local lspconfig = require('lspconfig')
 
 ---@diagnostic disable-next-line: missing-fields
-vim.lsp.start({
+lspconfig.beancount.setup {
   name = 'beancount',
-  cmd = { beancount_cmd },
-  root_dir = vim.fs.dirname(vim.fs.find({ 'delay.beancount' }, { upward = true })[1]),
-  single_file_support = true,
+  cmd = { beancount_cmd, '--stdio' },
+  on_attach = lsp.on_attach,
+  capabilities = lsp.make_client_capabilities(),
+  root_dir = lspconfig.util.root_pattern('delay.beancount'),
   init_options = {
     journal_file = '~/beancount/delay.beancount',
   },
-  settings = {},
-  on_attach = lsp.on_attach,
-  capabilities = lsp.make_client_capabilities(),
-}, {
-  reuse_client = function(client, conf)
-    return client.name == conf.name and client.config.root_dir == conf.root_dir
-  end,
-})
+}
 
 -- require 'telescope'.load_extension 'beancount'
 --

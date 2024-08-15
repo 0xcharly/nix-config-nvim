@@ -5,12 +5,10 @@ if vim.fn.executable(nixd_cmd) ~= 1 then
 end
 
 local lsp = require('user.lsp')
+local lspconfig = require('lspconfig')
 
----@diagnostic disable-next-line: missing-fields
-vim.lsp.start {
-  name = 'nix',
+lspconfig.nixd.setup {
   cmd = { nixd_cmd, '--inlay-hints', '--semantic-tokens' },
-  root_dir = vim.fs.dirname(vim.fs.find({ 'flake.nix', '.git' }, { upward = true })[1]),
   on_attach = lsp.on_attach,
   capabilities = lsp.make_client_capabilities(),
   settings = {

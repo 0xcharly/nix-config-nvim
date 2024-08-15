@@ -6,15 +6,13 @@
     ...
   }: {
     devShells.default = pkgs.mkShell {
-      nativeBuildInputs = with pkgs; [
-        # Nix.
-        alejandra
-        lua-language-server
-        # luacheck
-        nixd
-
-        # Lua.
-        stylua
+      nativeBuildInputs = [
+        config.treefmt.build.wrapper
+        pkgs.alejandra
+        pkgs.just
+        pkgs.lua-language-server
+        pkgs.nixd
+        pkgs.stylua
       ];
 
       shellHook = ''
@@ -32,6 +30,12 @@
           stylua.enable = true;
         };
       };
+    };
+
+    devShells.nvim = pkgs.mkShell {
+      packages = [
+        self'.packages.default
+      ];
     };
   };
 }

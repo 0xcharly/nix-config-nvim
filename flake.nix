@@ -25,9 +25,6 @@
     };
 
     gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
-
-    # Plugins from flakes.
-    rustaceanvim.url = "github:mrcjkb/rustaceanvim";
   };
 
   outputs = inputs @ {flake-parts, ...}:
@@ -37,6 +34,7 @@
         inputs.git-hooks-nix.flakeModule
         inputs.treefmt-nix.flakeModule
 
+        ./flake/cmd-fmt.nix
         ./flake/devshells.nix
       ];
 
@@ -47,77 +45,76 @@
           inherit system;
           overlays = [
             inputs.gen-luarc.overlays.default
-            inputs.rustaceanvim.overlays.default
           ];
         };
         defaultConfig = {
           src = ./nvim-config;
           runtime = [./nvim-runtime];
           patches = [];
-          plugins =
-            (with pkgs.vimPlugins; [
-              catppuccin-nvim
-              gitsigns-nvim
-              harpoon2
-              lualine-nvim
-              nvim-lastplace
-              nvim-surround
-              (nvim-treesitter.withPlugins (p:
-                with p; [
-                  awk
-                  bash
-                  beancount
-                  c
-                  cmake
-                  comment
-                  cpp
-                  css
-                  csv
-                  dart
-                  devicetree
-                  dhall
-                  diff
-                  dot
-                  fish
-                  gitcommit
-                  gitignore
-                  ini
-                  java
-                  json
-                  just
-                  kotlin
-                  lua
-                  make
-                  markdown
-                  markdown_inline
-                  nix
-                  objc
-                  python
-                  rust
-                  ssh_config
-                  starlark
-                  toml
-                  yaml
-                  zig
-                ]))
-              oil-nvim
-              plenary-nvim
-              sqlite-lua
-              telescope-fzf-native-nvim
-              telescope-nvim
-              todo-comments-nvim
-              # nvim-cmp and plugins
-              nvim-cmp
-              cmp-buffer
-              cmp-path
-              cmp-cmdline
-              cmp-nvim-lua
-              cmp-nvim-lsp
-              cmp-nvim-lsp-document-symbol
-              cmp-nvim-lsp-signature-help
-              cmp-rg
-            ])
-            ++ [pkgs.rustaceanvim];
+          plugins = with pkgs.vimPlugins; [
+            catppuccin-nvim
+            gitsigns-nvim
+            harpoon2
+            lualine-nvim
+            nvim-lastplace
+            nvim-lspconfig
+            nvim-surround
+            (nvim-treesitter.withPlugins (p:
+              with p; [
+                awk
+                bash
+                beancount
+                c
+                cmake
+                comment
+                cpp
+                css
+                csv
+                dart
+                devicetree
+                dhall
+                diff
+                dot
+                fish
+                gitcommit
+                gitignore
+                ini
+                java
+                json
+                just
+                kotlin
+                lua
+                make
+                markdown
+                markdown_inline
+                nix
+                objc
+                python
+                rust
+                ssh_config
+                starlark
+                toml
+                yaml
+                zig
+              ]))
+            oil-nvim
+            plenary-nvim
+            rustaceanvim
+            sqlite-lua
+            telescope-fzf-native-nvim
+            telescope-nvim
+            todo-comments-nvim
+            # nvim-cmp and plugins
+            nvim-cmp
+            cmp-buffer
+            cmp-path
+            cmp-cmdline
+            cmp-nvim-lua
+            cmp-nvim-lsp
+            cmp-nvim-lsp-document-symbol
+            cmp-nvim-lsp-signature-help
+            cmp-rg
+          ];
         };
       in rec {
         _module.args = {inherit pkgs;};
@@ -138,7 +135,7 @@
           luarc-json = pkgs.mk-luarc-json {
             inherit (defaultConfig) plugins;
             nvim = pkgs.neovim-unwrapped;
-            neodev-types = "nightly";
+            neodev-types = "stable";
           };
         };
       };

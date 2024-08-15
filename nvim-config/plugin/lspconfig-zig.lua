@@ -5,10 +5,10 @@ if vim.fn.executable(zls_cmd) ~= 1 then
 end
 
 local lsp = require('user.lsp')
+local lspconfig = require('lspconfig')
 
 ---@diagnostic disable-next-line: missing-fields
-vim.lsp.start {
-  name = 'zig',
+lspconfig.zls.setup {
   cmd = { zls_cmd },
   on_attach = lsp.on_attach,
   capabilities = lsp.make_client_capabilities(),
