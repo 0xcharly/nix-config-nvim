@@ -121,11 +121,12 @@
         };
       in rec {
         _module.args = {inherit pkgs;};
-        overlayAttrs.nvim = packages.default;
+        overlayAttrs.nix-config-nvim = packages.default;
 
         packages = rec {
           default = (pkgs.callPackage ./mk-nvim-config.nix {}) defaultConfig;
-          debug-norc = (pkgs.callPackage ./mk-nvim-config.nix {}) {src = ./.;};
+
+          debug-norc = default.override {src = ./.;};
           debug-no-plugins = withPlugins [];
           debug-with-zenburn = withExtraPlugins [pkgs.vimPlugins.zenburn];
 
