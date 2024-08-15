@@ -121,7 +121,7 @@
         };
       in rec {
         _module.args = {inherit pkgs;};
-        overlayAttrs.delay-nvim-config = packages;
+        overlayAttrs.nvim = packages.default;
 
         packages = rec {
           default = (pkgs.callPackage ./mk-nvim-config.nix {}) defaultConfig;
