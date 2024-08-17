@@ -68,7 +68,7 @@
     # Does this _after_ loading `init.lua` to guarantee a correct RTP order.
     wrappedInitLua = let
       dirExists = path: path != null && pathExists path && readFileType path == "directory";
-      initLua = src + "/init.lua";
+      initLua = src + /init.lua;
 
       prependRtp = builtins.map (
         path: lib.optionalString (dirExists path) "vim.opt.rtp:prepend('${path}')"
