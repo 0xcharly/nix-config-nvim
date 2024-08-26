@@ -7,7 +7,6 @@ end
 local lsp = require('user.lsp')
 local lspconfig = require('lspconfig')
 
----@diagnostic disable-next-line: missing-fields
 lspconfig.pylsp.setup {
   cmd = { pylsp_cmd },
   on_attach = lsp.on_attach,

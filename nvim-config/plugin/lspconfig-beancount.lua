@@ -7,7 +7,6 @@ end
 local lsp = require('user.lsp')
 local lspconfig = require('lspconfig')
 
----@diagnostic disable-next-line: missing-fields
 lspconfig.beancount.setup {
   name = 'beancount',
   cmd = { beancount_cmd, '--stdio' },

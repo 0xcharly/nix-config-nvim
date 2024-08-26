@@ -53,6 +53,7 @@
           patches = [];
           plugins = with pkgs.vimPlugins; [
             catppuccin-nvim
+            fidget-nvim
             gitsigns-nvim
             harpoon2
             lualine-nvim
@@ -99,7 +100,6 @@
               ]))
             oil-nvim
             plenary-nvim
-            rustaceanvim
             sqlite-lua
             telescope-fzf-native-nvim
             telescope-nvim
