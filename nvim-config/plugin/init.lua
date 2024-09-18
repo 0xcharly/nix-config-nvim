@@ -54,6 +54,7 @@ vim.o.foldenable = true
 vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.belloff = 'all'
+vim.o.showcmd = false
 
 -- Indentation.
 vim.o.autoindent = true

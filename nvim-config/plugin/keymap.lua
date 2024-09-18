@@ -2,10 +2,6 @@ local cmd = vim.cmd
 local diagnostic = vim.diagnostic
 local keymap = vim.keymap
 
--- Remap for dealing with word wrap.
-keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-
 -- Keymaps for better default experience.
 -- See `:help vim.keymap.set()`
 keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
