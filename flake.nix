@@ -83,6 +83,7 @@
                 java
                 json
                 just
+                kdl
                 kotlin
                 lua
                 make
