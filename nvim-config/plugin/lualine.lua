@@ -9,25 +9,6 @@ local section_filename = {
   },
 }
 
-local mode = {
-  'mode',
-  fmt = function(mode)
-    local icons = {
-      cmdline = '󰬊 ',
-      command = '󰬊 ',
-      insert = '󰬐 ',
-      normal = '󰬕 ',
-      replace = '󰬙 ',
-      select = '󰬚 ',
-      terminal = '󰬛 ',
-      visual = '󰬝 ',
-      ['v-block'] = '󰬝 ',
-      ['v-line'] = '󰬝 ',
-    }
-    return icons[string.lower(mode)] or mode
-  end,
-}
-
 local C = require('catppuccin.palettes').get_palette('mocha')
 local lsp = require('user.lsp')
 
@@ -62,7 +43,7 @@ require('lualine').setup {
     },
   },
   sections = {
-    lualine_a = { mode },
+    lualine_a = { 'mode' },
     lualine_b = {
       section_filename,
       { 'location', separator = '‥' },
@@ -85,7 +66,7 @@ require('lualine').setup {
     },
   },
   inactive_sections = {
-    lualine_a = { mode },
+    lualine_a = { 'mode' },
     lualine_b = { section_filename },
     lualine_c = {},
     lualine_x = {},
