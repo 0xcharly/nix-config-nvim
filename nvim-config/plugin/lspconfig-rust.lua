@@ -18,6 +18,11 @@ lspconfig.rust_analyzer.setup {
         loadOutDirsFromCheck = true,
         runBuildScripts = true,
       },
+      rustfmt = {
+        rangeFormatting = {
+          enable = true,
+        },
+      },
       procMacro = {
         enable = true,
         ignored = {
