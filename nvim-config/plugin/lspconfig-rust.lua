@@ -9,12 +9,7 @@ local lspconfig = require('lspconfig')
 
 lspconfig.rust_analyzer.setup {
   cmd = { rust_analyzer_cmd },
-  on_attach = function(client, bufnr)
-    lsp.on_attach(client, bufnr)
-    -- Fixes `gq` being borked: https://github.com/neovim/neovim/pull/19677.
-    -- rust-analyzer does not support formatting lines with `gq`.
-    vim.bo[bufnr].formatexpr = nil
-  end,
+  on_attach = lsp.on_attach,
   capabilities = lsp.make_client_capabilities(),
   settings = {
     ['rust-analyzer'] = {
