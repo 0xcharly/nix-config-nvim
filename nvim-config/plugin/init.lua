@@ -79,7 +79,6 @@ vim.opt.formatoptions = vim.opt.formatoptions -- :help formatoptions
   - 't' -- Don't auto-wrap text at 'textwidth'.
   - 'c' -- Don't auto-wrap comments using textwidth.
   + 'r' -- Insert comment leader on newline in Insert mode.
-  -- TODO: test drive o=true,/=true.
   + 'o' -- "O" and "o" continue comments...
   + '/' -- ...unless it's a // comment after a statement.
   + 'q' -- Format comments with "gq".
