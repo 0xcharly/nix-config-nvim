@@ -14,7 +14,7 @@ lspconfig.rust_analyzer.setup {
   settings = {
     ['rust-analyzer'] = {
       cargo = {
-        allFeatures = true,
+        allFeatures = false,
         loadOutDirsFromCheck = true,
         runBuildScripts = true,
       },
