@@ -53,6 +53,7 @@
           patches = [];
           plugins = with pkgs.vimPlugins; [
             catppuccin-nvim
+            conform-nvim
             fidget-nvim
             gitsigns-nvim
             harpoon2

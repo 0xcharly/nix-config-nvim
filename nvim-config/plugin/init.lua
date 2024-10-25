@@ -1,6 +1,3 @@
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ','
-
 -- Disable builtin plugins
 vim.g.loaded_gzip = 1
 vim.g.loaded_zip = 1

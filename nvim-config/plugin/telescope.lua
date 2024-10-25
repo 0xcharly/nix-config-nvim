@@ -98,12 +98,6 @@ vim.keymap.set('n', '<Leader>t*', grep_string_current_file_type, { desc = '[t]el
 vim.keymap.set('n', '<Leader>*', pickers.grep_string, { desc = 'telescope: grep string' })
 vim.keymap.set('n', '<Leader>t?', pickers.help_tags, { desc = '[t]elescope: help [?] tags' })
 vim.keymap.set('n', '<Leader>tg', project_files, { desc = '[t]elescope: project files [g]it' })
-vim.keymap.set('n', '<Leader>t.n', function()
-  pickers.git_files { cwd = '~/code/nixos-config' }
-end)
-vim.keymap.set('n', '<Leader>t.v', function()
-  pickers.git_files { cwd = '~/code/nix-config-nvim' }
-end)
 vim.keymap.set('n', '<Leader>tc', pickers.quickfix, { desc = '[t]elescope: quickfix [c] list' })
 vim.keymap.set('n', '<Leader>tq', pickers.command_history, { desc = '[t]elescope: command [q] history' })
 vim.keymap.set('n', '<Leader>tl', pickers.loclist, { desc = '[t]elescope: [l]oclist' })
@@ -114,13 +108,6 @@ vim.keymap.set('n', '<Leader>ty', function()
 end, { desc = '[t]elescope: [y]ank history' })
 vim.keymap.set('n', '<Leader>tbb', pickers.buffers, { desc = '[t]elescope: [bb]uffers' })
 vim.keymap.set('n', '<Leader>tbf', pickers.current_buffer_fuzzy_find, { desc = '[t]elescope: [b]uffer [f]uzzy find' })
-vim.keymap.set('n', '<Leader>ts', pickers.lsp_document_symbols, { desc = '[t]elescope: lsp document [s]ymbols' })
-vim.keymap.set(
-  'n',
-  '<Leader>tw',
-  pickers.lsp_dynamic_workspace_symbols,
-  { desc = '[t]elescope: lsp dynamic [w]orkspace symbols' }
-)
 vim.keymap.set('n', '<Leader>th', function()
   extensions.harpoon.marks()
 end, { desc = '[t]elescope: [h]arpoon marks' })

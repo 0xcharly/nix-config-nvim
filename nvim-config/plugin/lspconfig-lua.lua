@@ -1,16 +1,8 @@
-local lua_ls_cmd = 'lua-language-server'
-
--- Check if lua-language-server is available
-if vim.fn.executable(lua_ls_cmd) ~= 1 then
-  return
-end
-
 local lsp = require('user.lsp')
 local lspconfig = require('lspconfig')
 
 lspconfig.lua_ls.setup {
-  cmd = { lua_ls_cmd },
-  on_attach = lsp.on_attach,
+  cmd = { 'lua-language-server' },
   capabilities = lsp.make_client_capabilities(),
   settings = {
     Lua = {

@@ -1,16 +1,9 @@
-local beancount_cmd = 'beancount-language-server'
-
-if vim.fn.executable(beancount_cmd) ~= 1 then
-  return
-end
-
 local lsp = require('user.lsp')
 local lspconfig = require('lspconfig')
 
 lspconfig.beancount.setup {
   name = 'beancount',
-  cmd = { beancount_cmd, '--stdio' },
-  on_attach = lsp.on_attach,
+  cmd = { 'beancount-language-server', '--stdio' },
   capabilities = lsp.make_client_capabilities(),
   root_dir = lspconfig.util.root_pattern('delay.beancount'),
   init_options = {

@@ -2,12 +2,20 @@
 
 local M = {}
 
+-- { error = '󰅗 󰅙 󰅘 󰅚 󱄊 ', warn = '󰀨 󰗖 󱇎 󱇏 󰲼 ', info = '󰋽 󱔢 ', hint = '󰲽 ' },
+M.diagnostic_signs = {
+  Error = '󰅚 ',
+  Warn = '󰗖 ',
+  Info = '󰋽 ',
+  Hint = '󰲽 ',
+}
+
 --- Gets a 'ClientCapabilities' object, describing the LSP client capabilities
 --- Extends the object with capabilities provided by plugins.
 --- @return lsp.ClientCapabilities
 function M.make_client_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  -- Add com_nvim_lsp capabilities.
+  -- Add cmp_nvim_lsp capabilities.
   capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
   -- Enable preliminary support for workspace/didChangeWatchedFiles.
   capabilities = vim.tbl_deep_extend('keep', capabilities, {
@@ -26,6 +34,66 @@ function M.make_client_capabilities()
   -- Make sure to follow the instructions provided in the plugin's docs.
   return capabilities
 end
+
+-- Bordered popups.
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('user-lsp-attach', { clear = true }),
+  callback = function(event)
+    local map = function(keys, func, desc, mode)
+      mode = mode or 'n'
+      vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+    end
+
+    -- Jump to the definition of the word under your cursor.
+    --  This is where a variable was first declared, or where a function is defined, etc.
+    --  To jump back, press <C-t>.
+    map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+
+    -- Find references for the word under your cursor.
+    map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+
+    -- Jump to the implementation of the word under your cursor.
+    --  Useful when your language has ways of declaring types without an actual implementation.
+    map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+
+    -- Jump to the type of the word under your cursor.
+    --  Useful when you're not sure what type a variable is and you want to see
+    --  the definition of its *type*, not where it was *defined*.
+    map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+
+    -- Fuzzy find all the symbols in your current document.
+    --  Symbols are things like variables, functions, types, etc.
+    map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+
+    -- Fuzzy find all the symbols in your current workspace.
+    --  Similar to document symbols, except searches over your entire project.
+    map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+    -- Rename the variable under your cursor.
+    --  Most Language Servers support renaming across files, etc.
+    map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+
+    -- Execute a code action, usually your cursor needs to be on top of an error
+    -- or a suggestion from your LSP for this to activate.
+    map('<M-CR>', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+
+    -- WARN: This is not Goto Definition, this is Goto Declaration.
+    --  For example, in C this would take you to the header.
+    map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+
+    -- The following code creates a keymap to toggle inlay hints in your code,
+    -- if the language server you are using supports them
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+      map('<leader>h', function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+      end, '[T]oggle Inlay [H]ints')
+    end
+  end,
+})
 
 -- NOTE: Wasted a bunch of time trying to figure out why `gq` was not working in
 -- Rust files after enabling LSP formatting for that language. Turns out it also
@@ -91,64 +159,5 @@ vim.lsp.handlers['client/registerCapability'] = function(_, __, ctx)
   end
 end
 --]]
-
--- { error = '󰅗 󰅙 󰅘 󰅚 󱄊 ', warn = '󰀨 󰗖 󱇎 󱇏 󰲼 ', info = '󰋽 󱔢 ', hint = '󰲽 ' },
-M.diagnostic_signs = {
-  Error = '󰅚 ',
-  Warn = '󰗖 ',
-  Info = '󰋽 ',
-  Hint = '󰲽 ',
-}
-
-local preview_location_callback = function(_, result)
-  if result == nil or vim.tbl_isempty(result) then
-    return nil
-  end
-  local buf, _ = vim.lsp.util.preview_location(result[1], { border = 'rounded' })
-  if buf then
-    local cur_buf = vim.api.nvim_get_current_buf()
-    vim.bo[buf].filetype = vim.bo[cur_buf].filetype
-  end
-end
-
-local peek_definition = function()
-  local params = vim.lsp.util.make_position_params()
-  return vim.lsp.buf_request(0, 'textDocument/definition', params, preview_location_callback)
-end
-
-local peek_type_definition = function()
-  local params = vim.lsp.util.make_position_params()
-  return vim.lsp.buf_request(0, 'textDocument/typeDefinition', params, preview_location_callback)
-end
-
--- Bordered popups.
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
-
-M.on_attach = function(client, bufnr)
-  local opts = { noremap = true, silent = true, buffer = bufnr }
-
-  -- Mappings.
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-  vim.keymap.set('n', '<Leader>gt', vim.lsp.buf.type_definition, opts)
-  vim.keymap.set('n', '<Leader>pd', peek_definition, opts)
-  vim.keymap.set('n', '<Leader>pt', peek_type_definition, opts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-  vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, opts)
-  vim.keymap.set('n', '<M-CR>', vim.lsp.buf.code_action, opts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-  vim.keymap.set({ 'n', 'v' }, '<Leader>f', function()
-    vim.lsp.buf.format { async = true }
-  end, opts)
-
-  if client.server_capabilities.inlayHintProvider then
-    vim.keymap.set('n', '<space>h', function()
-      local current_setting = vim.lsp.inlay_hint.is_enabled { bufnr = bufnr }
-      vim.lsp.inlay_hint.enable(not current_setting, { bufnr = bufnr })
-    end, opts)
-  end
-end
 
 return M
