@@ -137,7 +137,6 @@
           luarc-json = pkgs.mk-luarc-json {
             inherit (defaultConfig) plugins;
             nvim = pkgs.neovim-unwrapped;
-            neodev-types = "stable";
           };
         };
       };
