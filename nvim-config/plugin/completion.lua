@@ -1,16 +1,19 @@
 local cmp = require('cmp')
 
-local cmp_mapping_next_item =
-  cmp.mapping(cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
-local cmp_mapping_prev_item =
-  cmp.mapping(cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
-local cmp_mapping_confirm = cmp.mapping(
-  cmp.mapping.confirm {
-    behavior = cmp.ConfirmBehavior.Insert,
-    select = true,
-  },
-  { 'i', 'c' }
-)
+-- local cmp_mapping_next_item =
+--   cmp.mapping(cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
+-- local cmp_mapping_prev_item =
+--   cmp.mapping(cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
+-- local cmp_mapping_confirm = cmp.mapping(
+--   cmp.mapping.confirm {
+--     behavior = cmp.ConfirmBehavior.Insert,
+--     select = true,
+--   },
+--   { 'i', 'c' }
+-- )
+local cmp_mapping_next_item = cmp.mapping.select_next_item()
+local cmp_mapping_prev_item = cmp.mapping.select_prev_item()
+local cmp_mapping_confirm = cmp.mapping.confirm { select = true }
 
 cmp.setup {
   mapping = cmp.mapping.preset.insert {
@@ -18,11 +21,12 @@ cmp.setup {
     ['<C-k>'] = cmp_mapping_prev_item,
     ['<C-S-j>'] = cmp_mapping_next_item,
     ['<C-S-k>'] = cmp_mapping_prev_item,
-    ['<C-m>'] = cmp.mapping.scroll_docs(4),
-    ['<C-w>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-a>'] = cmp.mapping.abort(),
     ['<C-y>'] = cmp_mapping_confirm,
     ['<C-S-y>'] = cmp_mapping_confirm,
+    ['<CR>'] = cmp_mapping_confirm,
     ['<c-space>'] = cmp.mapping.complete {},
     ['<C-q>'] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = true },
     ['<Tab>'] = cmp.config.disable,
