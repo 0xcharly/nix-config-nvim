@@ -3,10 +3,14 @@ local conform = require('conform')
 conform.setup {
   formatters_by_ft = {
     just = { 'just' },
+    json = { 'yq' },
+    kdl = { 'kdlfmt' },
     lua = { 'stylua' },
     nix = { 'alejandra' },
     python = { 'isort', 'black' },
+    toml = { 'taplo' },
     rust = { 'rustfmt', lsp_format = 'fallback' },
+    yaml = { 'yq' },
     -- Use the "_" filetype to run formatters on filetypes that don't
     -- have other formatters configured.
     ['_'] = { 'trim_whitespace' },

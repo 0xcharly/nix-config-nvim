@@ -13,6 +13,8 @@
         pkgs.lua-language-server
         pkgs.nixd
         pkgs.stylua
+        pkgs.taplo
+        pkgs.yq
       ];
 
       shellHook = ''

@@ -11,48 +11,36 @@ keymap.set('n', 'U', '<C-r>', { silent = true }) -- Redo
 keymap.set('n', 'gn', cmd.bnext, { silent = true }) -- Goto next buffer
 keymap.set('n', 'gp', cmd.bprevious, { silent = true }) -- Goto previous buffer
 
--- Buffer list navigation
-keymap.set('n', '[b', cmd.bprevious, { silent = true, desc = 'previous [b]uffer' })
-keymap.set('n', ']b', cmd.bnext, { silent = true, desc = 'next [b]uffer' })
-keymap.set('n', '[B', cmd.bfirst, { silent = true, desc = 'first [B]uffer' })
-keymap.set('n', ']B', cmd.blast, { silent = true, desc = 'last [B]uffer' })
-
 -- Diagnostic keymaps.
 keymap.set('n', '[d', diagnostic.goto_prev, { silent = true })
 keymap.set('n', ']d', diagnostic.goto_next, { silent = true })
 keymap.set('n', '<leader>e', diagnostic.open_float, { silent = true })
 keymap.set('n', '<leader>q', diagnostic.setloclist, { silent = true })
 
--- Make esc leave terminal mode
+-- Make esc leave terminal mode.
 keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { silent = true })
 
--- Try and make sure to not mangle space items
+-- Try and make sure to not mangle space items.
 keymap.set('t', '<S-Space>', '<Space>', { silent = true })
 keymap.set('t', '<C-Space>', '<Space>', { silent = true })
 
--- To use `Control+{h,j,k,l}` to navigate windows from any mode:
-keymap.set('t', '<M-Left>', '<C-\\><C-N><C-w>h', { silent = true })
-keymap.set('t', '<M-Down>', '<C-\\><C-N><C-w>j', { silent = true })
-keymap.set('t', '<M-Up>', '<C-\\><C-N><C-w>k', { silent = true })
-keymap.set('t', '<M-Right>', '<C-\\><C-N><C-w>l', { silent = true })
-keymap.set('i', '<C-Left>', '<C-\\><C-N><C-w>h', { silent = true })
-keymap.set('i', '<C-Down>', '<C-\\><C-N><C-w>j', { silent = true })
-keymap.set('i', '<C-Up>', '<C-\\><C-N><C-w>k', { silent = true })
-keymap.set('i', '<C-Right>', '<C-\\><C-N><C-w>l', { silent = true })
+-- Use `Control+{←↓↑→}` to navigate windows from any mode.
+keymap.set({ 'i', 't' }, '<C-Left>', '<C-\\><C-N><C-w>h', { silent = true })
+keymap.set({ 'i', 't' }, '<C-Down>', '<C-\\><C-N><C-w>j', { silent = true })
+keymap.set({ 'i', 't' }, '<C-Up>', '<C-\\><C-N><C-w>k', { silent = true })
+keymap.set({ 'i', 't' }, '<C-Right>', '<C-\\><C-N><C-w>l', { silent = true })
 keymap.set('n', '<C-Left>', '<C-w>h', { silent = true })
 keymap.set('n', '<C-Down>', '<C-w>j', { silent = true })
 keymap.set('n', '<C-Up>', '<C-w>k', { silent = true })
 keymap.set('n', '<C-Right>', '<C-w>l', { silent = true })
 
-keymap.set('i', '<A-Left>', cmd.tabprev, { silent = true })
-keymap.set('i', '<A-Right>', cmd.tabnext, { silent = true })
-keymap.set('n', '<A-Left>', cmd.tabprev, { silent = true })
-keymap.set('n', '<A-Right>', cmd.tabnext, { silent = true })
+-- Use `Control+Shift+{←↓↑→} to navigate between tabs and buffers.
+keymap.set({ 'i', 'n' }, '<C-S-Left>', cmd.tabprev, { silent = true })
+keymap.set({ 'i', 'n' }, '<C-S-Right>', cmd.tabnext, { silent = true })
+keymap.set({ 'i', 'n' }, '<C-S-Up>', cmd.bufprev, { silent = true })
+keymap.set({ 'i', 'n' }, '<C-S-Down>', cmd.bufnext, { silent = true })
 
-keymap.set('v', 'J', ":m '>+1<cr>gv=gv", { silent = true })
-keymap.set('v', 'K', ":m '<-2<cr>gv=gv", { silent = true })
-
-keymap.set('n', 'Y', 'yg$', { silent = true })
+-- Better defaults.
 keymap.set('n', 'n', 'nzzzv', { silent = true })
 keymap.set('n', 'N', 'Nzzzv', { silent = true })
 keymap.set('n', 'J', 'mzJ`z', { silent = true })
@@ -65,13 +53,12 @@ keymap.set('i', '<C-v>', '<C-o>"+p', { silent = true })
 keymap.set('c', '<C-v>', '<C-r>+', { silent = true })
 
 -- Better yank.
-keymap.set('n', '<leader>y', '"+y', { silent = true })
-keymap.set('v', '<leader>y', '"+y', { silent = true })
+keymap.set('n', 'Y', 'yg$', { silent = true })
 keymap.set('n', '<leader>Y', '"+Y', { silent = true })
+keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { silent = true })
 
 -- Better delete.
-keymap.set('n', '<leader>d', '"_d', { silent = true })
-keymap.set('v', '<leader>d', '"_d', { silent = true })
+keymap.set({ 'n', 'v' }, '<leader>d', '"_d', { silent = true })
 
 -- Pane creation.
 keymap.set('n', '<leader>wh', cmd.split, { silent = true })

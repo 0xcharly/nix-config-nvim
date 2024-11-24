@@ -15,9 +15,9 @@ fmt:
 [doc('Update the given flake input')]
 [macos]
 update input:
-  nix flake update {{ input }}
+    nix flake update {{ input }}
 
 [doc('Update the given flake input')]
 [linux]
 update input:
-  nix flake lock --update-input {{ input }}
+    nix flake lock --update-input {{ input }}

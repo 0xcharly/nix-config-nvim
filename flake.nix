@@ -52,7 +52,12 @@
           runtime = [./nvim-runtime];
           patches = [];
           plugins = with pkgs.vimPlugins; [
+            # Foundation plugins.
+            plenary-nvim
+            sqlite-lua
+            # Theme.
             catppuccin-nvim
+            # Convenience plugins.
             conform-nvim
             fidget-nvim
             gitsigns-nvim
@@ -60,7 +65,7 @@
             lualine-nvim
             nvim-lastplace
             nvim-lspconfig
-            nvim-surround
+            mini-nvim
             (nvim-treesitter.withPlugins (p:
               with p; [
                 awk
@@ -101,8 +106,6 @@
                 zig
               ]))
             oil-nvim
-            plenary-nvim
-            sqlite-lua
             telescope-fzf-native-nvim
             telescope-nvim
             todo-comments-nvim
