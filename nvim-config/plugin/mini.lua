@@ -11,15 +11,15 @@ require('mini.surround').setup {}
 require('mini.move').setup {
   mappings = {
     -- Move visual selection in Visual mode. Defaults are Shift + hjkl.
-    left = '<S-h>',
-    right = '<S-l>',
-    down = '<S-j>',
-    up = '<S-k>',
+    left = '<C-S-h>',
+    right = '<C-S-l>',
+    down = '<C-S-j>',
+    up = '<C-S-k>',
 
     -- Move current line in Normal mode
-    line_left = '<S-h>',
-    line_right = '<S-l>',
-    line_down = '<S-j>',
-    line_up = '<S-k>',
+    line_left = '<C-S-h>',
+    line_right = '<C-S-l>',
+    line_down = '<C-S-j>',
+    line_up = '<C-S-k>',
   },
 }
