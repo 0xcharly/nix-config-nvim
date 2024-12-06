@@ -40,7 +40,11 @@
 
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
-      perSystem = {system, ...}: let
+      perSystem = {
+        config,
+        system,
+        ...
+      }: let
         pkgs = import inputs.nixpkgs {
           inherit system;
           overlays = [
@@ -51,79 +55,96 @@
           src = ./nvim-config;
           runtime = [./nvim-runtime];
           patches = [];
-          plugins = with pkgs.vimPlugins; [
-            # Foundation plugins.
-            plenary-nvim
-            sqlite-lua
-            # Theme.
-            catppuccin-nvim
-            # Convenience plugins.
-            conform-nvim
-            fidget-nvim
-            gitsigns-nvim
-            harpoon2
-            lualine-nvim
-            nvim-lastplace
-            nvim-lspconfig
-            mini-nvim
-            (nvim-treesitter.withPlugins (p:
-              with p; [
-                awk
-                bash
-                beancount
-                c
-                cmake
-                comment
-                cpp
-                css
-                csv
-                dart
-                devicetree
-                dhall
-                diff
-                dot
-                fish
-                gitcommit
-                gitignore
-                ini
-                java
-                json
-                just
-                kdl
-                kotlin
-                lua
-                make
-                markdown
-                markdown_inline
-                nix
-                objc
-                python
-                rust
-                ssh_config
-                starlark
-                toml
-                yaml
-                zig
-              ]))
-            oil-nvim
-            telescope-fzf-native-nvim
-            telescope-nvim
-            todo-comments-nvim
-            # nvim-cmp and plugins
-            nvim-cmp
-            cmp-buffer
-            cmp-path
-            cmp-cmdline
-            cmp-nvim-lua
-            cmp-nvim-lsp
-            cmp-nvim-lsp-document-symbol
-            cmp-nvim-lsp-signature-help
-            cmp-rg
-          ];
+          plugins =
+            (with pkgs.vimPlugins; [
+              # Foundation plugins.
+              plenary-nvim
+              sqlite-lua
+              # Theme.
+              catppuccin-nvim
+              # Convenience plugins.
+              conform-nvim
+              fidget-nvim
+              gitsigns-nvim
+              harpoon2
+              lualine-nvim
+              nvim-lastplace
+              nvim-lspconfig
+              mini-nvim
+              (nvim-treesitter.withPlugins (p:
+                with p; [
+                  awk
+                  bash
+                  beancount
+                  c
+                  cmake
+                  comment
+                  cpp
+                  css
+                  csv
+                  dart
+                  devicetree
+                  dhall
+                  diff
+                  dot
+                  fish
+                  gitcommit
+                  gitignore
+                  ini
+                  java
+                  json
+                  just
+                  kdl
+                  kotlin
+                  lua
+                  make
+                  markdown
+                  markdown_inline
+                  nix
+                  objc
+                  python
+                  rust
+                  ssh_config
+                  starlark
+                  toml
+                  yaml
+                  zig
+                ]))
+              oil-nvim
+              telescope-fzf-native-nvim
+              telescope-nvim
+              todo-comments-nvim
+              # nvim-cmp and plugins
+              nvim-cmp
+              cmp-buffer
+              cmp-path
+              cmp-cmdline
+              cmp-nvim-lua
+              cmp-nvim-lsp
+              cmp-nvim-lsp-document-symbol
+              cmp-nvim-lsp-signature-help
+              cmp-rg
+            ])
+            ++ [
+              (pkgs.vimUtils.buildVimPlugin {
+                pname = "smear-cursor-nvim";
+                version = "0.2.0";
+                src = pkgs.fetchFromGitHub {
+                  owner = "sphamba";
+                  repo = "smear-cursor.nvim";
+                  rev = "4417c543687475c19f8a85e2f2f0bf0483a0cfaf";
+                  sha256 = "sha256-X42JHl4J9K1rm7CRcqpBrVMm0E2ZFeHxgGUq7Y5zzRw=";
+                };
+                meta.homepage = "https://github.com/sphamba/smear-cursor.nvim/";
+              })
+            ];
         };
-      in rec {
+      in {
         _module.args = {inherit pkgs;};
-        overlayAttrs.nix-config-nvim = packages.default;
+        overlayAttrs = {
+          default = config.packages;
+          nix-config-nvim = config.packages.default;
+        };
 
         packages = rec {
           default = (pkgs.callPackage ./mk-nvim-config.nix {}) defaultConfig;
