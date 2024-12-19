@@ -60,6 +60,7 @@
             plenary-nvim
             sqlite-lua
             # Theme.
+            alpha-nvim
             catppuccin-nvim
             # Convenience plugins.
             conform-nvim
