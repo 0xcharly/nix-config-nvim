@@ -40,7 +40,10 @@ vim.wo.relativenumber = true
 vim.wo.signcolumn = 'yes'
 vim.wo.cursorline = true
 
+-- Enable mouse, but change the 'mousemodel', so <RightMouse> extends selection
+-- instead of showing the popup-menu.
 vim.o.mouse = 'a'
+vim.o.mousemodel = extend
 
 -- Large fold level on startup.
 vim.o.foldcolumn = '1'
