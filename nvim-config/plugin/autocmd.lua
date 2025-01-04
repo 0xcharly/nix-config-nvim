@@ -19,3 +19,11 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   pattern = '*',
   command = '%s/\\s\\+$//e',
 })
+
+-- [[ Disable history on sensitive files ]]
+local disable_history_group = vim.api.nvim_create_augroup('DisableHistory', {})
+vim.api.nvim_create_autocmd({ 'BufRead' }, {
+  group = disable_history_group,
+  pattern = {'*.age'},
+  command = 'setlocal nobackup nomodeline noshelltemp noswapfile noundofile nowritebackup shadafile=NONE',
+})
