@@ -43,13 +43,13 @@
       perSystem = {
         config,
         system,
+        lib,
         ...
       }: let
         pkgs = import inputs.nixpkgs {
           inherit system;
-          overlays = [
-            inputs.gen-luarc.overlays.default
-          ];
+          overlays = [inputs.gen-luarc.overlays.default];
+          config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) ["copilot.vim"];
         };
         defaultConfig = {
           src = ./nvim-config;
@@ -63,6 +63,7 @@
             catppuccin-nvim
             # Convenience plugins.
             conform-nvim
+            copilot-vim
             fidget-nvim
             gitsigns-nvim
             harpoon2
