@@ -63,3 +63,7 @@ keymap.set({ 'n', 'v' }, '<leader>d', '"_d', { silent = true })
 -- Pane creation.
 keymap.set('n', '<leader>wh', cmd.split, { silent = true })
 keymap.set('n', '<leader>wv', cmd.vsplit, { silent = true })
+
+-- Virtual mode line movements.
+keymap.set('v', 'J', ":m '>+1<cr>gv=gv", { silent = true })
+keymap.set('v', 'K', ":m '<-2<cr>gv=gv", { silent = true })
