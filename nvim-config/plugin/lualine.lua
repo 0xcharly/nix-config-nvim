@@ -2,43 +2,45 @@ local section_filename = {
   'filename',
   separator = '',
   symbols = {
-    modified = '󱇨 ', -- Text to show when the file is modified.
-    readonly = '󱀰 ', -- Text to show when the file is non-modifiable or readonly.
+    modified = '[dirty] ', -- Text to show when the file is modified.
+    readonly = '[readonly] ', -- Text to show when the file is non-modifiable or readonly.
     unnamed = '[No Name]', -- Text to show for unnamed buffers.
-    newfile = '󰻭 ', -- Text to show for newly created file before first write
+    newfile = '[New] ', -- Text to show for newly created file before first write
   },
 }
 
-local C = require('catppuccin.palettes').get_palette('mocha')
-local lsp = require('user.lsp')
+local theme = require('lualine.themes.auto')
+local catppuccin = require('catppuccin.palettes').get_palette('mocha')
 
 local function hi(accent)
   return {
-    a = { bg = C.base, fg = accent },
-    b = { bg = C.base, fg = C.overlay2, gui = 'italic' },
-    c = { bg = C.base, fg = C.overlay0 },
-    x = { bg = C.base, fg = C.overlay0 },
-    y = { bg = C.base, fg = C.overlay0 },
-    z = { bg = C.base, fg = C.overlay0 },
+    a = { bg = theme.normal.b.bg, fg = accent, gui = 'bold' },
+    b = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
+    c = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
+    x = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
+    y = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
+    z = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
   }
 end
+
+local lsp = require('user.lsp')
 
 ---@diagnostic disable-next-line: undefined-field
 require('lualine').setup {
   options = {
     theme = {
-      normal = hi(C.overlay2),
-      insert = hi(C.blue),
-      visual = hi(C.mauve),
-      replace = hi(C.flamingo),
-      command = hi(C.red),
+      normal = hi(catppuccin.lavender),
+      insert = hi(catppuccin.blue),
+      visual = hi(catppuccin.mauve),
+      replace = hi(catppuccin.flamingo),
+      command = hi(catppuccin.red),
       inactive = {
-        a = { bg = C.mantle, fg = C.overlay0, gui = 'italic' },
-        b = { bg = C.mantle, fg = C.overlay0, gui = 'italic' },
-        c = { bg = C.mantle, fg = C.overlay0, gui = 'italic' },
-        x = { bg = C.mantle, fg = C.overlay0, gui = 'italic' },
-        y = { bg = C.mantle, fg = C.overlay0, gui = 'italic' },
-        z = { bg = C.mantle, fg = C.overlay0, gui = 'italic' },
+        a = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
+        b = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
+        c = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
+        x = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
+        y = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
+        z = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
       },
     },
   },
