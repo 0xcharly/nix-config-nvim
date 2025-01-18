@@ -9,17 +9,16 @@ local section_filename = {
   },
 }
 
-local theme = require('lualine.themes.auto')
 local catppuccin = require('catppuccin.palettes').get_palette('mocha')
 
 local function hi(accent)
   return {
-    a = { bg = theme.normal.b.bg, fg = accent, gui = 'bold' },
-    b = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
-    c = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
-    x = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
-    y = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
-    z = { bg = theme.normal.b.bg, fg = theme.normal.c.fg },
+    a = { bg = catppuccin.mantle, fg = accent, gui = 'bold' },
+    b = { bg = catppuccin.mantle, fg = catppuccin.overlay2 },
+    c = { bg = catppuccin.mantle, fg = catppuccin.overlay2 },
+    x = { bg = catppuccin.mantle, fg = catppuccin.overlay2 },
+    y = { bg = catppuccin.mantle, fg = catppuccin.overlay2 },
+    z = { bg = catppuccin.mantle, fg = accent, gui = 'bold' },
   }
 end
 
@@ -29,19 +28,12 @@ local lsp = require('user.lsp')
 require('lualine').setup {
   options = {
     theme = {
-      normal = hi(catppuccin.lavender),
+      normal = hi(catppuccin.rosewater),
       insert = hi(catppuccin.blue),
       visual = hi(catppuccin.mauve),
-      replace = hi(catppuccin.flamingo),
+      replace = hi(catppuccin.peach),
       command = hi(catppuccin.red),
-      inactive = {
-        a = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
-        b = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
-        c = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
-        x = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
-        y = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
-        z = { bg = theme.inactive.b.bg, fg = theme.inactive.c.fg },
-      },
+      inactive = hi(catppuccin.subtext0),
     },
   },
   sections = {

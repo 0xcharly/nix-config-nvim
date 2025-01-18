@@ -61,10 +61,13 @@
             sqlite-lua
             # Theme.
             catppuccin-nvim
+            lush-nvim
             # Convenience plugins.
+            blink-cmp
             conform-nvim
             copilot-vim
             fidget-nvim
+            fzf-lua
             gitsigns-nvim
             harpoon2
             lualine-nvim
@@ -114,16 +117,6 @@
             telescope-fzf-native-nvim
             telescope-nvim
             todo-comments-nvim
-            # nvim-cmp and plugins
-            nvim-cmp
-            cmp-buffer
-            cmp-path
-            cmp-cmdline
-            cmp-nvim-lua
-            cmp-nvim-lsp
-            cmp-nvim-lsp-document-symbol
-            cmp-nvim-lsp-signature-help
-            cmp-rg
           ];
         };
       in {
