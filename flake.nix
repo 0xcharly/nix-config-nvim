@@ -131,7 +131,6 @@
 
           debug-norc = default.override {src = ./.;};
           debug-no-plugins = withPlugins [];
-          debug-with-zenburn = withExtraPlugins [pkgs.vimPlugins.zenburn];
 
           withPlugins = plugins: default.override {inherit plugins;};
           withExtraPlugins = plugins:
