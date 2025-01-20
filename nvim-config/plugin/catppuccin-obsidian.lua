@@ -66,6 +66,7 @@ require('catppuccin').setup {
     return {
       -- Editor.
       Conceal = { fg = color.overlay2 },
+      CursorLine = { bg = ext.cursorline },
       LineNr = { fg = color.overlay2 },
       CursorLineNr = { fg = color.subtext1 },
       NonText = { fg = color.overlay2 },
@@ -76,9 +77,9 @@ require('catppuccin').setup {
       PmenuSbar = { bg = color.overlay0 },
       PmenuThumb = { bg = color.overlay2 },
       TabLineSel = { link = 'PmenuSel' },
-      Title = { fg = ext.title, style = { 'bold' } }, -- Titles for output from ":set all", ":autocmd" etc.
-      Visual = { bg = ext.selection }, -- Visual mode selection
-      VisualNOS = { link = 'Visual' }, -- Visual mode selection when vim is "Not Owning the Selection".
+      Title = { fg = ext.title, style = { 'bold' } },
+      Visual = { bg = ext.selection },
+      VisualNOS = { link = 'Visual' },
       WildMenu = { bg = color.overlay0 },
       WinSeparator = { fg = color.overlay1 },
       -- Syntax.
