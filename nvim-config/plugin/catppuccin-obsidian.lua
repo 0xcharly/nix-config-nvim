@@ -1,7 +1,6 @@
 local ext = {
   title = '#d9e2e4',
-  selection = '#243142',
-  cursorline = '#212a36',
+  cursorline = '#303747',
 
   surface_red = '#41262e',
   on_surface_red = '#fe9fa9',
@@ -78,7 +77,7 @@ require('catppuccin').setup {
       PmenuThumb = { bg = color.overlay2 },
       TabLineSel = { link = 'PmenuSel' },
       Title = { fg = ext.title, style = { 'bold' } },
-      Visual = { bg = ext.selection },
+      Visual = { link = 'CursorLine' },
       VisualNOS = { link = 'Visual' },
       WildMenu = { bg = color.overlay0 },
       WinSeparator = { fg = color.overlay1 },

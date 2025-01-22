@@ -40,8 +40,7 @@ local MrSuit = {
   crust = hsl('#0b1215'), -- Obsidian
 
   title = hsl('#d9e2e4'),
-  selection = hsl('#243142'),
-  cursorline = hsl('#212a36'),
+  cursorline = hsl('#303747'),
 
   surface_red = hsl('#41262e'),
   on_surface_red = hsl('#fe9fa9'),
@@ -160,7 +159,7 @@ local theme = lush(function(injected_functions)
     TabLineFill { Normal }, -- Tab pages line, where there are no labels
     TabLineSel { PmenuSel }, -- Tab pages line, active tab page label
     Title { fg = MrSuit.title, gui = 'bold' }, -- Titles for output from ":set all", ":autocmd" etc.
-    Visual { bg = MrSuit.selection }, -- Visual mode selection
+    Visual { CursorLine }, -- Visual mode selection
     VisualNOS { Visual }, -- Visual mode selection when vim is "Not Owning the Selection".
     Whitespace { NonText }, -- "nbsp", "space", "tab" and "trail" in 'listchars'
     Winseparator { VertSplit }, -- Separator between window splits. Inherts from |hl-VertSplit| by default, which it will replace eventually.
