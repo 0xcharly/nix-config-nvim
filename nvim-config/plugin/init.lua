@@ -42,14 +42,15 @@ vim.wo.cursorline = true
 
 -- Enable mouse, but change the 'mousemodel', so <RightMouse> extends selection
 -- instead of showing the popup-menu.
-vim.o.mouse = 'a'
-vim.o.mousemodel = extend
+vim.o.mouse = 'nv'
+vim.o.mousemodel = 'extend'
 
 -- Large fold level on startup.
 vim.o.foldcolumn = '1'
 vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
+vim.o.foldmethod = 'marker'
 
 vim.o.breakindent = true
 vim.o.undofile = true
