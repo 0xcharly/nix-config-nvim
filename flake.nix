@@ -125,7 +125,7 @@
 
         packages = rec {
           default = (pkgs.callPackage ./mk-nvim-config.nix {}) defaultConfig;
-          debug-theme = withExtraPlugins [pkgs.vimPlugins.lush-nvim];
+          debug-colorscheme = withExtraPlugins [pkgs.vimPlugins.lush-nvim];
 
           debug-norc = default.override {src = ./.;};
           debug-no-plugins = withPlugins [];
