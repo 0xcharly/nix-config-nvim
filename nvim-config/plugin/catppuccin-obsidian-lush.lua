@@ -281,6 +281,7 @@ local theme = lush(function(injected_functions)
     LspReferenceWrite { LspReferenceText }, -- Used for highlighting "write" references
     LspCodeLens { fg = MrSuit.overlay2, gui = 'italic' }, -- Used to color the virtual text of the codelens. See |nvim_buf_set_extmark()|.
     -- LspCodeLensSeparator        { }, -- Used to color the seperator between two or more code lens.
+    LspInlayHint { LspCodeLens }, -- Used to color the virtual text of the codelens. See |nvim_buf_set_extmark()|.
     -- LspSignatureActiveParameter { }, -- Used to highlight the active parameter in the signature help. See |vim.lsp.handlers.signature_help()|.
     LspParameter { fg = MrSuit.flamingo, gui = 'italic' }, -- Used to color the virtual text of the codelens. See |nvim_buf_set_extmark()|.
 
@@ -422,7 +423,7 @@ local theme = lush(function(injected_functions)
     sym('@conceal') { Conceal },
     sym('@scope') {}, -- scope block
     sym('@reference') {}, -- scope block
-    sym('@inlay.hint') { LspCodeLens }, -- identifier reference
+    sym('@inlay.hint') { LspInlayHint }, -- identifier reference
 
     -- Locals
     sym('@definition') {}, -- various definitions

@@ -61,7 +61,6 @@
             sqlite-lua
             # Theme.
             catppuccin-nvim
-            lush-nvim
             # Convenience plugins.
             blink-cmp
             conform-nvim
@@ -73,7 +72,6 @@
             lualine-nvim
             nvim-lastplace
             nvim-lspconfig
-            mini-nvim
             (nvim-treesitter.withPlugins (p:
               with p; [
                 awk
@@ -113,9 +111,8 @@
                 yaml
                 zig
               ]))
+            mini-nvim
             oil-nvim
-            telescope-fzf-native-nvim
-            telescope-nvim
             todo-comments-nvim
           ];
         };
@@ -128,6 +125,7 @@
 
         packages = rec {
           default = (pkgs.callPackage ./mk-nvim-config.nix {}) defaultConfig;
+          debug-theme = withExtraPlugins [pkgs.vimPlugins.lush-nvim];
 
           debug-norc = default.override {src = ./.;};
           debug-no-plugins = withPlugins [];

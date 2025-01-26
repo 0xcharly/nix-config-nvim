@@ -88,6 +88,11 @@ require('catppuccin').setup {
       Operator = { fg = color.subtext0 },
       Delimiter = { fg = color.subtext0 },
       Boolean = { fg = color.pink },
+      -- copilot.
+      CopilotSuggestion = { link = 'LspInlayHint' },
+      -- native_lsp.
+      LspCodeLens = { link = 'NonText' },
+      LspInlayHint = { link = 'LspCodeLens' },
       -- Treesitter.
       ['@variable.member'] = { fg = color.none },
       ['@keyword.function'] = { link = 'Keyword' },
