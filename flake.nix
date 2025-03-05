@@ -64,7 +64,6 @@
             # Convenience plugins.
             blink-cmp
             conform-nvim
-            copilot-vim
             fidget-nvim
             fzf-lua
             gitsigns-nvim
