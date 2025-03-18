@@ -75,6 +75,7 @@ require('catppuccin').setup {
       PmenuSel = { fg = ext.on_surface_blue, bg = ext.surface_blue },
       PmenuSbar = { bg = color.overlay0 },
       PmenuThumb = { bg = color.overlay2 },
+      TabLine = { fg = color.subtext1 },
       TabLineSel = { link = 'PmenuSel' },
       Title = { fg = ext.title, style = { 'bold' } },
       Visual = { link = 'CursorLine' },
