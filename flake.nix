@@ -62,6 +62,7 @@
             # Theme.
             catppuccin-nvim
             # Convenience plugins.
+            auto-hlsearch-nvim
             blink-cmp
             conform-nvim
             fidget-nvim
