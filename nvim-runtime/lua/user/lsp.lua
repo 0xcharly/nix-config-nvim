@@ -39,7 +39,7 @@ end
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
 vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
-local fzf = require('fzf-lua')
+local pickers = require('telescope.builtin')
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('user-lsp-attach', { clear = true }),
@@ -52,31 +52,27 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Jump to the definition of the word under your cursor.
     -- This is where a variable was first declared, or where a function is defined, etc.
     -- To jump back, press <C-t>.
-    map('gd', fzf.lsp_definitions, '[G]oto [D]efinition')
+    map('gd', pickers.lsp_definitions, '[G]oto [D]efinition')
 
     -- Find references for the word under your cursor.
-    map('gr', fzf.lsp_references, '[G]oto [R]eferences')
+    map('gr', pickers.lsp_references, '[G]oto [R]eferences')
 
     -- Jump to the implementation of the word under your cursor.
     -- Useful when your language has ways of declaring types without an actual implementation.
-    map('gI', fzf.lsp_implementations, '[G]oto [I]mplementation')
+    map('gI', pickers.lsp_implementations, '[G]oto [I]mplementation')
 
     -- Jump to the type of the word under your cursor.
     -- Useful when you're not sure what type a variable is and you want to see
     -- the definition of its *type*, not where it was *defined*.
-    map('<leader>D', fzf.lsp_typedefs, 'Type [D]efinition')
+    map('<leader>D', pickers.lsp_type_definitions, 'Type [D]efinition')
 
     -- Fuzzy find all the symbols in your current document.
     -- Symbols are things like variables, functions, types, etc.
-    map('<leader>ds', fzf.lsp_document_symbols, '[D]ocument [S]ymbols')
+    map('<leader>ds', pickers.lsp_document_symbols, '[D]ocument [S]ymbols')
 
     -- Fuzzy find all the symbols in your current workspace.
     -- Similar to document symbols, except searches over your entire project.
-    map('<leader>ws', fzf.lsp_live_workspace_symbols, '[W]orkspace [S]ymbols')
-
-    -- Display hover information about the symbol under the cursor in a floating
-    -- window. Calling the function twice will jump into the floating window.
-    map('<leader>h', vim.lsp.buf.hover, 'Show [H]over')
+    map('<leader>ws', pickers.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
     -- Rename the variable under your cursor.
     -- Most Language Servers support renaming across files, etc.

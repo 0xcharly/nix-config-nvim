@@ -39,6 +39,7 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 vim.wo.signcolumn = 'yes'
 vim.wo.cursorline = true
+vim.g.showtabline = false
 
 -- Enable mouse, but change the 'mousemodel', so <RightMouse> extends selection
 -- instead of showing the popup-menu.

@@ -65,7 +65,6 @@
             blink-cmp
             conform-nvim
             fidget-nvim
-            fzf-lua
             gitsigns-nvim
             harpoon2
             lualine-nvim
@@ -112,6 +111,7 @@
               ]))
             mini-nvim
             oil-nvim
+            telescope-nvim
             todo-comments-nvim
           ];
         };
