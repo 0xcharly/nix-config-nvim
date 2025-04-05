@@ -66,6 +66,7 @@
             blink-cmp
             conform-nvim
             fidget-nvim
+            flutter-tools-nvim
             gitsigns-nvim
             harpoon2
             lualine-nvim
