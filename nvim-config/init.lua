@@ -19,26 +19,35 @@ for name, icon in pairs(diagnostic_signs) do
   }
 end
 
+-- @param diagnostic vim.Diagnostic
+local function diagnostic_format(diagnostic)
+  local severity = diagnostic.severity
+  if severity == vim.diagnostic.severity.ERROR then
+    return prefix_diagnostic(diagnostic_signs.Error, diagnostic)
+  end
+  if severity == vim.diagnostic.severity.WARN then
+    return prefix_diagnostic(diagnostic_signs.Warn, diagnostic)
+  end
+  if severity == vim.diagnostic.severity.INFO then
+    return prefix_diagnostic(diagnostic_signs.Info, diagnostic)
+  end
+  if severity == vim.diagnostic.severity.HINT then
+    return prefix_diagnostic(diagnostic_signs.Hint, diagnostic)
+  end
+  return prefix_diagnostic('■', diagnostic)
+end
+
 vim.diagnostic.config {
-  virtual_text = {
-    spacing = 4,
-    prefix = '',
-    format = function(diagnostic)
-      local severity = diagnostic.severity
-      if severity == vim.diagnostic.severity.ERROR then
-        return prefix_diagnostic(diagnostic_signs.Error, diagnostic)
-      end
-      if severity == vim.diagnostic.severity.WARN then
-        return prefix_diagnostic(diagnostic_signs.Warn, diagnostic)
-      end
-      if severity == vim.diagnostic.severity.INFO then
-        return prefix_diagnostic(diagnostic_signs.Info, diagnostic)
-      end
-      if severity == vim.diagnostic.severity.HINT then
-        return prefix_diagnostic(diagnostic_signs.Hint, diagnostic)
-      end
-      return prefix_diagnostic('■', diagnostic)
-    end,
+  -- NOTE: Choose between virtual_text (inline diagnostics) or virtual_lines
+  -- (cascading diagnostics).
+  -- virtual_text = {
+  --   spacing = 4,
+  --   prefix = '',
+  --   format = diagnostic_format,
+  -- },
+  virtual_lines = {
+    current_line = false, -- Show diagnostics for all lines.
+    format = diagnostic_format,
   },
   signs = true,
   update_in_insert = false,
