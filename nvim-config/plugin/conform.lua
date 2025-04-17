@@ -6,20 +6,18 @@ conform.setup {
     json = { 'yq' },
     kdl = { 'kdlfmt' },
     lua = { 'stylua' },
-    nix = { 'alejandra' },
     python = { 'isort', 'black' },
     toml = { 'taplo' },
-    rust = { 'rustfmt', lsp_format = 'fallback' },
     yaml = { 'yq' },
     -- Use the "_" filetype to run formatters on filetypes that don't
     -- have other formatters configured.
-    ['_'] = { 'trim_whitespace', lsp_format = 'last' },
+    ['_'] = { 'trim_whitespace', 'trim_newlines', lsp_format = 'last' },
   },
   notify_on_error = false,
 }
 
 vim.keymap.set('', '<leader>f', function()
-  conform.format({ async = true, lsp_format = 'fallback' }, function(err, did_edit)
+  conform.format({ async = true }, function(err, did_edit)
     if not err and not did_edit then
       local mode = vim.api.nvim_get_mode().mode
       if vim.startswith(string.lower(mode), 'v') then
