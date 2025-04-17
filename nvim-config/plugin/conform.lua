@@ -13,14 +13,14 @@ conform.setup {
     yaml = { 'yq' },
     -- Use the "_" filetype to run formatters on filetypes that don't
     -- have other formatters configured.
-    ['_'] = { 'trim_whitespace' },
+    ['_'] = { 'trim_whitespace', lsp_format = 'last' },
   },
   notify_on_error = false,
 }
 
 vim.keymap.set('', '<leader>f', function()
-  conform.format({ async = true, lsp_format = 'fallback' }, function(err)
-    if not err then
+  conform.format({ async = true, lsp_format = 'fallback' }, function(err, did_edit)
+    if not err and not did_edit then
       local mode = vim.api.nvim_get_mode().mode
       if vim.startswith(string.lower(mode), 'v') then
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', true)
@@ -28,3 +28,5 @@ vim.keymap.set('', '<leader>f', function()
     end
   end)
 end, { desc = '[F]ormat buffer' })
+
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
