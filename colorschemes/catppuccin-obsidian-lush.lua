@@ -35,8 +35,8 @@ local MrSuit = {
   surface2 = hsl('#1d2530'),
   surface1 = hsl('#192029'),
   surface0 = hsl('#1d1f21'),
-  base = hsl('#151b23'),
-  mantle = hsl('#151b23').darken(15),
+  base = hsl('#11181c'), -- Arsenic
+  mantle = hsl('#11181c').darken(15),
   crust = hsl('#0b1215'), -- Obsidian
 
   title = hsl('#d9e2e4'),
