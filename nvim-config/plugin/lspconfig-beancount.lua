@@ -6,7 +6,5 @@ lspconfig.beancount.setup {
   cmd = { 'beancount-language-server', '--stdio' },
   capabilities = lsp.make_client_capabilities(),
   root_dir = lspconfig.util.root_pattern('delay.beancount'),
-  init_options = {
-    journal_file = '~/beancount/delay.beancount',
-  },
+  init_options = {},
 }
