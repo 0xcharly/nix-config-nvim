@@ -36,6 +36,15 @@
 
         ./flake/cmd-fmt.nix
         ./flake/devshells.nix
+
+        ({withSystem, ...}: {
+          flake.overlays.nvim-override = final: prev:
+            withSystem prev.stdenv.hostPlatform.system (
+              {config, ...}: {
+                nvim = config.packages.default;
+              }
+            );
+        })
       ];
 
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
@@ -43,13 +52,11 @@
       perSystem = {
         config,
         system,
-        lib,
         ...
       }: let
         pkgs = import inputs.nixpkgs {
           inherit system;
           overlays = [inputs.gen-luarc.overlays.default];
-          config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) ["copilot.vim"];
         };
         defaultConfig = {
           src = ./nvim-config;
