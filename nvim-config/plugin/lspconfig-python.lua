@@ -1,35 +1,45 @@
 local lsp = require('user.lsp')
 local lspconfig = require('lspconfig')
 
-lspconfig.pylsp.setup {
-  cmd = { 'pylsp' },
+-- Python LSP setup uses both pyright and ruff.
+--
+-- Pyright for strict type checking. Ruff LSP for linting and formatting.
+-- Both advertize great performances.
+
+lspconfig.pyright.setup {
   capabilities = lsp.make_client_capabilities(),
   settings = {
-    pylsp = {
-      plugins = {
-        black = {
-          enabled = true, -- Disables autopep8 and yapf.
-        },
-        flake8 = {
-          enabled = true,
-        },
-        pylint = {
-          enabled = true,
-        },
-        mccabe = {
-          enabled = true,
-        },
-        pycodestyle = {
-          enabled = true,
-          convention = 'google',
-        },
-        pyflakes = {
-          enabled = false,
-        },
-        mypy = {
-          enabled = true,
-        },
+    pyright = {
+      -- Using Ruff's import organizer.
+      disableOrganizeImports = true,
+    },
+    python = {
+      analysis = {
+        -- Ignore all files for analysis to exclusively use Ruff for linting.
+        ignore = { '*' },
       },
     },
   },
 }
+
+lspconfig.ruff.setup {
+  capabilities = lsp.make_client_capabilities(),
+  init_options = {
+    settings = {},
+  },
+}
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client == nil then
+      return
+    end
+    if client.name == 'ruff' then
+      -- Disable hover in favor of Pyright.
+      client.server_capabilities.hoverProvider = false
+    end
+  end,
+  desc = 'LSP: Disable hover capability from Ruff',
+})
