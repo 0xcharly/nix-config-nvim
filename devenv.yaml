@@ -4,5 +4,6 @@ inputs:
     url: github:cachix/devenv-nixpkgs/rolling
   gen-luarc:
     url: github:mrcjkb/nix-gen-luarc-json
-
+  treefmt-nix:
+    url: github:numtide/treefmt-nix
 # allowUnfree: true

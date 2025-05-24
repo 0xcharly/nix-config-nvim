@@ -3,18 +3,12 @@
   pkgs,
   ...
 }: {
-  # https://devenv.sh/packages/
   packages = with pkgs; [
-    git
     just
-    treefmt
     yq
 
     # Formatters.
-    alejandra
-    deadnix
-    stylua
-    taplo
+    (inputs.treefmt-nix.lib.mkWrapper pkgs (import ./treefmt.nix))
   ];
 
   languages.lua.enable = true;
