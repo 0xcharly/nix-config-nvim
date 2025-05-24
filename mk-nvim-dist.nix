@@ -21,7 +21,7 @@
     inherit (builtins) pathExists readFile readFileType;
 
     # Hot-fixes to the nvim package, if any.
-    package-with-patches = package.overrideAttrs (finalAttrs: prevAttrs: {
+    package-with-patches = package.overrideAttrs (_finalAttrs: prevAttrs: {
       patches = prevAttrs.patches ++ patches;
     });
 

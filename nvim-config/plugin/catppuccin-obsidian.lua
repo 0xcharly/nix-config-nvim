@@ -45,6 +45,7 @@ require('catppuccin').setup {
       green = '#addba9',
       teal = '#91d7d1',
       sky = '#95b7ef',
+      sapphire = '#74c7ec',
       blue = '#89b4fa',
       lavender = '#b4befe',
       text = '#e1e8f4',
