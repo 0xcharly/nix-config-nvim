@@ -35,10 +35,6 @@ function M.make_client_capabilities()
   return capabilities
 end
 
--- Bordered popups.
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
-
 local pickers = require('telescope.builtin')
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -89,7 +85,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- The following code creates a keymap to toggle inlay hints in your code,
     -- if the language server you are using supports them
     local client = vim.lsp.get_client_by_id(event.data.client_id)
-    if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+    if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
       map('<leader>ih', function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
       end, 'Toggle [I]nlay [H]ints')

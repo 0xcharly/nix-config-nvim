@@ -1,10 +1,5 @@
-local lsp = require('user.lsp')
-local lspconfig = require('lspconfig')
+-- vim.lsp.config('beancount',  {
+--   init_options = {},
+-- })
 
-lspconfig.beancount.setup {
-  name = 'beancount',
-  cmd = { 'beancount-language-server', '--stdio' },
-  capabilities = lsp.make_client_capabilities(),
-  root_dir = lspconfig.util.root_pattern('delay.beancount'),
-  init_options = {},
-}
+vim.lsp.enable('beancount')

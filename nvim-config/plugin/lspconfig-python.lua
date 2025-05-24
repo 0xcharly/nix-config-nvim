@@ -1,13 +1,9 @@
-local lsp = require('user.lsp')
-local lspconfig = require('lspconfig')
-
 -- Python LSP setup uses both pyright and ruff.
 --
 -- Pyright for strict type checking. Ruff LSP for linting and formatting.
 -- Both advertize great performances.
 
-lspconfig.pyright.setup {
-  capabilities = lsp.make_client_capabilities(),
+vim.lsp.config('pyright', {
   settings = {
     pyright = {
       -- Using Ruff's import organizer.
@@ -20,14 +16,13 @@ lspconfig.pyright.setup {
       },
     },
   },
-}
+})
 
-lspconfig.ruff.setup {
-  capabilities = lsp.make_client_capabilities(),
+vim.lsp.config('ruff', {
   init_options = {
     settings = {},
   },
-}
+})
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
@@ -43,3 +38,5 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
   desc = 'LSP: Disable hover capability from Ruff',
 })
+
+vim.lsp.enable { 'pyright', 'ruff' }

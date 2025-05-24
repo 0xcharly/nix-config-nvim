@@ -1,9 +1,4 @@
-local lsp = require('user.lsp')
-local lspconfig = require('lspconfig')
-
-lspconfig.rust_analyzer.setup {
-  cmd = { 'rust-analyzer' },
-  capabilities = lsp.make_client_capabilities(),
+vim.lsp.config('rust_analyzer', {
   settings = {
     ['rust-analyzer'] = {
       cargo = {
@@ -26,4 +21,6 @@ lspconfig.rust_analyzer.setup {
       },
     },
   },
-}
+})
+
+vim.lsp.enable('rust_analyzer')

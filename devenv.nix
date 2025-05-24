@@ -8,6 +8,8 @@
     yq
 
     # Formatters.
+    stylua
+
     (inputs.treefmt-nix.lib.mkWrapper pkgs (import ./treefmt.nix))
   ];
 

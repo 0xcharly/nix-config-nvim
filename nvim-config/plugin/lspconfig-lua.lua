@@ -1,9 +1,4 @@
-local lsp = require('user.lsp')
-local lspconfig = require('lspconfig')
-
-lspconfig.lua_ls.setup {
-  cmd = { 'lua-language-server' },
-  capabilities = lsp.make_client_capabilities(),
+vim.lsp.config('lua_ls', {
   settings = {
     Lua = {
       runtime = {
@@ -24,7 +19,6 @@ lspconfig.lua_ls.setup {
       },
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
-      -- inlay hints (supported in Neovim >= 0.10)
       hint = { enable = true },
       format = {
         enable = true,
@@ -36,4 +30,6 @@ lspconfig.lua_ls.setup {
       },
     },
   },
-}
+})
+
+vim.lsp.enable('lua_ls')
