@@ -22,8 +22,6 @@ local function hi(accent)
   }
 end
 
-local lsp = require('user.lsp')
-
 ---@diagnostic disable-next-line: undefined-field
 require('lualine').setup {
   options = {
@@ -51,10 +49,10 @@ require('lualine').setup {
       {
         'diagnostics',
         symbols = {
-          error = lsp.diagnostic_signs.Error,
-          warn = lsp.diagnostic_signs.Warn,
-          info = lsp.diagnostic_signs.Info,
-          hint = lsp.diagnostic_signs.Hint,
+          error = '󰅚 ',
+          warn = '󰗖 ',
+          info = '󰋽 ',
+          hint = '󰲽 ',
         },
       },
     },
