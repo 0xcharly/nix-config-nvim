@@ -37,58 +37,69 @@ end
 
 local pickers = require('telescope.builtin')
 
+-- grn in Normal mode maps to vim.lsp.buf.rename()
+-- grr in Normal mode maps to vim.lsp.buf.references()
+-- gri in Normal mode maps to vim.lsp.buf.implementation()
+-- gO in Normal mode maps to vim.lsp.buf.document_symbol()
+-- gra in Normal and Visual mode maps to vim.lsp.buf.code_action()
+-- CTRL-S in Insert and Select mode maps to vim.lsp.buf.signature_help()
+-- [d and ]d move between diagnostics in the current buffer ([D jumps to the first diagnostic, ]D jumps to the last)
+
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('user-lsp-attach', { clear = true }),
   callback = function(event)
-    local map = function(keys, func, desc, mode)
-      mode = mode or 'n'
-      vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+    local map = function(keys, func, desc)
+      vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
+
+    -- TODO: remove when telescope properly supports vim's winborder.
+    -- https://github.com/nvim-telescope/telescope.nvim/issues/3436
+    map('K', function()
+      vim.lsp.buf.hover { border = 'rounded', title = ' hover ' }
+    end, 'Hover Documentation')
 
     -- Jump to the definition of the word under your cursor.
     -- This is where a variable was first declared, or where a function is defined, etc.
-    -- To jump back, press <C-t>.
-    map('gd', pickers.lsp_definitions, '[G]oto [D]efinition')
+    map('grd', pickers.lsp_definitions, 'Goto Definition(s)')
+
+    -- Displays signature information about the symbol under the cursor in a
+    -- floating window.
+    map('grk', vim.lsp.buf.signature_help, 'Signature Help')
 
     -- Find references for the word under your cursor.
-    map('gr', pickers.lsp_references, '[G]oto [R]eferences')
+    map('grr', pickers.lsp_references, 'Goto References')
 
     -- Jump to the implementation of the word under your cursor.
     -- Useful when your language has ways of declaring types without an actual implementation.
-    map('gI', pickers.lsp_implementations, '[G]oto [I]mplementation')
+    map('gri', pickers.lsp_implementations, 'Goto Implementation')
 
     -- Jump to the type of the word under your cursor.
     -- Useful when you're not sure what type a variable is and you want to see
     -- the definition of its *type*, not where it was *defined*.
-    map('<leader>D', pickers.lsp_type_definitions, 'Type [D]efinition')
+    map('grt', pickers.lsp_type_definitions, 'Type Definition')
 
     -- Fuzzy find all the symbols in your current document.
     -- Symbols are things like variables, functions, types, etc.
-    map('<leader>ds', pickers.lsp_document_symbols, '[D]ocument [S]ymbols')
+    map('gO', pickers.lsp_document_symbols, 'Document Symbols')
 
     -- Fuzzy find all the symbols in your current workspace.
     -- Similar to document symbols, except searches over your entire project.
-    map('<leader>ws', pickers.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+    map('grO', pickers.lsp_dynamic_workspace_symbols, 'Workspace Symbols')
 
-    -- Rename the variable under your cursor.
-    -- Most Language Servers support renaming across files, etc.
-    map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-    -- Execute a code action, usually your cursor needs to be on top of an error
-    -- or a suggestion from your LSP for this to activate.
-    map('<M-CR>', vim.lsp.buf.code_action, 'Code Action', { 'n', 'x' })
-
-    -- WARN: This is not Goto Definition, this is Goto Declaration.
+    -- NOTE: This is not Goto Definition, this is Goto Declaration.
     -- For example, in C this would take you to the header.
-    map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_declaration) then
+      map('grD', vim.lsp.buf.declaration, 'Goto Declaration')
+    end
 
     -- The following code creates a keymap to toggle inlay hints in your code,
     -- if the language server you are using supports them
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
     if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-      map('<leader>ih', function()
+      map('gih', function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-      end, 'Toggle [I]nlay [H]ints')
+      end, 'Toggle Inlay Hints')
     end
   end,
 })
