@@ -7,7 +7,7 @@
 
   # Injects all packages declared by this flake.
   perSystem = {config, ...}: {
-    overlayAttrs.default = config.packages;
+    overlayAttrs.default.nix-config-nvim = config.packages;
   };
 
   # Overrides `pkgs.nvim` package with the distribution declared by this flake.
