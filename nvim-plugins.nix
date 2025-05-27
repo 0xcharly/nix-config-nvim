@@ -2,7 +2,6 @@
 with vimPlugins; [
   # Foundation plugins.
   plenary-nvim
-  sqlite-lua
   # Theme.
   catppuccin-nvim
   # Convenience plugins.

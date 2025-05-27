@@ -7,7 +7,6 @@
   neovimUtils,
   # Neovim config dependencies.
   rsync,
-  sqlite,
 }: let
   wrapper = {
     src,
@@ -87,23 +86,12 @@
             vim.opt.rtp:prepend('${nvimConfig}/after')
           ''
         ]);
-
-    # Generates command-line flags to point to the correct version of SQLite.
-    sqliteWrappedArgs = let
-      sqlitePackages = [sqlite];
-    in
-      builtins.concatStringsSep " " [
-        ''--prefix PATH : "${lib.makeBinPath sqlitePackages}"''
-        ''--set LIBSQLITE_CLIB_PATH "${sqlite.out}/lib/libsqlite3.so"''
-        ''--set LIBSQLITE "${sqlite.out}/lib/libsqlite3.so"''
-      ];
   in
     wrapNeovim package-with-patches (neovimConfig
       // {
         luaRcContent = wrappedInitLua;
         wrappedArgs = lib.espcapeShellArgs (builtins.concatStringsSep " " [
           neovimConfig.wrapperArgs
-          sqliteWrappedArgs
         ]);
         wrapRc = true;
       });
