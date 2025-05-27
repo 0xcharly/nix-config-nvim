@@ -16,7 +16,7 @@ M.diagnostic_signs = {
 function M.make_client_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   -- Add cmp_nvim_lsp capabilities.
-  capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
+  capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
   -- Enable preliminary support for workspace/didChangeWatchedFiles.
   capabilities = vim.tbl_deep_extend('keep', capabilities, {
     workspace = {

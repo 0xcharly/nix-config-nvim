@@ -6,13 +6,17 @@ with vimPlugins; [
   catppuccin-nvim
   # Convenience plugins.
   auto-hlsearch-nvim
-  blink-cmp
+  cmp-nvim-lsp
+  cmp-buffer
+  cmp-path
+  cmp-cmdline
   conform-nvim
   fidget-nvim
   flutter-tools-nvim
   gitsigns-nvim
   harpoon2
   lualine-nvim
+  lspkind-nvim
   nvim-lastplace
   nvim-lspconfig
   (nvim-treesitter.withPlugins (p:
@@ -55,6 +59,7 @@ with vimPlugins; [
       zig
     ]))
   mini-nvim
+  nvim-cmp
   oil-nvim
   telescope-nvim
   todo-comments-nvim
