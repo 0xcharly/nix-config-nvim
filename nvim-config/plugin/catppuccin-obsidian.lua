@@ -126,13 +126,11 @@ require('catppuccin').setup {
       ['@punctuation.bracket'] = { link = 'Punctuation' },
       ['@punctuation.special'] = { link = 'Punctuation' },
 
-      StatusLineMode = { fg = color.flamingo, style = { 'bold' } },
-      StatusLineFilename = { fg = color.subtext0 },
-      StatusLineLocation = { fg = color.subtext0 },
-      StatusLineBuffer = { fg = color.subtext0 },
+      StatusLineFocusedPrimary = { fg = color.flamingo, style = { 'bold' } },
+      StatusLineFocusedSecondary = { fg = color.subtext0 },
 
-      StatusLineModeInactive = { fg = color.subtext1, style = { 'bold' } },
-      StatusLineFilenameInactive = { fg = color.subtext0 },
+      StatusLineUnfocusedPrimary = { fg = color.subtext1, style = { 'bold' } },
+      StatusLineUnfocusedSecondary = { fg = color.subtext0 },
     }
   end,
 }

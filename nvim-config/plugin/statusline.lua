@@ -67,58 +67,43 @@ local function lspinfo()
   local function count(severity)
     return vim.tbl_count(vim.diagnostic.get(0, { severity = severity }))
   end
-  local count_errors = count(vim.diagnostic.severity.ERROR)
-  local count_warnings = count(vim.diagnostic.severity.WARN)
-  local count_info = count(vim.diagnostic.severity.INFO)
-  local count_hints = count(vim.diagnostic.severity.HINT)
 
-  local errors = ''
-  local warnings = ''
-  local hints = ''
-  local info = ''
-
-  if count_errors ~= 0 then
-    errors = '%#DiagnosticSignError#󰅚 ' .. count_errors .. ' '
-  end
-  if count_warnings ~= 0 then
-    warnings = '%#DiagnosticSignWarn#󰗖 ' .. count_warnings .. ' '
-  end
-  if count_info ~= 0 then
-    info = '%#DiagnosticSignInfo#󰋽 ' .. count_info .. ' '
-  end
-  if count_hints ~= 0 then
-    hints = '%#DiagnosticSignHint#󰲽 ' .. count_hints .. ' '
+  local function render(severity, hl, sign)
+    local severity_count = count(severity)
+    if severity_count == 0 then
+      return ''
+    end
+    return '%#DiagnosticSign' .. hl .. '#' .. sign .. severity_count .. ' '
   end
 
   return table.concat {
-    errors,
-    warnings,
-    hints,
-    info,
-    '%#Normal#',
+    render(vim.diagnostic.severity.ERROR, 'Error', '󰅚 '),
+    render(vim.diagnostic.severity.WARN, 'Warn', '󰗖 '),
+    render(vim.diagnostic.severity.INFO, 'Info', '󰋽 '),
+    render(vim.diagnostic.severity.HINT, 'Hint', '󰲽 '),
   }
 end
 
-function Statusline.active()
+function Statusline.focused()
   return table.concat {
-    ' %#StatuslineMode#',
+    '%#StatuslineFocusedPrimary# ',
     mode(),
-    '%#Normal#  %#StatusLineFilename#',
+    '%#StatusLineFocusedSecondary#  ',
     filename(),
-    '%#Normal#   %#StatusLineLocation#',
+    '   ',
     location(),
-    '%#Normal# %#StatusLineBuffer#',
+    ' ',
     bufinfo(),
     '%=',
     lspinfo(),
   }
 end
 
-function Statusline.inactive()
+function Statusline.unfocused()
   return table.concat {
-    ' %#StatuslineModeInactive#',
+    '%#StatuslineUnfocusedPrimary# ',
     mode(),
-    '%#Normal#  %#StatusLineFilenameInactive#',
+    '%#StatusLineUnfocusedSecondary#  ',
     filename(),
   }
 end
@@ -128,11 +113,11 @@ local statusline_group = vim.api.nvim_create_augroup('StatusLineGroup', {})
 vim.api.nvim_create_autocmd({ 'WinEnter', 'BufEnter' }, {
   group = statusline_group,
   pattern = '*',
-  command = 'setlocal statusline=%!v:lua.Statusline.active()',
+  command = 'setlocal statusline=%!v:lua.Statusline.focused()',
 })
 
 vim.api.nvim_create_autocmd({ 'WinLeave', 'BufLeave' }, {
   group = statusline_group,
   pattern = '*',
-  command = 'setlocal statusline=%!v:lua.Statusline.inactive()',
+  command = 'setlocal statusline=%!v:lua.Statusline.unfocused()',
 })
