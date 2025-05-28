@@ -27,10 +27,31 @@ local ext = {
 require('catppuccin').setup {
   transparent_background = true,
   integrations = {
-    blink_cmp = true,
-    cmp = false,
-    copilot_vim = true,
+    alpha = false,
+    cmp = true,
+    dashboard = false,
+    flash = false,
     fidget = true,
+    fzf = false,
+    gitsigns = true,
+    harpoon = true,
+    illuminate = {
+      enabled = false,
+    },
+    indent_blankline = {
+      enabled = false,
+    },
+    navic = {
+      enabled = false,
+    },
+    neotree = false,
+    neogit = false,
+    nvimtree = false,
+    mini = {
+      enabled = false,
+    },
+    rainbow_delimiters = false,
+    ufo = false,
   },
   color_overrides = {
     all = {
@@ -104,6 +125,14 @@ require('catppuccin').setup {
       ['@punctuation.delimiter'] = { link = 'Punctuation' },
       ['@punctuation.bracket'] = { link = 'Punctuation' },
       ['@punctuation.special'] = { link = 'Punctuation' },
+
+      StatusLineMode = { fg = color.flamingo, style = { 'bold' } },
+      StatusLineFilename = { fg = color.subtext0 },
+      StatusLineLocation = { fg = color.subtext0 },
+      StatusLineBuffer = { fg = color.subtext0 },
+
+      StatusLineModeInactive = { fg = color.subtext1, style = { 'bold' } },
+      StatusLineFilenameInactive = { fg = color.subtext0 },
     }
   end,
 }

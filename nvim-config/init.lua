@@ -13,7 +13,7 @@ local signs = {
     [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
     [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
     [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
-  }
+  },
 }
 
 -- @param diagnostic vim.Diagnostic

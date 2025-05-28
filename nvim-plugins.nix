@@ -15,7 +15,6 @@ with vimPlugins; [
   flutter-tools-nvim
   gitsigns-nvim
   harpoon2
-  lualine-nvim
   lspkind-nvim
   nvim-lastplace
   nvim-lspconfig
