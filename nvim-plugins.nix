@@ -15,7 +15,6 @@ with vimPlugins; [
   flutter-tools-nvim
   gitsigns-nvim
   harpoon2
-  lspkind-nvim
   nvim-lastplace
   nvim-lspconfig
   (nvim-treesitter.withPlugins (p:
