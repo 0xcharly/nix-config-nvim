@@ -91,7 +91,7 @@ require('catppuccin').setup {
       LineNr = { fg = color.overlay2 },
       CursorLineNr = { fg = color.subtext1 },
       NonText = { fg = color.overlay2 },
-      NormalFloat = { fg = color.text, bg = color.overlay0 },
+      NormalFloat = { fg = color.text, bg = color.base },
       FloatBorder = { fg = color.overlay1 },
       Pmenu = { bg = color.overlay0 },
       PmenuSel = { fg = ext.on_surface_blue, bg = ext.surface_blue },
