@@ -11,42 +11,27 @@
   wrapper = {
     src,
     runtime ? [],
-    package ? neovim-unwrapped,
-    wrapNeovim ? wrapNeovimUnstable,
-    pname ? "nvim-config",
     patches ? [],
     plugins ? [],
   }: let
-    inherit (builtins) pathExists readFile readFileType;
-
     # Hot-fixes to the nvim package, if any.
-    package-with-patches = package.overrideAttrs (_finalAttrs: prevAttrs: {
-      patches = prevAttrs.patches ++ patches;
+    package-with-patches = neovim-unwrapped.overrideAttrs (_final: prev: {
+      patches = prev.patches ++ patches;
     });
 
-    # The nvim package config pass down by `wrapNeovim`.
-    neovimConfig = let
-      normalizePlugin = plugin: {
-        inherit plugin;
-        config = null;
-        optional = false;
-        runtime = {};
-      };
-      normalizePluginList = map normalizePlugin;
-    in
-      neovimUtils.makeNeovimConfig {
-        viAlias = false;
-        vimAlias = false;
-        withPython3 = true;
-        withRuby = false;
-        withNodeJs = false;
-        plugins = normalizePluginList plugins;
-      };
+    # Generates the list of plugin.
+    normalizePlugin = plugin: {
+      inherit plugin;
+      config = null;
+      optional = false;
+      runtime = {};
+    };
+    normalizePluginList = map normalizePlugin;
 
     # Package the config into its own derivation. Excludes `init.lua` since it's
-    # inlined in `wrappedInitLua`.
-    nvimConfig = stdenv.mkDerivation {
-      name = pname;
+    # inlined in `luaRcContent`.
+    nvim-config = stdenv.mkDerivation {
+      name = "nvim-config";
       inherit src;
 
       buildInputs = [rsync];
@@ -61,39 +46,42 @@
 
     # Wraps the user's `init.lua`.
     #
-    # Ensures that `luaLib` is prepended to RTP before including the content of
-    # `init.lua`.
+    # Ensures that the runtime path is prepended to RTP before including the
+    # content of `init.lua`.
     # Ensures that `<config>/nvim` and `<config>/after` are also prepended to RTP.
     # Does this _after_ loading `init.lua` to guarantee a correct RTP order.
-    wrappedInitLua = let
-      dirExists = path: path != null && pathExists path && readFileType path == "directory";
-      initLua = src + /init.lua;
-
-      prependRtp = builtins.map (
-        path: lib.optionalString (dirExists path) "vim.opt.rtp:prepend('${path}')"
-      );
+    luaRcContent = let
+      prependAllToRtp = builtins.map (directory: "vim.opt.rtp:prepend('${directory}')");
+      userConfig = [
+        (nvim-config + /nvim)
+        (nvim-config + /after)
+      ];
+      inlineContent = builtins.map (file: builtins.readFile file);
+      inlinedConfig = [
+        (src + /init.lua)
+      ];
     in
       builtins.concatStringsSep "\n" ([
           ''
             vim.loader.enable()
           ''
         ]
-        ++ (prependRtp runtime)
-        ++ [
-          (lib.optionalString (pathExists initLua) (readFile initLua))
-          ''
-            vim.opt.rtp:prepend('${nvimConfig}/nvim')
-            vim.opt.rtp:prepend('${nvimConfig}/after')
-          ''
-        ]);
+        ++ (prependAllToRtp runtime)
+        ++ (inlineContent inlinedConfig)
+        ++ (prependAllToRtp userConfig));
   in
-    wrapNeovim package-with-patches (neovimConfig
-      // {
-        luaRcContent = wrappedInitLua;
-        wrappedArgs = lib.espcapeShellArgs (builtins.concatStringsSep " " [
-          neovimConfig.wrapperArgs
-        ]);
+    wrapNeovimUnstable package-with-patches (
+      neovimUtils.makeNeovimConfig {
+        inherit luaRcContent;
         wrapRc = true;
-      });
+
+        viAlias = false;
+        vimAlias = false;
+        withPython3 = false;
+        withRuby = false;
+        withNodeJs = false;
+        plugins = normalizePluginList plugins;
+      }
+    );
 in
   lib.makeOverridable wrapper
