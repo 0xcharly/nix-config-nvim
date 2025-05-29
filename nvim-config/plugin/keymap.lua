@@ -12,8 +12,6 @@ keymap.set('n', 'gn', cmd.bnext, { silent = true }) -- Goto next buffer
 keymap.set('n', 'gp', cmd.bprevious, { silent = true }) -- Goto previous buffer
 
 -- Diagnostic keymaps.
-keymap.set('n', '[d', diagnostic.goto_prev, { silent = true })
-keymap.set('n', ']d', diagnostic.goto_next, { silent = true })
 keymap.set('n', '<leader>e', diagnostic.open_float, { silent = true })
 keymap.set('n', '<leader>q', diagnostic.setloclist, { silent = true })
 
