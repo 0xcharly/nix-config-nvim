@@ -28,19 +28,15 @@ local function mode()
   return string.format('%s', modes[current_mode]):upper()
 end
 
-local function is_new_file()
-  local fname = vim.fn.expand('%')
-  return fname ~= '' and fname:match('^%a+://') == nil and vim.bo.buftype == '' and vim.fn.filereadable(fname) == 0
-end
-
 local function filename()
-  if is_new_file() then
-    return '[New]'
+  local function buf_fname()
+    local buf = '#' .. vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+    return (vim.fn.expand(buf) == '' and '-- Empty --') or vim.fn.expand(buf .. ':t')
   end
 
-  local fname = vim.fn.expand('%:t')
+  local fname = buf_fname()
   if fname == '' then
-    return '[No Name]'
+    return '-- No Name --'
   end
 
   return fname .. ' '
