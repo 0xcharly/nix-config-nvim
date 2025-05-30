@@ -42,7 +42,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- [[ Disable cursor line in inactive windows/buffers ]]
+-- [[ Disable cursor line in inactive windows/buffersr]]
 local cursorline_group = vim.api.nvim_create_augroup('InactiveDisableCursorLine', {})
 vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
   group = cursorline_group,
@@ -52,5 +52,5 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
 vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
   group = cursorline_group,
   pattern = '*',
-  command = 'setlocal cursorline',
+  command = 'setlocal nocursorline',
 })
