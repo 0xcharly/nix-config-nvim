@@ -56,7 +56,7 @@ local function location()
   if vim.bo.filetype == 'alpha' then
     return ''
   end
-  return '%l:%c ‥  %P'
+  return '%P   L%l'
 end
 
 local function lspinfo()
@@ -86,7 +86,7 @@ function Statusline.focused()
     mode(),
     '%#StatusLineFocusedSecondary#  ',
     filename(),
-    '   ',
+    ' ',
     location(),
     ' ',
     bufinfo(),
