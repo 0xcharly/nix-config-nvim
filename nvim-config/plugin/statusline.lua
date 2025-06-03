@@ -82,7 +82,7 @@ end
 
 function Statusline.focused()
   return table.concat {
-    '%#StatuslineFocusedPrimary# ',
+    '%#StatusLineFocusedPrimary# ',
     mode(),
     '%#StatusLineFocusedSecondary#  ',
     filename(),
@@ -97,7 +97,7 @@ end
 
 function Statusline.unfocused()
   return table.concat {
-    '%#StatuslineUnfocusedPrimary# ',
+    '%#StatusLineUnfocusedPrimary# ',
     mode(),
     '%#StatusLineUnfocusedSecondary#  ',
     filename(),

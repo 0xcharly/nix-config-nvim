@@ -1,6 +1,5 @@
 local ext = {
   title = '#d9e2e4',
-  cursorline = '#303747',
 
   surface_red = '#41262e',
   on_surface_red = '#fe9fa9',
@@ -71,10 +70,10 @@ require('catppuccin').setup {
       lavender = '#b4befe',
       text = '#e1e8f4',
       subtext1 = '#bac2de',
-      subtext0 = '#8fa3bb',
+      subtext0 = '#9ca0a8',
       overlay2 = '#7a8490',
       overlay1 = '#454759',
-      overlay0 = '#23282f',
+      overlay0 = '#232932',
       surface2 = '#1d2530',
       surface1 = '#192029',
       surface0 = '#1d1f21',
@@ -87,7 +86,7 @@ require('catppuccin').setup {
     return {
       -- Editor.
       Conceal = { fg = color.overlay2 },
-      CursorLine = { bg = ext.cursorline },
+      CursorLine = { bg = color.overlay0 },
       LineNr = { fg = color.overlay2 },
       CursorLineNr = { fg = color.subtext1 },
       NonText = { fg = color.overlay2 },
@@ -103,7 +102,8 @@ require('catppuccin').setup {
       Visual = { link = 'CursorLine' },
       VisualNOS = { link = 'Visual' },
       WildMenu = { bg = color.overlay0 },
-      WinSeparator = { fg = color.overlay1 },
+      -- Same as CursorLine and StatusLine
+      WinSeparator = { fg = color.overlay0 },
       -- Syntax.
       Comment = { fg = color.overlay2, style = {} },
       Keyword = { fg = color.subtext1, style = { 'bold' } },
@@ -126,7 +126,10 @@ require('catppuccin').setup {
       ['@punctuation.bracket'] = { link = 'Punctuation' },
       ['@punctuation.special'] = { link = 'Punctuation' },
 
-      StatusLineFocusedPrimary = { fg = color.flamingo, style = { 'bold' } },
+      -- StatusLine = { bg = '#202d40' },
+      StatusLine = { bg = color.overlay0 },
+      StatusLineNC = { link = 'StatusLine' },
+      StatusLineFocusedPrimary = { link = 'Title' },
       StatusLineFocusedSecondary = { fg = color.subtext0 },
 
       StatusLineUnfocusedPrimary = { fg = color.subtext1, style = { 'bold' } },
