@@ -61,4 +61,5 @@ with vimPlugins; [
   oil-nvim
   telescope-nvim
   todo-comments-nvim
+  toggleterm-nvim
 ]
