@@ -6,7 +6,7 @@ conform.setup {
     json = { 'yq' },
     kdl = { 'kdlfmt' },
     lua = { 'stylua' },
-    python = { 'isort', 'black' },
+    python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
     toml = { 'taplo' },
     yaml = { 'yq' },
     -- Use the "_" filetype to run formatters on filetypes that don't

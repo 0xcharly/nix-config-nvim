@@ -18,11 +18,7 @@ vim.lsp.config('pyright', {
   },
 })
 
-vim.lsp.config('ruff', {
-  init_options = {
-    -- settings = {},
-  },
-})
+vim.lsp.config('ruff', {})
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
