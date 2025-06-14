@@ -24,7 +24,7 @@ local ext = {
 }
 
 require('catppuccin').setup {
-  transparent_background = true,
+  transparent_background = false,
   integrations = {
     alpha = false,
     cmp = true,
