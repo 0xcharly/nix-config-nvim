@@ -40,9 +40,7 @@ vim.wo.relativenumber = true
 vim.wo.signcolumn = 'yes'
 vim.wo.cursorline = true
 vim.g.showtabline = false
--- TODO: enable when telescope properly supports vim's winborder.
--- https://github.com/nvim-telescope/telescope.nvim/issues/3436
--- vim.o.winborder = 'rounded'
+vim.o.winborder = 'rounded'
 
 -- Enable mouse, but change the 'mousemodel', so <RightMouse> extends selection
 -- instead of showing the popup-menu.

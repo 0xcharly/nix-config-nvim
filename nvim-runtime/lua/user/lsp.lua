@@ -35,8 +35,6 @@ function M.make_client_capabilities()
   return capabilities
 end
 
-local pickers = require('telescope.builtin')
-
 -- grn in Normal mode maps to vim.lsp.buf.rename()
 -- grr in Normal mode maps to vim.lsp.buf.references()
 -- gri in Normal mode maps to vim.lsp.buf.implementation()
@@ -52,39 +50,35 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
 
-    -- TODO: remove when telescope properly supports vim's winborder.
-    -- https://github.com/nvim-telescope/telescope.nvim/issues/3436
-    map('K', function()
-      vim.lsp.buf.hover { border = 'rounded', title = ' hover ' }
-    end, 'Hover Documentation')
+    map('K', vim.lsp.buf.hover, 'Hover Documentation')
 
     -- Jump to the definition of the word under your cursor.
     -- This is where a variable was first declared, or where a function is defined, etc.
-    map('grd', pickers.lsp_definitions, 'Goto Definition(s)')
+    map('grd', Snacks.picker.lsp_definitions, 'Goto Definition(s)')
 
     -- Displays signature information about the symbol under the cursor in a
     -- floating window.
     map('grk', vim.lsp.buf.signature_help, 'Signature Help')
 
     -- Find references for the word under your cursor.
-    map('grr', pickers.lsp_references, 'Goto References')
+    map('grr', Snacks.picker.lsp_references, 'Goto References')
 
     -- Jump to the implementation of the word under your cursor.
     -- Useful when your language has ways of declaring types without an actual implementation.
-    map('gri', pickers.lsp_implementations, 'Goto Implementation')
+    map('gri', Snacks.picker.lsp_implementations, 'Goto Implementation')
 
     -- Jump to the type of the word under your cursor.
     -- Useful when you're not sure what type a variable is and you want to see
     -- the definition of its *type*, not where it was *defined*.
-    map('grt', pickers.lsp_type_definitions, 'Type Definition')
+    map('grt', Snacks.picker.lsp_type_definitions, 'Type Definition')
 
     -- Fuzzy find all the symbols in your current document.
     -- Symbols are things like variables, functions, types, etc.
-    map('gO', pickers.lsp_document_symbols, 'Document Symbols')
+    map('gO', Snacks.picker.lsp_symbols, 'Document Symbols')
 
     -- Fuzzy find all the symbols in your current workspace.
     -- Similar to document symbols, except searches over your entire project.
-    map('grO', pickers.lsp_dynamic_workspace_symbols, 'Workspace Symbols')
+    map('grO', Snacks.picker.lsp_workspace_symbols, 'Workspace Symbols')
 
     local client = vim.lsp.get_client_by_id(event.data.client_id)
 

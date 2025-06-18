@@ -7,6 +7,7 @@
   neovimUtils,
   # Neovim config dependencies.
   rsync,
+  sqlite,
 }: let
   wrapper = {
     src,
@@ -19,17 +20,8 @@
       patches = prev.patches ++ patches;
     });
 
-    # Generates the list of plugin.
-    normalizePlugin = plugin: {
-      inherit plugin;
-      config = null;
-      optional = false;
-      runtime = {};
-    };
-    normalizePluginList = map normalizePlugin;
-
-    # Package the config into its own derivation. Excludes `init.lua` since it's
-    # inlined in `luaRcContent`.
+    # Packages the config into its own derivation. Excludes `init.lua` since
+    # it's inlined in `luaRcContent`.
     nvim-config = stdenv.mkDerivation {
       name = "nvim-config";
       inherit src;
@@ -69,18 +61,43 @@
         ++ (prependAllToRtp runtime)
         ++ (inlineContent inlinedConfig)
         ++ (prependAllToRtp userConfig));
+
+    # Generates command-line flags to point to the correct version of SQLite.
+    sqliteWrapperArgs = let
+      sqlitePackages = [sqlite];
+      sqliteLibExt = stdenv.hostPlatform.extensions.sharedLibrary;
+      sqliteLibPath = "${sqlite.out}/lib/libsqlite3${sqliteLibExt}";
+    in [
+      "--prefix"
+      "PATH"
+      ":"
+      "${lib.makeBinPath sqlitePackages}"
+      "--set"
+      "LIBSQLITE_CLIB_PATH"
+      sqliteLibPath
+      "--set"
+      "LIBSQLITE"
+      sqliteLibPath
+    ];
+
+    neovimConfig = neovimUtils.makeNeovimConfig {
+      inherit luaRcContent;
+      wrapRc = true;
+
+      viAlias = false;
+      vimAlias = false;
+      withPython3 = false;
+      withRuby = false;
+      withNodeJs = false;
+      plugins = neovimUtils.normalizePlugins plugins;
+    };
   in
     wrapNeovimUnstable package-with-patches (
-      neovimUtils.makeNeovimConfig {
-        inherit luaRcContent;
-        wrapRc = true;
-
-        viAlias = false;
-        vimAlias = false;
-        withPython3 = false;
-        withRuby = false;
-        withNodeJs = false;
-        plugins = normalizePluginList plugins;
+      neovimConfig
+      // {
+        # makeNeovimConfig overwrites `wrapperArgs`, hence our own overwrite below.
+        withSqlite = true;
+        wrapperArgs = lib.escapeShellArgs (neovimConfig.wrapperArgs ++ sqliteWrapperArgs);
       }
     );
 in

@@ -49,6 +49,7 @@ with vimPlugins; [
       nix
       objc
       python
+      regex
       rust
       ssh_config
       starlark
@@ -59,7 +60,8 @@ with vimPlugins; [
   mini-nvim
   nvim-cmp
   oil-nvim
-  telescope-nvim
+  snacks-nvim
+  sqlite-lua
   todo-comments-nvim
   toggleterm-nvim
 ]
