@@ -5,9 +5,17 @@ require('snacks').setup {
       ---@diagnostic disable-next-line: missing-parameter
       sqlite3_path = require('luv').os_getenv('LIBSQLITE_CLIB_PATH'),
     },
+    icons = {
+      files = {
+        enabled = false,
+      },
+      tree = {
+        last = '╰╴',
+      },
+    },
   },
   terminal = {
-    enable = true,
+    enabled = true,
     win = {
       border = 'rounded',
       position = 'float',

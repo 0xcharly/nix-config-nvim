@@ -135,6 +135,9 @@ require('catppuccin').setup {
 
       StatusLineUnfocusedPrimary = { fg = color.subtext1, style = { 'bold' } },
       StatusLineUnfocusedSecondary = { fg = color.subtext0 },
+
+      -- Snacks.
+      SnacksPickerInputCursorLine = { bg = color.base },
     }
   end,
 }
