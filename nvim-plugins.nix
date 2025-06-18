@@ -1,24 +1,6 @@
-{vimPlugins}:
-with vimPlugins; [
-  # Foundation plugins.
-  plenary-nvim
-  # Theme.
-  catppuccin-nvim
-  # Convenience plugins.
-  auto-hlsearch-nvim
-  cmp-nvim-lsp
-  cmp-buffer
-  cmp-path
-  cmp-cmdline
-  conform-nvim
-  fidget-nvim
-  flutter-tools-nvim
-  gitsigns-nvim
-  harpoon2
-  nvim-lastplace
-  nvim-lspconfig
-  (nvim-treesitter.withPlugins (p:
-    with p; [
+{vimPlugins}: let
+  mkTreesitterPlugins = treesitter-plugins:
+    with treesitter-plugins; [
       awk
       bash
       beancount
@@ -56,12 +38,31 @@ with vimPlugins; [
       toml
       yaml
       zig
-    ]))
-  mini-nvim
-  nvim-cmp
-  oil-nvim
-  snacks-nvim
-  sqlite-lua
-  todo-comments-nvim
-  toggleterm-nvim
-]
+    ];
+in
+  with vimPlugins; [
+    # Foundation plugins.
+    plenary-nvim
+    # Theme.
+    catppuccin-nvim
+    # Convenience plugins.
+    auto-hlsearch-nvim
+    cmp-nvim-lsp
+    cmp-buffer
+    cmp-path
+    cmp-cmdline
+    conform-nvim
+    fidget-nvim
+    flutter-tools-nvim
+    gitsigns-nvim
+    harpoon2
+    nvim-lastplace
+    nvim-lspconfig
+    (nvim-treesitter.withPlugins mkTreesitterPlugins)
+    mini-nvim
+    nvim-cmp
+    oil-nvim
+    snacks-nvim
+    sqlite-lua
+    todo-comments-nvim
+  ]

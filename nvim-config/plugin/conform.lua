@@ -16,7 +16,7 @@ conform.setup {
   notify_on_error = false,
 }
 
-vim.keymap.set('', '<leader>f', function()
+vim.keymap.set('', '<LocalLeader>f', function()
   conform.format({ async = true }, function(err, did_edit)
     if not err and not did_edit then
       local mode = vim.api.nvim_get_mode().mode
