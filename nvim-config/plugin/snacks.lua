@@ -1,6 +1,13 @@
 require('snacks').setup {
   picker = {
     enabled = true,
+    main = {
+      -- Does not force opening in a buffer showing the content of a file. This
+      -- effectively allows opening the file in the current buffer even if it's
+      -- showing something else than a file (eg. terminal or oil.nvim).
+      file = false,
+      current = true,
+    },
     db = {
       ---@diagnostic disable-next-line: missing-parameter
       sqlite3_path = require('luv').os_getenv('LIBSQLITE_CLIB_PATH'),
