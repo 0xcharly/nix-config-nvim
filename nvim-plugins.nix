@@ -65,4 +65,5 @@ in
     snacks-nvim
     sqlite-lua
     todo-comments-nvim
+    undotree
   ]
