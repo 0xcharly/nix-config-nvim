@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  lib,
   ...
 }: {
   packages = with pkgs; [
@@ -10,13 +11,13 @@
     # Formatters.
     alejandra
     stylua
-
-    (inputs.treefmt-nix.lib.mkWrapper pkgs (import ./treefmt.nix))
   ];
 
   languages.lua.enable = true;
-  languages.nix.enable = true;
-  languages.nix.lsp.package = pkgs.nixd;
+  languages.nix = {
+    enable = true;
+    lsp.package = pkgs.nixd;
+  };
 
   enterShell = let
     pkgs' = import inputs.nixpkgs {
@@ -30,4 +31,20 @@
   in ''
     ln -fs ${luarc-json} .luarc.json
   '';
+
+  scripts.fmt.exec = let
+    fmt-opts = {
+      projectRootFile = "flake.lock";
+      programs = {
+        alejandra.enable = true;
+        deadnix.enable = true;
+        prettier.enable = true;
+        shfmt.enable = false;
+        stylua.enable = true;
+        taplo.enable = true;
+      };
+    };
+    fmt = inputs.treefmt-nix.lib.mkWrapper pkgs fmt-opts;
+  in
+    lib.getExe fmt;
 }
