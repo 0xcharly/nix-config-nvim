@@ -109,5 +109,9 @@ vim.opt.shortmess = { -- :help shortmess
   W = true,
 }
 
+-- Skip current working directory for backups. Doesn't play way with compiler
+-- file watchers.
+vim.o.backupdir = vim.o.backupdir - '.'
+
 vim.o.grepprg = "rg --hidden --glob '!.git' --no-heading --smart-case --vimgrep --follow $*"
 vim.opt.grepformat = vim.opt.grepformat ^ { '%f:%l:%c:%m' }
