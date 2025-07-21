@@ -15,6 +15,7 @@
       dhall
       diff
       dot
+      elixir
       fish
       gitcommit
       gitignore
