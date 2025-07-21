@@ -1,4 +1,4 @@
-local elixir = require('elixir-tools')
+local elixir = require('elixir')
 
 elixir.setup {
   nextls = { enable = true },
