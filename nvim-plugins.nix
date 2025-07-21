@@ -52,6 +52,7 @@ in
     cmp-path
     cmp-cmdline
     conform-nvim
+    elixir-tools-nvim
     fidget-nvim
     flutter-tools-nvim
     gitsigns-nvim
