@@ -42,7 +42,7 @@
     # content of `init.lua`.
     # Ensures that `<config>/nvim` and `<config>/after` are also prepended to RTP.
     # Does this _after_ loading `init.lua` to guarantee a correct RTP order.
-    luaRcContent = let
+    customLuaRC = let
       prependAllToRtp = builtins.map (directory: "vim.opt.rtp:prepend('${directory}')");
       userConfig = [
         (nvim-config + /nvim)
@@ -81,7 +81,7 @@
     ];
 
     neovimConfig = neovimUtils.makeNeovimConfig {
-      inherit luaRcContent;
+      inherit customLuaRC;
       wrapRc = true;
 
       viAlias = false;
