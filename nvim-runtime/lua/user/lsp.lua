@@ -52,6 +52,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     map('K', vim.lsp.buf.hover, 'Hover Documentation')
 
+    -- Select code action.
+    map('gra', require('tiny-code-action').code_action, 'Goto Definition(s)')
+
     -- Jump to the definition of the word under your cursor.
     -- This is where a variable was first declared, or where a function is defined, etc.
     map('grd', Snacks.picker.lsp_definitions, 'Goto Definition(s)')

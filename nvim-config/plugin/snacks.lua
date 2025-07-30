@@ -1,6 +1,7 @@
 require('snacks').setup {
   picker = {
     enabled = true,
+    ui_select = false,
     main = {
       -- Does not force opening in a buffer showing the content of a file. This
       -- effectively allows opening the file in the current buffer even if it's
