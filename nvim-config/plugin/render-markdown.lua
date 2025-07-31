@@ -1,4 +1,4 @@
 require('render-markdown').setup {
-  code = { conceal_delimiters = false },
+  code = { border = "thick" },
   completions = { lsp = { enabled = true } },
 }
