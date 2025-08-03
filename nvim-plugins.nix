@@ -38,10 +38,13 @@
       dhall
       diff
       dot
+      eex
       elixir
       fish
       gitcommit
       gitignore
+      heex
+      html
       ini
       java
       json
@@ -59,6 +62,7 @@
       rust
       ssh_config
       starlark
+      surface
       toml
       yaml
       zig
