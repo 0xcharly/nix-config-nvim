@@ -9,7 +9,6 @@ with vimPlugins; [
   cmp-path
   cmp-cmdline
   conform-nvim
-  elixir-tools-nvim
   fidget-nvim
   harpoon2
   nvim-lastplace
