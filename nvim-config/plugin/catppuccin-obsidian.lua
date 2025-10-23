@@ -118,7 +118,7 @@ require('catppuccin').setup {
       LspCodeLens = { link = 'NonText' },
       LspInlayHint = { link = 'LspCodeLens' },
       -- Treesitter.
-      ['@parameter'] = { fg = color.subtext0 },
+      ['@parameter'] = { fg = color.subtext1 },
       ['@variable.member'] = { fg = color.none },
       ['@keyword.function'] = { link = 'Keyword' },
       ['@keyword.return'] = { link = 'Keyword' },
