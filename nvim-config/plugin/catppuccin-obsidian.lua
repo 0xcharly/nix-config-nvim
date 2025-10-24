@@ -71,7 +71,7 @@ require('catppuccin').setup {
       lavender = '#b4befe',
       text = '#e1e8f4',
       subtext1 = '#bac2de',
-      subtext0 = '#9ca0a8',
+      subtext0 = '#8fa3bb',
       overlay2 = '#7a8490',
       overlay1 = '#454759',
       overlay0 = '#232932',
