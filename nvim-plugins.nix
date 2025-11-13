@@ -3,7 +3,6 @@ with vimPlugins; [
   # Theme.
   catppuccin-nvim
   # Convenience plugins.
-  auto-hlsearch-nvim
   cmp-nvim-lsp
   cmp-buffer
   cmp-path
