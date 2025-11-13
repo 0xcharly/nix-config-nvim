@@ -8,7 +8,6 @@ with vimPlugins; [
   cmp-path
   cmp-cmdline
   conform-nvim
-  fidget-nvim
   harpoon2
   nvim-lastplace
   nvim-lspconfig
