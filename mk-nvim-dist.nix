@@ -7,7 +7,19 @@
   neovimUtils,
   # Neovim config dependencies.
   rsync,
+  # Runtime dependencies.
+  alejandra,
+  fzf,
+  kdlfmt,
+  lua-language-server,
+  nixd,
+  pyright,
+  ripgrep,
+  ruff,
   sqlite,
+  stylua,
+  taplo,
+  yq,
 }: let
   wrapper = {
     src,
@@ -80,6 +92,26 @@
       sqliteLibPath
     ];
 
+    runtimeDeps = [
+      alejandra
+      fzf
+      kdlfmt
+      lua-language-server
+      nixd
+      pyright
+      ripgrep
+      ruff
+      stylua
+      taplo
+      yq
+    ];
+    runtimeDepsWrapperArgs = [
+      "--prefix"
+      "PATH"
+      ":"
+      "${lib.makeBinPath runtimeDeps}"
+    ];
+
     neovimConfig = neovimUtils.makeNeovimConfig {
       inherit customLuaRC;
       # TODO(25.11): Remove deprecated `luaRcContent`.
@@ -99,7 +131,7 @@
       // {
         # makeNeovimConfig overwrites `wrapperArgs`, hence our own overwrite below.
         withSqlite = true;
-        wrapperArgs = lib.escapeShellArgs (neovimConfig.wrapperArgs ++ sqliteWrapperArgs);
+        wrapperArgs = lib.escapeShellArgs (neovimConfig.wrapperArgs ++ sqliteWrapperArgs ++ runtimeDepsWrapperArgs);
       }
     );
 in

@@ -71,8 +71,8 @@ vim.o.wrap = false
 
 -- Search.
 vim.o.incsearch = true
-vim.o.ignorecase = true -- Ignore case when searching...
-vim.o.smartcase = true -- ... unless there is a capital letter in the query
+vim.o.ignorecase = true -- Ignore case when searching …
+vim.o.smartcase = true -- … unless there is a capital letter in the query
 vim.o.splitright = true -- Prefer windows splitting to the right
 vim.o.splitbelow = true -- Prefer windows splitting to the bottom
 vim.o.updatetime = 50 -- Make updates happen faster
