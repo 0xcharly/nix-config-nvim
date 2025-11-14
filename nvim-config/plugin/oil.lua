@@ -1,8 +1,8 @@
 require('oil').setup {
-  view_options = {
-    -- Show files and directories that start with "."
-    show_hidden = true,
-  },
+  -- Show files and directories that start with "."
+  view_options = { show_hidden = true },
+  -- Auto-reload on changes.
+  watch_for_changes = true,
 }
 
 vim.keymap.set('n', '-', vim.cmd.Oil, { desc = 'open parent directory' })

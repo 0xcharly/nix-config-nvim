@@ -1,4 +1,4 @@
--- [[ Flash on yank ]]
+-- [[ Flash on yank. ]]
 -- See `:help vim.highlight.on_yank()`
 local yank_group = vim.api.nvim_create_augroup('HighlightYank', {})
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- [[ Remove trailing whitespaces ]]
+-- [[ Remove trailing whitespaces. ]]
 local whitespace_group = vim.api.nvim_create_augroup('TrimWhitespace', {})
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   group = whitespace_group,
@@ -20,7 +20,7 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   command = '%s/\\s\\+$//e',
 })
 
--- [[ Disable history on sensitive files ]]
+-- [[ Disable history on sensitive files. ]]
 local disable_history_group = vim.api.nvim_create_augroup('DisableHistory', {})
 vim.api.nvim_create_autocmd({ 'BufRead' }, {
   group = disable_history_group,
@@ -28,7 +28,7 @@ vim.api.nvim_create_autocmd({ 'BufRead' }, {
   command = 'setlocal nobackup nomodeline noshelltemp noswapfile noundofile nowritebackup shadafile=NONE',
 })
 
--- [[ Yank ring ]]
+-- [[ Yank ring. ]]
 -- https://github.com/neovim/neovim/discussions/33425
 -- https://x.com/justinmk/status/1911092038109364377
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -42,7 +42,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- [[ Disable cursor line in inactive windows/buffersr]]
+-- [[ Disable cursor line in inactive windows/buffers. ]]
 local cursorline_group = vim.api.nvim_create_augroup('InactiveDisableCursorLine', {})
 vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
   group = cursorline_group,

@@ -87,22 +87,24 @@ require('catppuccin').setup {
     return {
       -- Editor.
       Conceal = { fg = color.overlay2 },
-      CursorLine = { bg = color.overlay0 },
+      CursorLine = { bg = color.surface2 },
       LineNr = { fg = color.overlay2 },
       CursorLineNr = { fg = color.subtext1 },
       NonText = { fg = color.overlay2 },
       NormalFloat = { fg = color.text, bg = color.base },
-      FloatBorder = { fg = color.overlay1 },
+      FloatBorder = { fg = color.sky, bg = color.none },
       Pmenu = { bg = color.overlay0 },
       PmenuSel = { fg = ext.on_surface_blue, bg = ext.surface_blue },
+      PmenuExtra = { link = 'PmenuSel' },
+      PmenuExtraSel = { link = 'PmenuSel' },
       PmenuSbar = { bg = color.overlay0 },
-      PmenuThumb = { bg = color.overlay2 },
+      PmenuThumb = { bg = color.sky },
       TabLine = { fg = color.subtext1 },
       TabLineSel = { link = 'PmenuSel' },
       Title = { fg = ext.title, style = { 'bold' } },
       Visual = { link = 'CursorLine' },
       VisualNOS = { link = 'Visual' },
-      WildMenu = { bg = color.overlay0 },
+      WildMenu = { bg = ext.surface_blue },
       -- Same as CursorLine and StatusLine
       WinSeparator = { fg = color.overlay0 },
       -- Syntax.
@@ -112,8 +114,6 @@ require('catppuccin').setup {
       Operator = { fg = color.subtext0 },
       Delimiter = { fg = color.subtext0 },
       Boolean = { fg = color.pink },
-      -- copilot.
-      CopilotSuggestion = { link = 'LspInlayHint' },
       -- native_lsp.
       LspCodeLens = { link = 'NonText' },
       LspInlayHint = { link = 'LspCodeLens' },
@@ -128,7 +128,6 @@ require('catppuccin').setup {
       ['@punctuation.bracket'] = { link = 'Punctuation' },
       ['@punctuation.special'] = { link = 'Punctuation' },
 
-      -- StatusLine = { bg = '#202d40' },
       StatusLine = { bg = color.overlay0 },
       StatusLineNC = { link = 'StatusLine' },
       StatusLineFocusedPrimary = { link = 'Title' },
@@ -138,7 +137,20 @@ require('catppuccin').setup {
       StatusLineUnfocusedSecondary = { fg = color.subtext0 },
 
       -- Snacks.
+      SnacksPickerBorder = { link = 'FloatBorder' },
+      SnacksPickerPrompt = { fg = color.blue },
       SnacksPickerInputCursorLine = { bg = color.base },
+
+      -- Noice.
+      NoicePopupBorder = { link = 'FloatBorder' },
+      NoiceCmdlinePopupBorder = { link = 'FloatBorder' },
+
+      -- Treesitter's `comment` queries.
+      -- https://github.com/nvim-treesitter/nvim-treesitter/blob/42fc28ba918343ebfd5565147a42a26580579482/queries/comment/highlights.scm
+      ['@comment.error'] = { fg = color.maroon, bg = color.none, style = { 'bold' } },
+      ['@comment.note'] = { fg = ext.title, bg = color.none, style = { 'bold' } },
+      ['@comment.todo'] = { fg = color.sky, bg = color.none, style = { 'bold' } },
+      ['@comment.warning'] = { fg = color.yellow, bg = color.none, style = { 'bold' } },
     }
   end,
 }

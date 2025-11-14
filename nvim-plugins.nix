@@ -13,6 +13,7 @@ with vimPlugins; [
   nvim-lspconfig
   nvim-treesitter.withAllGrammars
   mini-nvim
+  noice-nvim
   nvim-cmp
   oil-nvim
   render-markdown-nvim

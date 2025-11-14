@@ -1,7 +1,11 @@
 require('snacks').setup {
+  -- Add support for inlined images via the Kitty Graphics Protocol.
+  image = { enabled = true },
+  -- Better pickers.
   picker = {
     enabled = true,
-    ui_select = false,
+    prompt = '  ',
+    ui_select = true,
     main = {
       -- Does not force opening in a buffer showing the content of a file. This
       -- effectively allows opening the file in the current buffer even if it's
@@ -14,14 +18,16 @@ require('snacks').setup {
       sqlite3_path = require('luv').os_getenv('LIBSQLITE_CLIB_PATH'),
     },
     icons = {
-      files = {
-        enabled = false,
-      },
-      tree = {
-        last = '╰╴',
-      },
+      files = { enabled = false },
+      tree = { last = '╰╴' },
     },
   },
+  -- Backdrop uses winblend which doesn't blend well with (at least) underlines:
+  -- links' underline turn red when a floating window with backdrop is visible.
+  win = { backdrop = false },
+  -- Load files content first, plugins after.
+  quickfile = { enabled = true },
+  -- Integrated terminal on a hot-key.
   terminal = {
     enabled = true,
     win = {
@@ -34,6 +40,16 @@ require('snacks').setup {
     },
   },
 }
+
+-- LSP-aware rename built into Oil.
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'OilActionsPost',
+  callback = function(event)
+    if event.data.actions[1].type == 'move' then
+      Snacks.rename.on_rename_file(event.data.actions[1].src_url, event.data.actions[1].dest_url)
+    end
+  end,
+})
 
 -- Snacks.picker
 vim.keymap.set('n', '<Leader>g', Snacks.picker.grep, { desc = '[g]rep' })
