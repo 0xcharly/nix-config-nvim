@@ -6,6 +6,7 @@ require('noice').setup {
       ['vim.lsp.util.stylize_markdown'] = true,
       ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
     },
+    progress = { enabled = false },
   },
   -- you can enable a preset for easier configuration
   presets = {
@@ -15,7 +16,6 @@ require('noice').setup {
     inc_rename = false, -- enables an input dialog for inc-rename.nvim
     lsp_doc_border = true, -- add a border to hover docs and signature help
   },
-
   cmdline = {
     format = {
       cmdline = { icon = ':' },
