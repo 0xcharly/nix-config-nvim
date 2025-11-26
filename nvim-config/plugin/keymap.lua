@@ -32,11 +32,9 @@ keymap.set('n', '<C-Down>', '<C-w>j', { silent = true })
 keymap.set('n', '<C-Up>', '<C-w>k', { silent = true })
 keymap.set('n', '<C-Right>', '<C-w>l', { silent = true })
 
--- Use `Control+Shift+{←↓↑→} to navigate between tabs and buffers.
-keymap.set({ 'i', 'n' }, '<C-S-Left>', cmd.tabprev, { silent = true })
-keymap.set({ 'i', 'n' }, '<C-S-Right>', cmd.tabnext, { silent = true })
-keymap.set({ 'i', 'n' }, '<C-S-Up>', cmd.bufprev, { silent = true })
-keymap.set({ 'i', 'n' }, '<C-S-Down>', cmd.bufnext, { silent = true })
+-- Use `Alt+{jk} to navigate between tabs.
+keymap.set({ 'i', 'n' }, '<A-j>', cmd.tabprev, { silent = true })
+keymap.set({ 'i', 'n' }, '<A-k>', cmd.tabnext, { silent = true })
 
 -- Better defaults.
 keymap.set('n', 'n', 'nzzzv', { silent = true })
