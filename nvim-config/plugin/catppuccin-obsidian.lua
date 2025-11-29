@@ -78,7 +78,7 @@ require('catppuccin').setup {
       surface2 = '#1d2530',
       surface1 = '#192029',
       surface0 = '#1d1f21',
-      base = '#11181c',
+      base = '#10141E',
       mantle = '#101618',
       crust = '#0b1215',
     },
