@@ -3,7 +3,6 @@
 
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [./overlays.nix];
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
       perSystem = {pkgs, ...}: let
