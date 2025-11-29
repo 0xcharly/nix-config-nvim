@@ -114,8 +114,6 @@
 
     neovimConfig = neovimUtils.makeNeovimConfig {
       inherit customLuaRC;
-      # TODO(25.11): Remove deprecated `luaRcContent`.
-      luaRcContent = customLuaRC;
       wrapRc = true;
 
       viAlias = false;
