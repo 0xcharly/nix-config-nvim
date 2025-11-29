@@ -69,7 +69,7 @@ require('catppuccin').setup {
       sapphire = '#74c7ec',
       blue = '#89b4fa',
       lavender = '#b4befe',
-      text = '#e1e8f4',
+      text = '#cad5e2',
       subtext1 = '#bac2de',
       subtext0 = '#8fa3bb',
       overlay2 = '#7a8490',
