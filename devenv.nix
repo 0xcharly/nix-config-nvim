@@ -1,14 +1,10 @@
 {
   inputs,
-  pkgs,
   lib,
+  pkgs,
   ...
 }: {
   packages = with pkgs; [
-    just
-    yq
-
-    # Formatters.
     alejandra
     stylua
   ];
