@@ -6,4 +6,3 @@ inputs:
     url: github:mrcjkb/nix-gen-luarc-json
   treefmt-nix:
     url: github:numtide/treefmt-nix
-# allowUnfree: true
