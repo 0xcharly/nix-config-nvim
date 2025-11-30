@@ -5,7 +5,7 @@
 
   outputs = {nixpkgs, ...}: let
     forAllSystems = fn:
-      nixpkgs.lib.genAttrs nixpkgs.lib.platforms.linux (
+      nixpkgs.lib.genAttrs (with nixpkgs.lib.platforms; darwin ++ linux) (
         system: fn nixpkgs.legacyPackages.${system}
       );
   in {
