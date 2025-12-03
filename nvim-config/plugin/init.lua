@@ -58,6 +58,7 @@ vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.belloff = 'all'
 vim.o.showcmd = false
+vim.o.showmode = false
 
 -- Indentation.
 vim.o.autoindent = true
@@ -96,18 +97,23 @@ vim.opt.formatoptions = vim.opt.formatoptions -- :help formatoptions
 
 -- Message output.
 vim.opt.shortmess = { -- :help shortmess
-  t = true,
-  a = true,
   A = true,
-  o = true,
+  C = true,
+  F = true, -- NOTE: this breaks autocommand messages
+  I = true,
   O = true,
   T = true,
-  f = true,
-  F = true, -- NOTE: this breaks autocommand messages
-  s = true,
-  c = true,
   W = true,
+  a = true,
+  c = true,
+  f = true,
+  o = true,
+  s = true,
+  t = true,
 }
+
+-- Visual represenation of special characters.
+vim.opt.listchars = 'tab:».,eol:↵,trail:·,nbsp:_,extends:>,precedes:<'
 
 -- Skip current working directory for backups. Doesn't play way with compiler
 -- file watchers.

@@ -101,6 +101,10 @@ function Statusline.unfocused()
     mode(),
     '%#StatusLineUnfocusedSecondary#  ',
     filename(),
+    ' ',
+    location(),
+    ' ',
+    bufinfo(),
   }
 end
 

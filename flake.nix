@@ -1,9 +1,16 @@
 {
   description = "Neovim config";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nix-math.url = "github:xddxdd/nix-math";
+  };
 
-  outputs = {nixpkgs, ...}: let
+  outputs = {
+    nixpkgs,
+    nix-math,
+    ...
+  }: let
     forAllSystems = fn:
       nixpkgs.lib.genAttrs (with nixpkgs.lib.platforms; darwin ++ linux) (
         system: fn nixpkgs.legacyPackages.${system}
@@ -12,7 +19,9 @@
     formatter = forAllSystems (pkgs: pkgs.alejandra);
 
     packages = forAllSystems (pkgs: let
-      mkNvimDist = pkgs.callPackage ./mk-nvim-dist.nix {};
+      mkNvimDist = pkgs.callPackage ./mk-nvim-dist.nix {
+        colors = import ./colors.nix nixpkgs.lib nix-math.lib.math;
+      };
       nvimConfig = {
         src = ./nvim-config;
         runtime = [./nvim-runtime];
@@ -37,5 +46,7 @@
         plugins = [];
       };
     });
+
+    lib = import ./colors.nix nixpkgs.lib nix-math.lib.math;
   };
 }

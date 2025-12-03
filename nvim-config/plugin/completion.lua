@@ -42,8 +42,8 @@ cmp.setup {
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-p>'] = cmp.mapping.complete(),
-    ['<C-k>'] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
-    ['<C-j>'] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
+    ['<C-k>'] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
+    ['<C-j>'] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
     ['<C-y>'] = cmp.mapping.confirm { select = true },
   },
   sources = cmp.config.sources({
@@ -57,11 +57,12 @@ cmp.setup {
 local function cmdline_mapping(f)
   return {
     c = function(fallback)
-      if cmp.visible() then
-        return f()
+      local lcmp = require('cmp')
+      if lcmp.visible() then
+        f(lcmp)
+      else
+        fallback()
       end
-
-      fallback()
     end,
   }
 end
@@ -69,9 +70,10 @@ end
 -- Use cmdline & path source for ':' (incompatible with `native_menu`).
 cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline {
-    ['<C-k>'] = cmdline_mapping(cmp.select_prev_item),
-    ['<C-j>'] = cmdline_mapping(cmp.select_next_item),
-    ['<C-y>'] = cmp.mapping.confirm { select = true },
+    ['<C-p>'] = cmp.config.disable,
+    ['<C-n>'] = cmp.config.disable,
+    ['<C-k>'] = cmdline_mapping(function(lcmp) lcmp.select_prev_item() end),
+    ['<C-j>'] = cmdline_mapping(function(lcmp) lcmp.select_next_item() end),
   },
   sources = cmp.config.sources({
     { name = 'path' },

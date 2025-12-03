@@ -2,16 +2,26 @@ local conform = require('conform')
 
 conform.setup {
   formatters_by_ft = {
-    just = { 'just' },
+    c = { 'clang-format' },
+    cpp = { 'clang-format' },
+    elixir = { 'mix' },
+    javascript = { 'prettier' },
     json = { 'yq' },
+    just = { 'just' },
     kdl = { 'kdlfmt' },
     lua = { 'stylua' },
     python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
     toml = { 'taplo' },
+    typescript = { 'prettier' },
     yaml = { 'yq' },
     -- Use the "_" filetype to run formatters on filetypes that don't
     -- have other formatters configured.
     ['_'] = { 'trim_whitespace', 'trim_newlines', lsp_format = 'last' },
+  },
+  formatters = {
+    ['clang-format'] = {
+      prepend_args = { '-style=file', '-fallback-style=Google' },
+    },
   },
   notify_on_error = false,
 }
