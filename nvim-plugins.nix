@@ -27,6 +27,7 @@ in
       cmp-path
       cmp-cmdline
       conform-nvim
+      fff-nvim
       harpoon2
       nvim-lastplace
       nvim-lspconfig

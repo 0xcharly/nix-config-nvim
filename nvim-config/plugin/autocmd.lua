@@ -52,7 +52,14 @@ local cursorline_group = vim.api.nvim_create_augroup('InactiveDisableCursorLine'
 vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
   group = cursorline_group,
   pattern = '*',
-  command = 'setlocal cursorline',
+  callback = function()
+    -- Disable :cursorline for `fff_input` buffers.
+    if vim.bo.filetype == 'fff_input' then
+      vim.cmd([[setlocal nocursorline]])
+    else
+      vim.cmd([[setlocal cursorline]])
+    end
+  end,
 })
 vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
   group = cursorline_group,

@@ -54,7 +54,6 @@ vim.api.nvim_create_autocmd('User', {
 -- Snacks.picker
 vim.keymap.set('n', '<Leader>g', Snacks.picker.grep, { desc = '[g]rep' })
 vim.keymap.set('n', '<Leader>?', Snacks.picker.help, { desc = '[?] help tags' })
-vim.keymap.set('n', '<Leader><Space>', Snacks.picker.smart, { desc = '[f]iles' })
 vim.keymap.set('n', '<leader>fb', Snacks.picker.buffers, { desc = 'Buffers' })
 vim.keymap.set('n', '<leader>ff', Snacks.picker.files, { desc = 'Find Files' })
 vim.keymap.set('n', '<leader>fg', Snacks.picker.git_files, { desc = 'Find Git Files' })
