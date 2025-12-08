@@ -3,12 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nix-math.url = "github:xddxdd/nix-math";
+    nix-config-colorscheme.url = "github:0xcharly/nix-config-colorscheme";
   };
 
   outputs = {
     nixpkgs,
-    nix-math,
+    nix-config-colorscheme,
     ...
   }: let
     forAllSystems = fn:
@@ -19,14 +19,14 @@
     formatter = forAllSystems (pkgs: pkgs.alejandra);
 
     packages = forAllSystems (pkgs: let
-      mkNvimDist = pkgs.callPackage ./mk-nvim-dist.nix {
-        colors = import ./colors.nix nixpkgs.lib nix-math.lib.math;
-      };
+      mkNvimDist = pkgs.callPackage ./mk-nvim-dist.nix {};
       nvimConfig = {
         src = ./nvim-config;
         runtime = [./nvim-runtime];
         patches = [];
-        plugins = pkgs.callPackage ./nvim-plugins.nix {};
+        plugins = pkgs.callPackage ./nvim-plugins.nix {
+          inherit (nix-config-colorscheme.packages.${pkgs.stdenv.hostPlatform.system}) colorscheme-nvim;
+        };
       };
     in rec {
       # The default package that bundles the entire neoviw configuration
@@ -46,7 +46,5 @@
         plugins = [];
       };
     });
-
-    lib = import ./colors.nix nixpkgs.lib nix-math.lib.math;
   };
 }

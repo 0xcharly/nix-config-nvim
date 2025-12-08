@@ -2,6 +2,7 @@
   vimPlugins,
   vimUtils,
   fetchFromGitHub,
+  colorscheme-nvim,
 }: let
   command-mode-nvim =
     (vimUtils.buildVimPlugin {
@@ -39,4 +40,7 @@ in
       sqlite-lua
       undotree
     ]
-    ++ [command-mode-nvim]
+    ++ [
+      colorscheme-nvim
+      command-mode-nvim
+    ]

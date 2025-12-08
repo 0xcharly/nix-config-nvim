@@ -1,10 +1,6 @@
 {
-  # Own colorscheme.
-  colors,
-  # callPackage auto arguments.
   stdenv,
   lib,
-  writeText,
   # Neovim derivation helpers.
   neovim-unwrapped,
   wrapNeovimUnstable,
@@ -45,18 +41,9 @@
       buildInputs = [rsync];
       buildPhase = ''
         mkdir -p $out/nvim
-        mkdir -p $out/nvim/plugin
       '';
 
-      colorscheme = writeText "colorscheme.lua" (
-        with colors;
-          import ./colorscheme/colorscheme.lua.nix (
-            lib.attrsets.mapAttrs (_: oklch: "0x${rgbToHex (convertOklchToRgb oklch)}") theme
-          )
-      );
-
       installPhase = ''
-        cp $colorscheme $out/nvim/plugin/colorscheme.lua
         rsync -a --exclude=/init.lua $src/ $out/nvim
       '';
     };
