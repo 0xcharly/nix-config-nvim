@@ -17,7 +17,7 @@
 
   enterShell = let
     pkgs' = import inputs.nixpkgs {
-      inherit (pkgs.stdenv) system;
+      inherit (pkgs.stdenv.hostPlatform) system;
       overlays = [inputs.gen-luarc.overlays.default];
     };
     luarc-json = pkgs'.mk-luarc-json {
