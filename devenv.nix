@@ -21,7 +21,9 @@
       overlays = [inputs.gen-luarc.overlays.default];
     };
     luarc-json = pkgs'.mk-luarc-json {
-      plugins = pkgs.callPackage ./nvim-plugins.nix {};
+      plugins = pkgs.callPackage ./nvim-plugins.nix {
+          inherit (inputs.nix-config-colorscheme.packages.${pkgs.stdenv.hostPlatform.system}) colorscheme-nvim;
+      };
       nvim = pkgs.neovim-unwrapped;
     };
   in ''
