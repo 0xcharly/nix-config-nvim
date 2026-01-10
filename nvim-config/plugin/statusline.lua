@@ -1,5 +1,3 @@
-Statusline = {}
-
 local modes = {
   ['n'] = 'NORMAL',
   ['no'] = 'NORMAL',
@@ -21,16 +19,21 @@ local modes = {
   ['r?'] = 'CONFIRM',
   ['!'] = 'SHELL',
   ['t'] = 'TERMINAL',
+  ['nt'] = 'TERMINAL',
 }
 
-local function mode()
-  local current_mode = vim.api.nvim_get_mode().mode
-  return string.format('%s', modes[current_mode]):upper()
+local function mode(bufnr)
+  if bufnr == vim.api.nvim_get_current_buf() then
+    local current_mode = vim.api.nvim_get_mode().mode
+    return string.format('%s', modes[current_mode]):upper()
+  end
+
+  return 'NORMAL'
 end
 
-local function filename()
+local function filename(bufnr)
   local function buf_fname()
-    local buf = '#' .. vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+    local buf = '#' .. tostring(bufnr)
     return (vim.fn.expand(buf) == '' and '-- Empty --') or vim.fn.expand(buf .. ':t')
   end
 
@@ -42,26 +45,29 @@ local function filename()
   return fname .. ' '
 end
 
-local function bufinfo()
-  if vim.bo.modified then
-    return '[dirty]'
+local function bufinfo(bufnr)
+  if vim.api.nvim_get_option_value('modified', { buf = bufnr }) then
+    return '[+]'
   end
-  if vim.bo.modifiable == false or vim.bo.readonly == true then
-    return '[readonly]'
+  if
+    not vim.api.nvim_get_option_value('modifiable', { buf = bufnr })
+    or vim.api.nvim_get_option_value('readonly', { buf = bufnr })
+  then
+    return '[RO]'
   end
   return ''
 end
 
-local function location()
-  if vim.bo.filetype == 'alpha' then
+local function location(bufnr)
+  if vim.api.nvim_get_option_value('filetype', { buf = bufnr }) == 'alpha' then
     return ''
   end
   return '%P   L%l'
 end
 
-local function lspinfo()
+local function lspinfo(bufnr)
   local function count(severity)
-    return vim.tbl_count(vim.diagnostic.get(0, { severity = severity }))
+    return vim.tbl_count(vim.diagnostic.get(bufnr, { severity = severity }))
   end
 
   local function render(severity, hl, sign)
@@ -80,44 +86,68 @@ local function lspinfo()
   }
 end
 
-function Statusline.focused()
+local function GenerateFocusedStatusline(bufnr)
   return table.concat {
     '%#StatusLineFocusedPrimary# ',
-    mode(),
+    mode(bufnr),
     '%#StatusLineFocusedSecondary#  ',
-    filename(),
+    filename(bufnr),
     ' ',
-    location(),
+    location(bufnr),
     ' ',
-    bufinfo(),
+    bufinfo(bufnr),
     '%=',
-    lspinfo(),
+    lspinfo(bufnr),
   }
 end
 
-function Statusline.unfocused()
+local function GenerateUnfocusedStatusline(bufnr)
   return table.concat {
     '%#StatusLineUnfocusedPrimary# ',
-    mode(),
+    mode(bufnr),
     '%#StatusLineUnfocusedSecondary#  ',
-    filename(),
+    filename(bufnr),
     ' ',
-    location(),
+    location(bufnr),
     ' ',
-    bufinfo(),
+    bufinfo(bufnr),
   }
 end
 
-local statusline_group = vim.api.nvim_create_augroup('StatusLineGroup', {})
+function GenerateStatusline(bufnr)
+  if bufnr == vim.api.nvim_get_current_buf() then
+    return GenerateFocusedStatusline(bufnr)
+  else
+    return GenerateUnfocusedStatusline(bufnr)
+  end
+end
 
-vim.api.nvim_create_autocmd({ 'WinEnter', 'BufEnter' }, {
-  group = statusline_group,
-  pattern = '*',
-  command = 'setlocal statusline=%!v:lua.Statusline.focused()',
-})
+function RefreshStatusline(event)
+  local bufnr = event.buf
+  local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
 
-vim.api.nvim_create_autocmd({ 'WinLeave', 'BufLeave' }, {
+  if buftype == '' or buftype == 'file' or buftype == 'terminal' then
+    vim.api.nvim_set_option_value('statusline', GenerateStatusline(bufnr), { scope = 'local' })
+    vim.api.nvim_command([[ redrawstatus ]])
+  end
+end
+
+local statusline_group = vim.api.nvim_create_augroup('StatusLineRefreshGroup', {})
+
+vim.api.nvim_create_autocmd({
+  'BufEnter',
+  'BufModifiedSet',
+  'BufNew',
+  'BufNewFile',
+  'BufReadPost',
+  'BufWinEnter',
+  'BufWritePost',
+  'DiagnosticChanged',
+  'TabEnter',
+  'TermOpen',
+  'VimResized',
+  'WinEnter',
+}, {
+  callback = vim.schedule_wrap(RefreshStatusline),
   group = statusline_group,
-  pattern = '*',
-  command = 'setlocal statusline=%!v:lua.Statusline.unfocused()',
 })
