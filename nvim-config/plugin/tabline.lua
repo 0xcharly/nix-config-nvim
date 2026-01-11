@@ -31,12 +31,15 @@ function GenerateTabLine()
 
   for tabnr = 1, total_tabs do
     local buflist = array_filter(vim.fn.tabpagebuflist(tabnr), function(bufnr)
+      if not vim.api.nvim_buf_is_valid(bufnr) then
+        return false
+      end
       local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
       return buftype == '' or buftype == 'file' or buftype == 'terminal'
     end)
 
     local fname = ''
-    if buflist ~= 0 then
+    if #buflist ~= 0 then
       fname = GetBufferName(buflist[1])
 
       if #buflist > 1 then
