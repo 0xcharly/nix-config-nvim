@@ -124,6 +124,10 @@ end
 
 function RefreshStatusline(event)
   local bufnr = event.buf
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+
   local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
 
   if buftype == '' or buftype == 'file' or buftype == 'terminal' then
