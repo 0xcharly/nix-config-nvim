@@ -3,7 +3,8 @@
   vimUtils,
   fetchFromGitHub,
   colorscheme-nvim,
-}: let
+}:
+let
   command-mode-nvim =
     (vimUtils.buildVimPlugin {
       pname = "command-mode.nvim";
@@ -16,32 +17,33 @@
       };
 
       meta.homepage = "https://github.com/ej-shafran/compile-mode.nvim";
-    }).overrideAttrs {
-      dependencies = with vimPlugins; [plenary-nvim];
-    };
+    }).overrideAttrs
+      {
+        dependencies = with vimPlugins; [ plenary-nvim ];
+      };
 in
-  with vimPlugins;
-    [
-      cmp-nvim-lsp
-      cmp-buffer
-      cmp-path
-      cmp-cmdline
-      conform-nvim
-      fff-nvim
-      harpoon2
-      nvim-lastplace
-      nvim-lspconfig
-      nvim-treesitter.withAllGrammars
-      mini-nvim
-      noice-nvim
-      nvim-cmp
-      oil-nvim
-      render-markdown-nvim
-      snacks-nvim
-      sqlite-lua
-      undotree
-    ]
-    ++ [
-      colorscheme-nvim
-      command-mode-nvim
-    ]
+with vimPlugins;
+[
+  cmp-nvim-lsp
+  cmp-buffer
+  cmp-path
+  cmp-cmdline
+  conform-nvim
+  fff-nvim
+  harpoon2
+  nvim-lastplace
+  nvim-lspconfig
+  nvim-treesitter.withAllGrammars
+  mini-nvim
+  noice-nvim
+  nvim-cmp
+  oil-nvim
+  render-markdown-nvim
+  snacks-nvim
+  sqlite-lua
+  undotree
+]
+++ [
+  colorscheme-nvim
+  command-mode-nvim
+]

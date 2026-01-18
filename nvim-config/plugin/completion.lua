@@ -72,8 +72,12 @@ cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline {
     ['<C-p>'] = cmp.config.disable,
     ['<C-n>'] = cmp.config.disable,
-    ['<C-k>'] = cmdline_mapping(function(lcmp) lcmp.select_prev_item() end),
-    ['<C-j>'] = cmdline_mapping(function(lcmp) lcmp.select_next_item() end),
+    ['<C-k>'] = cmdline_mapping(function(lcmp)
+      lcmp.select_prev_item()
+    end),
+    ['<C-j>'] = cmdline_mapping(function(lcmp)
+      lcmp.select_next_item()
+    end),
   },
   sources = cmp.config.sources({
     { name = 'path' },

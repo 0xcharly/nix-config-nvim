@@ -1,5 +1,5 @@
 -- Use the system's monospace font.
-vim.o.guifont = "monospace:h12"
+vim.o.guifont = 'monospace:h12'
 
 -- Neovide-specific options.
 if vim.g.neovide then

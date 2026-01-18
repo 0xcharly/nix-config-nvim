@@ -10,7 +10,7 @@ hipatterns.setup {
     hack = { pattern = '%f[%w]()HACK()%f[%W]', group = '@comment.warning' },
     todo = { pattern = '%f[%w]()TODO()%f[%W]', group = '@comment.todo' },
     hint = { pattern = '%f[%w]()HINT()%f[%W]', group = '@comment.hint' },
-    note = { pattern = {'%f[%w]()NOTE()%f[%W]', '%f[%w]()IMPORTANT NOTE()%f[%W]'}, group = '@comment.note' },
+    note = { pattern = { '%f[%w]()NOTE()%f[%W]', '%f[%w]()IMPORTANT NOTE()%f[%W]' }, group = '@comment.note' },
 
     -- Highlight hex color strings (`#rrggbb`) using that color
     hex_color = hipatterns.gen_highlighter.hex_color(),
