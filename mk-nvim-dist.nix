@@ -8,11 +8,11 @@
   # Neovim config dependencies.
   rsync,
   # Runtime dependencies.
-  alejandra,
   fzf,
   kdlfmt,
   lua-language-server,
   nixd,
+  nixfmt-rfc-style,
   pyright,
   ripgrep,
   ruff,
@@ -93,11 +93,11 @@
     ];
 
     runtimeDeps = [
-      alejandra
       fzf
       kdlfmt
       lua-language-server
       nixd
+      nixfmt-rfc-style
       pyright
       ripgrep
       ruff

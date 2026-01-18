@@ -3,7 +3,7 @@ vim.lsp.config('nixd', {
   settings = {
     nixd = {
       formatting = {
-        command = { 'alejandra', '-qq' },
+        command = { 'nixfmt' },
       },
     },
   },

@@ -5,7 +5,7 @@
   ...
 }: {
   packages = with pkgs; [
-    alejandra
+    nixfmt-rfc-style
     stylua
   ];
 
@@ -34,7 +34,7 @@
     fmt-opts = {
       projectRootFile = "flake.lock";
       programs = {
-        alejandra.enable = true;
+        nixfmt.enable = true;
         deadnix.enable = true;
         prettier.enable = true;
         shfmt.enable = false;

@@ -16,7 +16,7 @@
         system: fn nixpkgs.legacyPackages.${system}
       );
   in {
-    formatter = forAllSystems (pkgs: pkgs.alejandra);
+    formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
 
     packages = forAllSystems (pkgs: let
       mkNvimDist = pkgs.callPackage ./mk-nvim-dist.nix {};
