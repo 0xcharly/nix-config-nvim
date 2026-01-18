@@ -6,6 +6,22 @@ require('snacks').setup {
     enabled = true,
     prompt = '  ',
     ui_select = true,
+    layout = {
+      reverse = true,
+      layout = {
+        box = 'horizontal',
+        backdrop = false,
+        width = 0.9,
+        height = 0.9,
+        border = 'none',
+        {
+          box = 'vertical',
+          { win = 'list', border = true },
+          { win = 'input', height = 1, border = true },
+        },
+        { win = 'preview', width = 0.5, border = true },
+      },
+    },
     main = {
       -- Does not force opening in a buffer showing the content of a file. This
       -- effectively allows opening the file in the current buffer even if it's
@@ -63,6 +79,9 @@ vim.keymap.set('n', '<Leader>q', Snacks.picker.qflist, { desc = '[q]uickfix list
 vim.keymap.set('n', '<Leader>r', Snacks.picker.registers, { desc = '[r]egisters' })
 vim.keymap.set('n', '<Leader>d', Snacks.picker.diagnostics, { desc = '[d]iagnostics' })
 vim.keymap.set('n', '<Leader>b', Snacks.picker.buffers, { desc = '[bb]uffers' })
+
+-- Alias keymap for Smart Find Files.
+vim.keymap.set('n', 'ff', Snacks.picker.smart, { desc = 'Smart Find Files' })
 
 -- Snacks.terminal
 vim.keymap.set({ 'n', 't' }, '<A-y>', Snacks.terminal.toggle, { desc = 'Terminal' })

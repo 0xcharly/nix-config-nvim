@@ -47,9 +47,6 @@
               plugins = prev.plugins ++ plugins;
             });
 
-          # A custom build with an extra lush-nvim plugin to work on the theme.
-          debug-colorscheme = withExtraPlugins [ pkgs.vimPlugins.lush-nvim ];
-
           # A custom debug build without any configuration or plugins.
           debug-norc = default.override {
             src = ./.;
