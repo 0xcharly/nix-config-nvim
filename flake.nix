@@ -55,4 +55,6 @@
         }
       );
     };
+
+  nixConfig.experimental-features = [ "pipe-operators" ];
 }
