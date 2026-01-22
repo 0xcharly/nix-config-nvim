@@ -80,8 +80,5 @@ vim.keymap.set('n', '<Leader>r', Snacks.picker.registers, { desc = '[r]egisters'
 vim.keymap.set('n', '<Leader>d', Snacks.picker.diagnostics, { desc = '[d]iagnostics' })
 vim.keymap.set('n', '<Leader>b', Snacks.picker.buffers, { desc = '[bb]uffers' })
 
--- Alias keymap for Smart Find Files.
-vim.keymap.set('n', 'ff', Snacks.picker.smart, { desc = 'Smart Find Files' })
-
 -- Snacks.terminal
 vim.keymap.set({ 'n', 't' }, '<A-y>', Snacks.terminal.toggle, { desc = 'Terminal' })
