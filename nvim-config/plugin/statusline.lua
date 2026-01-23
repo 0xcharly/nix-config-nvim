@@ -1,34 +1,28 @@
 local modes = {
-  ['n'] = 'NORMAL',
-  ['no'] = 'NORMAL',
-  ['v'] = 'VISUAL',
-  ['V'] = 'VISUAL LINE',
-  [''] = 'VISUAL BLOCK',
-  ['s'] = 'SELECT',
-  ['S'] = 'SELECT LINE',
-  [''] = 'SELECT BLOCK',
-  ['i'] = 'INSERT',
-  ['ic'] = 'INSERT',
-  ['R'] = 'REPLACE',
-  ['Rv'] = 'VISUAL REPLACE',
-  ['c'] = 'COMMAND',
-  ['cv'] = 'VIM EX',
-  ['ce'] = 'EX',
-  ['r'] = 'PROMPT',
-  ['rm'] = 'MOAR',
-  ['r?'] = 'CONFIRM',
-  ['!'] = 'SHELL',
-  ['t'] = 'TERMINAL',
-  ['nt'] = 'TERMINAL',
+  ['v'] = '󰰫 ',
+  ['V'] = '󰰫 ',
+  [''] = '󰰫 ',
+  ['s'] = '󰰢 ',
+  ['S'] = '󰰢 ',
+  [''] = '󰰢 ',
+  ['i'] = '󰰄 ',
+  ['ic'] = '󰰄 ',
+  ['R'] = '󰰟 ',
+  ['Rv'] = '󰰟 ',
+  ['c'] = '󰯲 ',
+  ['cv'] = '󰯲 ',
+  ['ce'] = '󰯲 ',
+  ['t'] = '󰰄 ',
 }
+local default_mode_icon = '󰰓 '
 
 local function mode(bufnr)
   if bufnr == vim.api.nvim_get_current_buf() then
     local current_mode = vim.api.nvim_get_mode().mode
-    return string.format('%s', modes[current_mode]):upper()
+    return string.format('%s', modes[current_mode] or default_mode_icon):upper()
   end
 
-  return 'NORMAL'
+  return default_mode_icon
 end
 
 local function filename(bufnr)
@@ -62,7 +56,7 @@ local function location(bufnr)
   if vim.api.nvim_get_option_value('filetype', { buf = bufnr }) == 'alpha' then
     return ''
   end
-  return '%P   L%l'
+  return '%l:%c %P'
 end
 
 local function lspinfo(bufnr)
@@ -88,9 +82,11 @@ end
 
 local function GenerateFocusedStatusline(bufnr)
   return table.concat {
-    '%#StatusLineFocusedPrimary# ',
+    '%#StatusLineFocusedPrimary#',
+    '▍ ',
     mode(bufnr),
-    '%#StatusLineFocusedSecondary#  ',
+    '%#StatusLineFocusedSecondary#',
+    '  ',
     filename(bufnr),
     ' ',
     location(bufnr),
@@ -103,9 +99,11 @@ end
 
 local function GenerateUnfocusedStatusline(bufnr)
   return table.concat {
-    '%#StatusLineUnfocusedPrimary# ',
+    '%#StatusLineUnfocusedPrimary#',
+    '▍ ',
     mode(bufnr),
-    '%#StatusLineUnfocusedSecondary#  ',
+    '%#StatusLineUnfocusedSecondary#',
+    '  ',
     filename(bufnr),
     ' ',
     location(bufnr),
@@ -147,6 +145,7 @@ vim.api.nvim_create_autocmd({
   'BufWinEnter',
   'BufWritePost',
   'DiagnosticChanged',
+  'ModeChanged',
   'TabEnter',
   'TermOpen',
   'VimResized',
