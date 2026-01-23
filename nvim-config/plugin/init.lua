@@ -39,7 +39,7 @@ vim.wo.number = false
 vim.wo.relativenumber = false
 vim.wo.signcolumn = 'yes'
 vim.wo.cursorline = true
-vim.o.showtabline = 2
+vim.o.showtabline = 1
 vim.o.winborder = 'rounded'
 
 -- Enable mouse, but change the 'mousemodel', so <RightMouse> extends selection
