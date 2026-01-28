@@ -12,7 +12,7 @@
   kdlfmt,
   lua-language-server,
   nixd,
-  nixfmt-rfc-style,
+  nixfmt,
   pyright,
   ripgrep,
   ruff,
@@ -107,7 +107,7 @@ let
         kdlfmt
         lua-language-server
         nixd
-        nixfmt-rfc-style
+        nixfmt
         pyright
         ripgrep
         ruff
