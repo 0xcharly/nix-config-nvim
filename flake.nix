@@ -20,7 +20,7 @@
         );
     in
     {
-      formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+      formatter = forAllSystems (pkgs: pkgs.nixfmt);
 
       packages = forAllSystems (
         pkgs:
@@ -43,8 +43,8 @@
           # Augment the default package with more plugins.
           withExtraPlugins =
             plugins:
-            default.override (prev: {
-              plugins = prev.plugins ++ plugins;
+            default.override (old: {
+              plugins = (old.plugins or [ ]) ++ plugins;
             });
 
           # A custom debug build without any configuration or plugins.
@@ -56,5 +56,9 @@
       );
     };
 
-  nixConfig.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
+  nixConfig.experimental-features = [
+    "nix-command"
+    "flakes"
+    "pipe-operators"
+  ];
 }

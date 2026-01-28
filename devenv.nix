@@ -6,14 +6,16 @@
 }:
 {
   packages = with pkgs; [
-    nixfmt-rfc-style
+    nixfmt
     stylua
   ];
 
-  languages.lua.enable = true;
-  languages.nix = {
-    enable = true;
-    lsp.package = pkgs.nixd;
+  languages = {
+    lua.enable = true;
+    nix = {
+      enable = true;
+      lsp.package = pkgs.nixd;
+    };
   };
 
   enterShell =
