@@ -3,15 +3,19 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nix-config-colorscheme.url = "github:0xcharly/nix-config-colorscheme";
+
+    colorscheme = {
+      url = "github:0xcharly/nix-config-colorscheme";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    fff = {
+      url = "github:dmtrKovalenko/fff.nvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    {
-      nixpkgs,
-      nix-config-colorscheme,
-      ...
-    }:
+    { nixpkgs, ... }@inputs:
     let
       forAllSystems =
         fn:
@@ -25,13 +29,15 @@
       packages = forAllSystems (
         pkgs:
         let
+          inherit (pkgs.stdenv.hostPlatform) system;
           mkNvimDist = pkgs.callPackage ./mk-nvim-dist.nix { };
           nvimConfig = {
             src = ./nvim-config;
             runtime = [ ./nvim-runtime ];
             patches = [ ];
             plugins = pkgs.callPackage ./nvim-plugins.nix {
-              inherit (nix-config-colorscheme.packages.${pkgs.stdenv.hostPlatform.system}) colorscheme-nvim;
+              inherit (inputs.colorscheme.packages.${system}) colorscheme-nvim;
+              inherit (inputs.fff.packages.${system}) fff-nvim;
             };
           };
         in

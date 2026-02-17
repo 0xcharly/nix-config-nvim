@@ -6,5 +6,7 @@ inputs:
     url: github:mrcjkb/nix-gen-luarc-json
   treefmt-nix:
     url: github:numtide/treefmt-nix
-  nix-config-colorscheme:
+  colorscheme:
     url: github:0xcharly/nix-config-colorscheme
+  fff:
+    url: github:dmtrKovalenko/fff.nvim

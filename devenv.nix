@@ -20,15 +20,15 @@
 
   enterShell =
     let
+      inherit (pkgs.stdenv.hostPlatform) system;
       pkgs' = import inputs.nixpkgs {
         inherit (pkgs.stdenv.hostPlatform) system;
         overlays = [ inputs.gen-luarc.overlays.default ];
       };
       luarc-json = pkgs'.mk-luarc-json {
         plugins = pkgs.callPackage ./nvim-plugins.nix {
-          inherit (inputs.nix-config-colorscheme.packages.${pkgs.stdenv.hostPlatform.system})
-            colorscheme-nvim
-            ;
+          inherit (inputs.colorscheme.packages.${system}) colorscheme-nvim;
+          inherit (inputs.fff.packages.${system}) fff-nvim;
         };
         nvim = pkgs.neovim-unwrapped;
       };
