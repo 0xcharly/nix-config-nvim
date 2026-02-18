@@ -1,12 +1,12 @@
 require('fff').setup {
   prompt = '   ',
-  title = 'Find files',
+  title = 'Files',
   keymaps = {
     move_up = { '<Up>', '<C-k>' },
     move_down = { '<Down>', '<C-j>' },
   },
-  hl = { cursor = 'Normal' },
-  preview = { enabled = false },
+  hl = { cursor = 'Visual' },
+  -- preview = { enabled = false },
 }
 
 vim.keymap.set('n', 'ff', function()
@@ -14,7 +14,7 @@ vim.keymap.set('n', 'ff', function()
 end, { desc = '[f]iles' })
 
 vim.keymap.set('n', 'fg', function()
-  require('fff').live_grep()
+  require('fff').live_grep { title = 'Pattern' }
 end, { desc = '[g]rep' })
 
 -- IMPORTANT NOTE: if deleting this in the future, also cleanup the
