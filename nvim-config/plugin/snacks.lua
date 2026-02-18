@@ -11,8 +11,8 @@ require('snacks').setup {
       layout = {
         box = 'horizontal',
         backdrop = false,
-        width = 0.9,
-        height = 0.9,
+        width = 0.8,
+        height = 0.8,
         border = 'none',
         {
           box = 'vertical',
@@ -50,8 +50,8 @@ require('snacks').setup {
       border = 'rounded',
       position = 'float',
       backdrop = 60,
-      height = 0.9,
-      width = 0.9,
+      height = 0.8,
+      width = 0.8,
       zindex = 50,
     },
   },
@@ -68,17 +68,10 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 -- Snacks.picker
-vim.keymap.set('n', '<Leader>g', Snacks.picker.grep, { desc = '[g]rep' })
 vim.keymap.set('n', '<Leader>?', Snacks.picker.help, { desc = '[?] help tags' })
-vim.keymap.set('n', '<leader>fb', Snacks.picker.buffers, { desc = 'Buffers' })
-vim.keymap.set('n', '<leader>ff', Snacks.picker.files, { desc = 'Find Files' })
-vim.keymap.set('n', '<leader>fg', Snacks.picker.git_files, { desc = 'Find Git Files' })
-vim.keymap.set('n', '<leader>fp', Snacks.picker.projects, { desc = 'Projects' })
-vim.keymap.set('n', '<leader>fr', Snacks.picker.recent, { desc = 'Recent' })
-vim.keymap.set('n', '<Leader>q', Snacks.picker.qflist, { desc = '[q]uickfix list' })
 vim.keymap.set('n', '<Leader>r', Snacks.picker.registers, { desc = '[r]egisters' })
 vim.keymap.set('n', '<Leader>d', Snacks.picker.diagnostics, { desc = '[d]iagnostics' })
-vim.keymap.set('n', '<Leader>b', Snacks.picker.buffers, { desc = '[bb]uffers' })
+vim.keymap.set('n', '<Leader>b', Snacks.picker.buffers, { desc = '[b]uffers' })
 
 -- Snacks.terminal
 vim.keymap.set({ 'n', 't' }, '<A-y>', Snacks.terminal.toggle, { desc = 'Terminal' })
