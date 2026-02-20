@@ -31,11 +31,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1769745271,
-        "narHash": "sha256-XaBANzzmZ5Ci17fvSfQurcY1Q5mhlQxZLl+8zYs+KU8=",
+        "lastModified": 1771606023,
+        "narHash": "sha256-lrwHsAbYKKDBxIwa/D7OaMnbTHd1PzxmdOymlBYy3UI=",
         "owner": "0xcharly",
         "repo": "nix-config-colorscheme",
-        "rev": "7335b6a1b429e8c1ed723c79482cad15bdb8c54e",
+        "rev": "e06af23227b37160354c18f7178d25ad65017ed5",
         "type": "github"
       },
       "original": {

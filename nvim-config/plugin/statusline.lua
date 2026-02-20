@@ -1,20 +1,20 @@
 local modes = {
-  ['v'] = '󰰫 ',
-  ['V'] = '󰰫 ',
-  [''] = '󰰫 ',
-  ['s'] = '󰰢 ',
-  ['S'] = '󰰢 ',
-  [''] = '󰰢 ',
-  ['i'] = '󰰄 ',
-  ['ic'] = '󰰄 ',
-  ['R'] = '󰰟 ',
-  ['Rv'] = '󰰟 ',
-  ['c'] = '󰯲 ',
-  ['cv'] = '󰯲 ',
-  ['ce'] = '󰯲 ',
-  ['t'] = '󰰄 ',
+  ['v'] = 'VISUAL',
+  ['V'] = 'VISUAL',
+  [''] = 'VISUAL',
+  ['s'] = 'SELECT',
+  ['S'] = 'SELECT',
+  [''] = 'SELECT',
+  ['i'] = 'INSERT',
+  ['ic'] = 'INSERT',
+  ['R'] = 'REPLACE',
+  ['Rv'] = 'REPLACE',
+  ['c'] = 'COMMAND',
+  ['cv'] = 'COMMAND',
+  ['ce'] = 'COMMAND',
+  ['t'] = 'TERMINAL',
 }
-local default_mode_icon = '󰰓 '
+local default_mode_icon = 'NORMAL'
 
 local function mode(bufnr)
   if bufnr == vim.api.nvim_get_current_buf() then
@@ -83,7 +83,7 @@ end
 local function GenerateFocusedStatusline(bufnr)
   return table.concat {
     '%#StatusLineFocusedPrimary#',
-    '▍ ',
+    ' ',
     mode(bufnr),
     '%#StatusLineFocusedSecondary#',
     '  ',

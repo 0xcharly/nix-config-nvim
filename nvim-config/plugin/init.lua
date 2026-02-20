@@ -35,8 +35,8 @@ vim.g.netrw_winsize = 25
 -- https://github.com/neovim/neovim/commit/2648c3579a4d274ee46f83db1bd63af38fa9e0a7
 vim.g.python_recommended_style = 0
 
-vim.wo.number = false
-vim.wo.relativenumber = false
+vim.wo.number = true
+vim.wo.relativenumber = true
 vim.wo.signcolumn = 'yes'
 vim.wo.cursorline = true
 vim.o.showtabline = 1
@@ -48,7 +48,7 @@ vim.o.mouse = 'nv'
 vim.o.mousemodel = 'extend'
 
 -- Large fold level on startup.
-vim.o.foldcolumn = '1'
+vim.o.foldcolumn = '0'
 vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
