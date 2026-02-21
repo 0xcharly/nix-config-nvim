@@ -14,7 +14,7 @@ vim.keymap.set('n', 'ff', function()
 end, { desc = '[f]iles' })
 
 vim.keymap.set('n', 'fg', function()
-  require('fff').live_grep { title = 'Pattern' }
+  require('fff').live_grep { title = 'Pattern', grep = { modes = 'fuzzy', 'plain', 'regex' } }
 end, { desc = '[g]rep' })
 
 -- IMPORTANT NOTE: if deleting this in the future, also cleanup the
