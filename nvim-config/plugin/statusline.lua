@@ -16,8 +16,8 @@ local modes = {
 }
 local default_mode_icon = 'NORMAL'
 
-local function mode(bufnr)
-  if bufnr == vim.api.nvim_get_current_buf() then
+local function mode(winid)
+  if winid == vim.api.nvim_get_current_win() then
     local current_mode = vim.api.nvim_get_mode().mode
     return string.format('%s', modes[current_mode] or default_mode_icon):upper()
   end
@@ -80,11 +80,11 @@ local function lspinfo(bufnr)
   }
 end
 
-local function GenerateFocusedStatusline(bufnr)
+local function GenerateFocusedStatusline(winid, bufnr)
   return table.concat {
     '%#StatusLineFocusedPrimary#',
     ' ',
-    mode(bufnr),
+    mode(winid),
     '%#StatusLineFocusedSecondary#',
     '  ',
     filename(bufnr),
@@ -97,11 +97,11 @@ local function GenerateFocusedStatusline(bufnr)
   }
 end
 
-local function GenerateUnfocusedStatusline(bufnr)
+local function GenerateUnfocusedStatusline(winid, bufnr)
   return table.concat {
     '%#StatusLineUnfocusedPrimary#',
     '▍ ',
-    mode(bufnr),
+    mode(winid),
     '%#StatusLineUnfocusedSecondary#',
     '  ',
     filename(bufnr),
@@ -112,26 +112,27 @@ local function GenerateUnfocusedStatusline(bufnr)
   }
 end
 
-function GenerateStatusline(bufnr)
-  if bufnr == vim.api.nvim_get_current_buf() then
-    return GenerateFocusedStatusline(bufnr)
-  else
-    return GenerateUnfocusedStatusline(bufnr)
+function GenerateStatusline(winid)
+  local bufnr = vim.api.nvim_win_get_buf(winid)
+  if winid == vim.api.nvim_get_current_win() then
+    return GenerateFocusedStatusline(winid, bufnr)
   end
+  return GenerateUnfocusedStatusline(winid, bufnr)
 end
 
-function RefreshStatusline(event)
-  local bufnr = event.buf
-  if not vim.api.nvim_buf_is_valid(bufnr) then
-    return
+---@diagnostic disable-next-line: unused-local
+function RefreshStatusline(_event)
+  for _, winid in ipairs(vim.api.nvim_list_wins()) do
+    local bufnr = vim.api.nvim_win_get_buf(winid)
+    if vim.api.nvim_buf_is_valid(bufnr) then
+      local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
+      if buftype == '' or buftype == 'file' or buftype == 'terminal' then
+        vim.api.nvim_set_option_value('statusline', GenerateStatusline(winid), { scope = 'local', win = winid })
+      end
+    end
   end
 
-  local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
-
-  if buftype == '' or buftype == 'file' or buftype == 'terminal' then
-    vim.api.nvim_set_option_value('statusline', GenerateStatusline(bufnr), { scope = 'local' })
-    vim.api.nvim_command([[ redrawstatus ]])
-  end
+  vim.api.nvim_command([[ redrawstatus ]])
 end
 
 local statusline_group = vim.api.nvim_create_augroup('StatusLineRefreshGroup', {})
@@ -139,6 +140,7 @@ local statusline_group = vim.api.nvim_create_augroup('StatusLineRefreshGroup', {
 vim.api.nvim_create_autocmd({
   'BufEnter',
   'BufModifiedSet',
+  'BufLeave',
   'BufNew',
   'BufNewFile',
   'BufReadPost',
@@ -150,6 +152,7 @@ vim.api.nvim_create_autocmd({
   'TermOpen',
   'VimResized',
   'WinEnter',
+  'WinLeave',
 }, {
   callback = vim.schedule_wrap(RefreshStatusline),
   group = statusline_group,
