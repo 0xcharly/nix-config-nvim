@@ -10,7 +10,6 @@ with vimPlugins;
   cmp-path
   cmp-cmdline
   conform-nvim
-  harpoon2
   nvim-lastplace
   nvim-lspconfig
   nvim-treesitter.withAllGrammars
