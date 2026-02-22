@@ -26,17 +26,24 @@ local function mode(bufnr)
 end
 
 local function filename(bufnr)
-  local function buf_fname()
-    local buf = '#' .. tostring(bufnr)
-    return (vim.fn.expand(buf) == '' and '-- Empty --') or vim.fn.expand(buf .. ':t')
+  local name = vim.api.nvim_buf_get_name(bufnr)
+  if name == '' then
+    return '-- Empty --'
   end
 
-  local fname = buf_fname()
+  local fname = vim.fn.fnamemodify(name, ':t')
   if fname == '' then
     return '-- No Name --'
   end
 
-  return fname .. ' '
+  return fname
+end
+
+local function location(bufnr)
+  if vim.api.nvim_get_option_value('filetype', { buf = bufnr }) == 'alpha' then
+    return ''
+  end
+  return '%l:%c %P'
 end
 
 local function bufinfo(bufnr)
@@ -50,13 +57,6 @@ local function bufinfo(bufnr)
     return '[RO]'
   end
   return ''
-end
-
-local function location(bufnr)
-  if vim.api.nvim_get_option_value('filetype', { buf = bufnr }) == 'alpha' then
-    return ''
-  end
-  return '%l:%c %P'
 end
 
 local function lspinfo(bufnr)
@@ -88,7 +88,7 @@ local function GenerateFocusedStatusline(bufnr)
     '%#StatusLineFocusedSecondary#',
     '  ',
     filename(bufnr),
-    ' ',
+    '  ',
     location(bufnr),
     ' ',
     bufinfo(bufnr),
@@ -105,7 +105,7 @@ local function GenerateUnfocusedStatusline(bufnr)
     '%#StatusLineUnfocusedSecondary#',
     '  ',
     filename(bufnr),
-    ' ',
+    '  ',
     location(bufnr),
     ' ',
     bufinfo(bufnr),
