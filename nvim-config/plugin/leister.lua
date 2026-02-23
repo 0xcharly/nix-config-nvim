@@ -329,6 +329,26 @@ local function open_tab_manager()
     end
   end, { buffer = state.bufnr, silent = true })
 
+  vim.keymap.set('n', '<CR>', function()
+    if not (state.winid and vim.api.nvim_win_is_valid(state.winid)) then
+      return
+    end
+
+    local line = vim.api.nvim_get_current_line()
+    local id = line:match('^/(%d+)')
+    id = id and tonumber(id) or nil
+    if not id then
+      return
+    end
+
+    rebuild_ids(vim.api.nvim_list_tabpages())
+    local tabpage = state.tab_by_id[id]
+    if tabpage and vim.api.nvim_tabpage_is_valid(tabpage) then
+      vim.api.nvim_set_current_tabpage(tabpage)
+      vim.api.nvim_win_close(state.winid, true)
+    end
+  end, { buffer = state.bufnr, silent = true })
+
   vim.wo[state.winid].number = true
   vim.wo[state.winid].relativenumber = false
   vim.wo[state.winid].conceallevel = 2
