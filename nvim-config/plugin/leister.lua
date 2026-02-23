@@ -323,6 +323,12 @@ local function open_tab_manager()
     border = 'rounded',
   })
 
+  vim.keymap.set({ 'n', 'i' }, '<Esc>', function()
+    if state.winid and vim.api.nvim_win_is_valid(state.winid) then
+      vim.api.nvim_win_close(state.winid, true)
+    end
+  end, { buffer = state.bufnr, silent = true })
+
   vim.wo[state.winid].number = true
   vim.wo[state.winid].relativenumber = false
   vim.wo[state.winid].conceallevel = 2
