@@ -149,11 +149,15 @@ local function delete_tabs(desired)
     return (tab_index[a] or 0) > (tab_index[b] or 0)
   end)
 
+  if #tabpages - #tabs_to_delete < 1 then
+    table.remove(tabs_to_delete, #tabs_to_delete)
+  end
+
   for _, tabpage in ipairs(tabs_to_delete) do
     if vim.api.nvim_tabpage_is_valid(tabpage) then
       local idx = tab_index[tabpage]
       if idx then
-        vim.cmd.tabclose({ count = idx, mods = { emsg_silent = true } })
+        vim.cmd.tabclose({ args = { tostring(idx) }, mods = { emsg_silent = true } })
       else
         vim.api.nvim_set_current_tabpage(tabpage)
         vim.cmd.tabclose({ mods = { emsg_silent = true } })
@@ -189,6 +193,11 @@ local function reorder_tabs(desired)
 end
 
 local function apply_changes(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+
+  vim.bo[bufnr].modified = false
   local desired = parse_lines(bufnr)
   local previous_tab = vim.api.nvim_get_current_tabpage()
 
@@ -237,7 +246,6 @@ local function open_tab_manager()
       buffer = state.bufnr,
       callback = function()
         apply_changes(state.bufnr)
-        vim.bo[state.bufnr].modified = false
       end,
     })
 
