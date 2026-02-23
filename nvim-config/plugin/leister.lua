@@ -19,7 +19,10 @@ local function get_buffer_name(bufnr)
     return 'term'
   end
 
-  return vim.fn.fnamemodify(name, ':t')
+  local filename = vim.fn.fnamemodify(name, ':t')
+  local dir = vim.fn.fnamemodify(name, ':h')
+  local relative_dir = vim.fn.fnamemodify(dir, ':.')
+  return filename .. ' ' .. relative_dir
 end
 
 local function array_filter(arr_in, predicate)
@@ -52,7 +55,7 @@ local function tab_label(tabnr)
 
   local fname = get_buffer_name(buflist[1])
   if #buflist > 1 then
-    fname = fname .. ' (+' .. tostring(#buflist) .. ')'
+    fname = fname .. ' +' .. tostring(#buflist)
   end
 
   return fname
