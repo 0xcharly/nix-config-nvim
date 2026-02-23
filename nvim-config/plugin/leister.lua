@@ -6,6 +6,7 @@ local state = {
   tab_by_id = {},
   id_by_tab = {},
   next_id = 1,
+  ns = vim.api.nvim_create_namespace('leister-tab-manager'),
 }
 
 local function get_buffer_name(bufnr)
@@ -32,14 +33,18 @@ local function array_filter(arr_in, predicate)
   return arr_out
 end
 
-local function tab_label(tabnr)
-  local buflist = array_filter(vim.fn.tabpagebuflist(tabnr), function(bufnr)
+local function tab_buffers(tabnr)
+  return array_filter(vim.fn.tabpagebuflist(tabnr), function(bufnr)
     if not vim.api.nvim_buf_is_valid(bufnr) then
       return false
     end
     local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
     return buftype == '' or buftype == 'file' or buftype == 'terminal'
   end)
+end
+
+local function tab_label(tabnr)
+  local buflist = tab_buffers(tabnr)
 
   if #buflist == 0 then
     return '-- Empty --'
@@ -77,6 +82,39 @@ local function rebuild_ids(tabpages)
   state.id_by_tab = new_id_by_tab
 end
 
+local function update_virtual_lines(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+
+  local tabpages = vim.api.nvim_list_tabpages()
+  rebuild_ids(tabpages)
+  vim.api.nvim_buf_clear_namespace(bufnr, state.ns, 0, -1)
+
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  for line_index, line in ipairs(lines) do
+    local trimmed = vim.trim(line)
+    if trimmed ~= '' then
+      local id = trimmed:match('^/(%d+)')
+      id = id and tonumber(id) or nil
+      local tabpage = id and state.tab_by_id[id] or nil
+      if tabpage and vim.api.nvim_tabpage_is_valid(tabpage) then
+        local tabnr = vim.api.nvim_tabpage_get_number(tabpage)
+        local buflist = tab_buffers(tabnr)
+        if #buflist > 1 then
+          local virt_lines = {}
+          for idx = 2, #buflist do
+            table.insert(virt_lines, { { '  • ' .. get_buffer_name(buflist[idx]), 'Comment' } })
+          end
+          vim.api.nvim_buf_set_extmark(bufnr, state.ns, line_index - 1, 0, {
+            virt_lines = virt_lines,
+          })
+        end
+      end
+    end
+  end
+end
+
 local function render_buffer(bufnr)
   if not vim.api.nvim_buf_is_valid(bufnr) then
     return
@@ -97,6 +135,8 @@ local function render_buffer(bufnr)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
   vim.bo[bufnr].modifiable = true
   vim.bo[bufnr].modified = false
+
+  update_virtual_lines(bufnr)
 end
 
 local function parse_lines(bufnr)
@@ -246,6 +286,13 @@ local function open_tab_manager()
       buffer = state.bufnr,
       callback = function()
         apply_changes(state.bufnr)
+      end,
+    })
+
+    vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI', 'TextChangedP' }, {
+      buffer = state.bufnr,
+      callback = function()
+        update_virtual_lines(state.bufnr)
       end,
     })
 
