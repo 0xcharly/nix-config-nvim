@@ -19,7 +19,6 @@ with vimPlugins;
   render-markdown-nvim
   snacks-nvim
   sqlite-lua
-  undotree
 ]
 ++ [
   colorscheme-nvim
