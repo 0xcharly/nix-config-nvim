@@ -29,7 +29,6 @@ require('blink.cmp').setup {
   completion = {
     documentation = { auto_show = true },
     ghost_text = { enabled = true },
-    signature = { enabled = true },
   },
   fuzzy = {
     implementation = 'rust',
@@ -42,6 +41,7 @@ require('blink.cmp').setup {
       'sort_text',
     },
   },
+  signature = { enabled = true },
   sources = {
     providers = {
       -- Exclude keywords/constants from autocomplete
