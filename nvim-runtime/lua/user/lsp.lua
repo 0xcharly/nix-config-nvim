@@ -14,25 +14,20 @@ M.diagnostic_signs = {
 --- Extends the object with capabilities provided by plugins.
 --- @return lsp.ClientCapabilities
 function M.make_client_capabilities()
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  -- Add cmp_nvim_lsp capabilities.
-  capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-  -- Enable preliminary support for workspace/didChangeWatchedFiles.
-  capabilities = vim.tbl_deep_extend('keep', capabilities, {
+  return require('blink.cmp').get_lsp_capabilities {
     workspace = {
       didChangeWatchedFiles = {
         dynamicRegistration = true,
       },
       configuration = true,
     },
-  })
-  capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
-    lineFoldingOnly = true,
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      },
+    },
   }
-  -- Add any additional plugin capabilities here.
-  -- Make sure to follow the instructions provided in the plugin's docs.
-  return capabilities
 end
 
 -- grn in Normal mode maps to vim.lsp.buf.rename()

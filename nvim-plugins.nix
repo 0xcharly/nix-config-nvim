@@ -5,10 +5,7 @@
 }:
 with vimPlugins;
 [
-  cmp-nvim-lsp
-  cmp-buffer
-  cmp-path
-  cmp-cmdline
+  blink-cmp
   conform-nvim
   nvim-lastplace
   nvim-lspconfig

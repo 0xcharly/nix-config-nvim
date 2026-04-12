@@ -1,88 +1,63 @@
-local cmp = require('cmp')
-
-local cmp_kinds = {
-  Text = ' ',
-  Method = ' ',
-  Function = ' ',
-  Constructor = ' ',
-  Field = ' ',
-  Variable = ' ',
-  Class = ' ',
-  Interface = ' ',
-  Module = ' ',
-  Property = ' ',
-  Unit = ' ',
-  Value = ' ',
-  Enum = ' ',
-  Keyword = ' ',
-  Snippet = ' ',
-  Color = ' ',
-  File = ' ',
-  Reference = ' ',
-  Folder = ' ',
-  EnumMember = ' ',
-  Constant = ' ',
-  Struct = ' ',
-  Event = ' ',
-  Operator = ' ',
-  TypeParameter = ' ',
-}
-
-cmp.setup {
-  formatting = {
-    fields = { 'kind', 'abbr' },
-    format = function(_, vim_item)
-      vim_item.kind = cmp_kinds[vim_item.kind] or ''
-      return vim_item
-    end,
-  },
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
-  },
-  mapping = cmp.mapping.preset.insert {
-    ['<C-p>'] = cmp.mapping.complete(),
-    ['<C-k>'] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
-    ['<C-j>'] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
-    ['<C-y>'] = cmp.mapping.confirm { select = true },
-  },
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'render-markdown' },
-  }, {
-    { name = 'buffer' },
-  }),
-}
-
-local function cmdline_mapping(f)
-  return {
-    c = function(fallback)
-      local lcmp = require('cmp')
-      if lcmp.visible() then
-        f(lcmp)
-      else
-        fallback()
-      end
-    end,
-  }
+-- Exclude keywords/constants from autocomplete
+-- https://cmp.saghen.dev/recipes.html#exclude-keywords-constants-from-autocomplete
+local function blink_cmp_lsp_filter_out_keywords(_, items)
+  return vim.tbl_filter(function(item)
+    return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
+  end, items)
 end
 
--- Use cmdline & path source for ':' (incompatible with `native_menu`).
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline {
-    ['<C-p>'] = cmp.config.disable,
-    ['<C-n>'] = cmp.config.disable,
-    ['<C-k>'] = cmdline_mapping(function(lcmp)
-      lcmp.select_prev_item()
-    end),
-    ['<C-j>'] = cmdline_mapping(function(lcmp)
-      lcmp.select_next_item()
-    end),
+-- Path completion from `cwd` instead of current buffer's directory
+-- https://cmp.saghen.dev/recipes.html#path-completion-from-cwd-instead-of-current-buffer-s-directory
+local function blink_cmp_path_get_cwd(_)
+  return vim.fn.getcwd()
+end
+
+require('blink.cmp').setup {
+  keymap = {
+    preset = 'default',
+
+    ['<C-p>'] = { 'show', 'fallback' },
+    ['<C-k>'] = { 'select_prev', 'fallback' },
+    ['<C-j>'] = { 'select_next', 'fallback' },
+
+    ['<C-u>'] = { 'scroll_signature_up', 'fallback' },
+    ['<C-d>'] = { 'scroll_signature_down', 'fallback' },
   },
-  sources = cmp.config.sources({
-    { name = 'path' },
-  }, {
-    { name = 'cmdline' },
-  }),
-  matching = { disallow_symbol_nonprefix_matching = false },
-})
+  appearance = {
+    nerd_font_variant = 'mono',
+  },
+  completion = {
+    documentation = { auto_show = true },
+    ghost_text = { enabled = true },
+    signature = { enabled = true },
+  },
+  fuzzy = {
+    implementation = 'rust',
+    -- Always prioritize exact matches
+    -- https://cmp.saghen.dev/recipes.html#always-prioritize-exact-matches
+    sorts = {
+      'exact',
+      -- Then defaults:
+      'score',
+      'sort_text',
+    },
+  },
+  sources = {
+    providers = {
+      -- Exclude keywords/constants from autocomplete
+      -- https://cmp.saghen.dev/recipes.html#exclude-keywords-constants-from-autocomplete
+      lsp = {
+        name = 'LSP',
+        module = 'blink.cmp.sources.lsp',
+        transform_items = blink_cmp_lsp_filter_out_keywords,
+      },
+      -- Path completion from `cwd` instead of current buffer's directory
+      -- https://cmp.saghen.dev/recipes.html#path-completion-from-cwd-instead-of-current-buffer-s-directory
+      path = {
+        opts = {
+          get_cwd = blink_cmp_path_get_cwd,
+        },
+      },
+    },
+  },
+}
