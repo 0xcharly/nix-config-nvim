@@ -7,7 +7,6 @@ with vimPlugins;
 [
   blink-cmp
   conform-nvim
-  nvim-lastplace
   nvim-lspconfig
   nvim-treesitter.withAllGrammars
   mini-nvim
