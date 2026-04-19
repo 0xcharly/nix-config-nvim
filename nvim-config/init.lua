@@ -3,5 +3,8 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ','
 
--- Native plugins.
+-- Native plugins
 vim.cmd.filetype('plugin', 'indent', 'on')
+
+-- New UI opt-in
+require('vim._core.ui2').enable {}
