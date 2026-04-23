@@ -12,6 +12,7 @@ with vimPlugins;
   mini-nvim
   nvim-cmp
   oil-nvim
+  render-markdown-nvim
   snacks-nvim
   sqlite-lua
 ]
