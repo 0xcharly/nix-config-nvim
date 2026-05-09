@@ -100,7 +100,7 @@ end
 local function GenerateUnfocusedStatusline(winid, bufnr)
   return table.concat {
     '%#StatusLineUnfocusedPrimary#',
-    '▍ ',
+    ' ',
     mode(winid),
     '%#StatusLineUnfocusedSecondary#',
     '  ',
